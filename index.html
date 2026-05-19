@@ -1434,6 +1434,7 @@
               <div class="status-pill"><span class="dot"></span><span id="adminCount">0 aziende</span></div>
               <div class="actions" style="margin-top: 0;">
                 <button class="btn secondary" id="refreshAdmin">Aggiorna lista</button>
+                <button class="btn secondary" id="seedDemoNetwork">Carica rete demo 50 aziende</button>
                 <button class="btn" data-goto="matching">Prepara match</button>
               </div>
             </div>
@@ -1735,6 +1736,59 @@
     const authSignupEndpoint = `${SUPABASE_URL}/auth/v1/signup`;
     const useSupabase = SUPABASE_PUBLISHABLE_KEY && !SUPABASE_PUBLISHABLE_KEY.includes('INSERISCI_');
 
+    const demoCompanyRows = [
+      ['Acciai Lombarda SpA', 'acciailombarda.it', 'Acciaio e metalli', 'Milano, Lombardia', 'Offre servizi/prodotti', 'Acciaio inox 316L e 304, lamiere, barre tonde, coil, taglio a misura e certificati colata.', 'Cerca buyer industriali in Italia ed Europa per forniture ricorrenti di acciaio inox.', 'ISO 9001, ISO 14001, EN 10204 3.1', 'Stock dichiarato: 180 ton 316L, 240 ton 304, lead time 18-25 giorni.', 80],
+      ['MetalNord Componenti Srl', 'metalnordcomponenti.it', 'Acciaio e metalli', 'Roma, Lazio', 'Cerca fornitori o subappaltatori', 'Componenti metallici lavorati, carpenteria leggera e assemblaggi per industria meccanica.', 'Cerca acciaio inox 316L certificato per 30-80 ton/mese con consegna Nord Italia.', 'ISO 9001, EN 1090', 'Richiesta attiva: 40-60 ton/mese 316L, validita 14 giorni.', 80],
+      ['SteelForge Europe GmbH', 'steelforge-europe.com', 'Acciaio e metalli', 'Dusseldorf, Germania', 'Offre servizi/prodotti', 'Forgiati, barre speciali, acciai inox e altoresistenziali per industria meccanica.', 'Cerca distributori e buyer italiani per forniture programmate Q3-Q4.', 'ISO 9001, IATF 16949, EN 10204', 'Stock dichiarato: 95 ton inox speciale, lead time 21 giorni.', 82],
+      ['Inox Adriatica Srl', 'inoxadriatica.it', 'Acciaio e metalli', 'Ancona, Marche', 'Buyer e seller', 'Tubi inox, raccordi, flange e lavorazioni su disegno per impiantistica.', 'Cerca coil 316L e partner logistici per consegne nel Centro Italia.', 'ISO 9001, PED, EN 10204', 'Stock dichiarato: 42 ton tubi inox, aggiornato questa settimana.', 78],
+      ['Metalli Tirreno Spa', 'metallitirreno.it', 'Acciaio e metalli', 'Livorno, Toscana', 'Offre servizi/prodotti', 'Distribuzione metalli non ferrosi, alluminio, inox, rame e taglio rapido.', 'Cerca PMI manifatturiere con fabbisogni mensili da 5 a 50 ton.', 'ISO 9001', 'Stock dichiarato: 300 ton metalli misti, lead time 7-14 giorni.', 75],
+      ['EdilRoma Appalti Srl', 'edilromaappalti.it', 'Subappalti ed edilizia', 'Roma, Lazio', 'Cerca fornitori o subappaltatori', 'General contractor per cantieri pubblici e privati, coordinamento lavori edili.', 'Cerca subappaltatori a Milano per impianti elettrici, posa strutture e finiture.', 'SOA OG1, ISO 9001, DURC regolare', 'Appalto Lombardia: avvio previsto entro 30 giorni, budget lavori sopra 250.000 euro.', 80],
+      ['TecnoImpianti Milano Srl', 'tecnoimpiantimilano.it', 'Subappalti ed edilizia', 'Milano, Lombardia', 'Offre servizi/prodotti', 'Impianti elettrici civili e industriali, squadre per cantieri, manutenzione e quadri elettrici.', 'Cerca appalti e subappalti in Lombardia con committenti verificati.', 'DURC regolare, ISO 9001, DM 37/08', 'Disponibilita dichiarata: 3 squadre entro 20 giorni.', 80],
+      ['Lombarda Ponteggi Srl', 'lombardaponteggi.it', 'Subappalti ed edilizia', 'Bergamo, Lombardia', 'Offre servizi/prodotti', 'Ponteggi, opere provvisionali, sicurezza cantiere e noleggio attrezzature.', 'Cerca imprese edili con cantieri nel Nord Italia sopra 80.000 euro.', 'DURC regolare, ISO 45001', 'Disponibilita dichiarata: 12.000 mq ponteggi, lead time 10 giorni.', 76],
+      ['BuildSud Cantieri Srl', 'buildsudcantieri.it', 'Subappalti ed edilizia', 'Napoli, Campania', 'Buyer e seller', 'Ristrutturazioni industriali, opere civili e coordinamento squadre specialistiche.', 'Cerca partner nel Nord Italia per lavori fuori regione e cantieri temporanei.', 'SOA OG1, ISO 9001', 'Capacita dichiarata: 4 cantieri simultanei, trasferte da pianificare.', 78],
+      ['NordFiniture Contract Srl', 'nordfiniturecontract.it', 'Subappalti ed edilizia', 'Brescia, Lombardia', 'Offre servizi/prodotti', 'Cartongesso, finiture, pitture industriali, controsoffitti e ripristini rapidi.', 'Cerca general contractor con necessita di squadre rapide in Lombardia.', 'DURC regolare, ISO 9001', 'Disponibilita dichiarata: 2 squadre entro 15 giorni.', 74],
+      ['ElettroPadana Srl', 'elettropadana.it', 'Impianti elettrici', 'Parma, Emilia-Romagna', 'Offre servizi/prodotti', 'Cablaggi industriali, quadri elettrici, automazione bordo macchina e manutenzione.', 'Cerca produttori macchinari e cantieri industriali nel Nord Italia.', 'ISO 9001, CEI 11-27, DM 37/08', 'Disponibilita dichiarata: 6 tecnici, lead time 12 giorni.', 80],
+      ['Roma Energy Systems Srl', 'romaenergysystems.it', 'Impianti elettrici', 'Roma, Lazio', 'Cerca fornitori o subappaltatori', 'Progettazione impianti energia, fotovoltaico e revamping elettrico.', 'Cerca squadre certificate per installazioni in Lombardia e Veneto.', 'ISO 9001, ESCo, DM 37/08', 'Richiesta attiva: 2 squadre esterne per Q3.', 82],
+      ['Automazione Veneto Spa', 'automazioneveneto.it', 'Impianti elettrici', 'Vicenza, Veneto', 'Offre servizi/prodotti', 'PLC, SCADA, robotica, retrofitting linee e manutenzione predittiva.', 'Cerca PMI manifatturiere con linee da automatizzare entro 6 mesi.', 'ISO 9001, Siemens Partner', 'Capacita dichiarata: 5 progetti/mese, lead time analisi 7 giorni.', 78],
+      ['PowerLine Sicilia Srl', 'powerlinesicilia.it', 'Impianti elettrici', 'Catania, Sicilia', 'Buyer e seller', 'Impianti MT/BT, manutenzione cabine, quadri e installazioni industriali.', 'Cerca fornitori quadri elettrici e cantieri industriali nel Sud Italia.', 'ISO 9001, CEI, DM 37/08', 'Disponibilita dichiarata: 4 squadre, trasferte su richiesta.', 76],
+      ['SmartFacility Torino Srl', 'smartfacilitytorino.it', 'Servizi B2B', 'Torino, Piemonte', 'Offre servizi/prodotti', 'Facility management, manutenzione edifici, pulizie industriali e pronto intervento.', 'Cerca aziende multi-sede per contratti annuali di manutenzione e facility.', 'ISO 9001, ISO 14001', 'Capacita dichiarata: copertura Piemonte e Lombardia, SLA 24/48h.', 75],
+      ['LogiNord Trasporti Spa', 'loginordtrasporti.it', 'Logistica e trasporti', 'Verona, Veneto', 'Offre servizi/prodotti', 'Trasporto industriale, groupage, FTL/LTL e distribuzione Nord Italia.', 'Cerca produttori con spedizioni ricorrenti verso Germania, Francia e Benelux.', 'ISO 9001, GDP, ADR base', 'Capacita dichiarata: 80 mezzi, slot disponibili entro 48 ore.', 78],
+      ['FreshLog Bologna Srl', 'freshlogbologna.it', 'Logistica e trasporti', 'Bologna, Emilia-Romagna', 'Offre servizi/prodotti', 'Trasporto refrigerato, logistica alimentare, celle 0-4 gradi e surgelato.', 'Cerca produttori alimentari con consegne GDO nel Centro-Nord.', 'HACCP, IFS Logistics, ATP', 'Capacita dichiarata: 22 mezzi refrigerati, slot settimanali disponibili.', 82],
+      ['Mediterranea Freight Srl', 'medfreight.it', 'Logistica e trasporti', 'Bari, Puglia', 'Buyer e seller', 'Trasporto intermodale, mare-terra, container e distribuzione Sud Italia.', 'Cerca partner logistici Nord Italia e clienti export nel Mediterraneo.', 'ISO 9001, AEO', 'Capacita dichiarata: 40 container/settimana, lead time variabile.', 74],
+      ['Alpina Courier Srl', 'alpinacourier.it', 'Logistica e trasporti', 'Bolzano, Trentino-Alto Adige', 'Offre servizi/prodotti', 'Consegne espresse B2B in aree alpine, ultimo miglio tecnico e ricambi urgenti.', 'Cerca produttori macchinari con necessita ricambi urgenti in Nord-Est.', 'ISO 9001', 'Capacita dichiarata: consegna 24/48h Nord-Est.', 72],
+      ['EuroPallet Service Srl', 'europalletservice.it', 'Logistica e trasporti', 'Piacenza, Emilia-Romagna', 'Offre servizi/prodotti', 'Gestione pallet, pooling, reverse logistics e riparazione bancali.', 'Cerca aziende con flussi pallet sopra 2.000 pezzi/mese.', 'EPAL, ISO 9001', 'Stock dichiarato: 18.000 pallet EPAL disponibili.', 76],
+      ['PackFood Emilia Spa', 'packfoodemilia.it', 'Packaging', 'Modena, Emilia-Romagna', 'Offre servizi/prodotti', 'Packaging alimentare flessibile, vaschette, film barriera e soluzioni MAP.', 'Cerca produttori alimentari con volumi sopra 50.000 pezzi/mese.', 'BRC Packaging, ISO 22000, MOCA', 'Stock dichiarato: 600.000 pezzi standard, lead time 12-18 giorni.', 83],
+      ['BioCarta Toscana Srl', 'biocartatoscana.it', 'Packaging', 'Lucca, Toscana', 'Offre servizi/prodotti', 'Packaging carta riciclata, astucci, scatole e soluzioni sostenibili.', 'Cerca brand alimentari e cosmetici con necessita packaging eco.', 'FSC, PEFC, ISO 14001', 'Capacita dichiarata: 250.000 scatole/mese, lead time 20 giorni.', 77],
+      ['PackNord Pharma Srl', 'packnordpharma.it', 'Packaging', 'Monza, Lombardia', 'Offre servizi/prodotti', 'Astucci farmaceutici, bugiardini, serializzazione e packaging regolato.', 'Cerca aziende farmaceutiche con lotti pilota e produzione ricorrente.', 'GMP, ISO 9001, FSC', 'Capacita dichiarata: 3 linee farmaceutiche, lead time 25 giorni.', 84],
+      ['Adriatica Imballaggi Srl', 'adriaticaimballaggi.it', 'Packaging', 'Pescara, Abruzzo', 'Buyer e seller', 'Imballaggi industriali, casse legno, protezioni e packaging export.', 'Cerca fornitori film protettivi e clienti industriali export.', 'ISPM-15, ISO 9001', 'Stock dichiarato: 4.000 casse standard, produzione su misura 10 giorni.', 73],
+      ['PlastTech Bergamo Srl', 'plasttechbergamo.it', 'Packaging', 'Bergamo, Lombardia', 'Offre servizi/prodotti', 'Stampaggio plastica, contenitori tecnici, componenti packaging e prototipi.', 'Cerca aziende alimentari e industriali con stampi dedicati.', 'ISO 9001, MOCA su richiesta', 'Capacita dichiarata: 12 presse, lead time campione 15 giorni.', 78],
+      ['Alimenta Nord Spa', 'alimentanord.it', 'Alimentare', 'Cremona, Lombardia', 'Cerca fornitori o subappaltatori', 'Produzione alimentare conto terzi, ingredienti secchi e prodotti da forno.', 'Cerca packaging alimentare certificato MOCA e trasporto refrigerato.', 'BRC, IFS, HACCP', 'Richiesta attiva: packaging 100.000 pezzi/mese e logistica GDO.', 82],
+      ['Caseificio Appennino Srl', 'caseificioappennino.it', 'Alimentare', 'Reggio Emilia, Emilia-Romagna', 'Cerca fornitori o subappaltatori', 'Produzione lattiero-casearia, stagionatura e confezionamento formaggi.', 'Cerca trasporto refrigerato e packaging alimentare sostenibile.', 'HACCP, IFS Food', 'Richiesta attiva: consegne settimanali Nord Italia, 0-4 gradi.', 80],
+      ['Dolciaria Verona Srl', 'dolciariaverona.it', 'Alimentare', 'Verona, Veneto', 'Buyer e seller', 'Prodotti dolciari, biscotti, private label e confezionamento stagionale.', 'Cerca packaging premium e distributori B2B in Germania e Austria.', 'BRC, IFS, HACCP', 'Capacita dichiarata: 40.000 confezioni/settimana, stagionalita alta Q4.', 78],
+      ['Oleificio Sud Export Srl', 'oleificiosudexport.it', 'Alimentare', 'Bari, Puglia', 'Offre servizi/prodotti', 'Olio EVO, private label, bulk e confezionamento per export.', 'Cerca distributori europei e packaging vetro certificato.', 'BRC, IFS, BIO', 'Stock dichiarato: 180.000 litri disponibili, lead time 14 giorni.', 77],
+      ['Conserve Tirreno Spa', 'conservetirreno.it', 'Alimentare', 'Salerno, Campania', 'Cerca fornitori o subappaltatori', 'Conserve vegetali, sughi, private label e export GDO.', 'Cerca packaging alimentare, logistica e buyer export per lotti ricorrenti.', 'BRC, IFS, HACCP', 'Capacita dichiarata: 1.5M pezzi/mese, richiesta packaging Q3.', 79],
+      ['CNC Precision Torino Srl', 'cncprecisiontorino.it', 'Macchinari industriali', 'Torino, Piemonte', 'Offre servizi/prodotti', 'Lavorazioni CNC 3/5 assi, tornitura, fresatura e prototipi metallici.', 'Cerca buyer automotive e fornitori acciai speciali certificati.', 'ISO 9001, IATF 16949 in audit', 'Capacita dichiarata: 14 centri CNC, slot disponibili in 3 settimane.', 81],
+      ['Macchine Veneto Spa', 'macchineveneto.it', 'Macchinari industriali', 'Padova, Veneto', 'Buyer e seller', 'Macchine automatiche per packaging, linee custom e revamping.', 'Cerca componenti CNC, automazione PLC e clienti packaging alimentare.', 'ISO 9001, CE machinery', 'Capacita dichiarata: 5 linee/mese, lead time progetto 8-12 settimane.', 82],
+      ['Robotica Brianza Srl', 'roboticabrianza.it', 'Macchinari industriali', 'Monza, Lombardia', 'Offre servizi/prodotti', 'Celle robotizzate, visione artificiale, pallettizzazione e integrazione cobot.', 'Cerca aziende manifatturiere con automazione fine linea.', 'ISO 9001, Fanuc integrator', 'Capacita dichiarata: 3 celle/mese, sopralluogo entro 10 giorni.', 80],
+      ['Officine Marche Srl', 'officinemarche.it', 'Macchinari industriali', 'Pesaro, Marche', 'Cerca fornitori o subappaltatori', 'Costruzione telai, carpenteria pesante e parti macchina su disegno.', 'Cerca taglio laser, verniciatura industriale e acciaio certificato.', 'ISO 9001, EN 1090', 'Richiesta attiva: subfornitura telai Q3, volumi medi.', 78],
+      ['LaserCut Lombardia Srl', 'lasercutlombardia.it', 'Macchinari industriali', 'Varese, Lombardia', 'Offre servizi/prodotti', 'Taglio laser fibra, piegatura, saldatura e finitura componenti metallici.', 'Cerca commesse ricorrenti da produttori macchinari e carpenterie.', 'ISO 9001, EN 1090', 'Capacita dichiarata: 2 impianti laser, slot in 8 giorni.', 79],
+      ['CloudB2B Solutions Srl', 'cloudb2bsolutions.it', 'Servizi B2B', 'Milano, Lombardia', 'Offre servizi/prodotti', 'CRM, automazioni commerciali, integrazioni API e dashboard direzionali.', 'Cerca PMI industriali che vogliono digitalizzare vendite e procurement.', 'ISO 27001 in corso, Microsoft Partner', 'Capacita dichiarata: 6 progetti attivi, nuovo slot tra 20 giorni.', 76],
+      ['LegalProcurement Roma Srl', 'legalprocurementroma.it', 'Servizi B2B', 'Roma, Lazio', 'Offre servizi/prodotti', 'Consulenza contratti fornitura, compliance appalti, NDA e verifiche documentali.', 'Cerca startup B2B e PMI che gestiscono partnership e subappalti.', 'Albo avvocati, privacy compliance', 'Disponibilita dichiarata: review documentale entro 72 ore.', 74],
+      ['HR Cantieri Italia Srl', 'hrcantieriitalia.it', 'Servizi B2B', 'Bologna, Emilia-Romagna', 'Offre servizi/prodotti', 'Somministrazione personale tecnico, ricerca operai specializzati e capisquadra.', 'Cerca aziende edili e impiantistiche con picchi di lavoro stagionali.', 'Agenzia lavoro autorizzata, ISO 9001', 'Disponibilita dichiarata: database 850 profili tecnici.', 73],
+      ['Finanza PMI Hub Srl', 'finanzapmihub.it', 'Servizi B2B', 'Firenze, Toscana', 'Offre servizi/prodotti', 'Finanza agevolata, bandi, credito imposta e supporto business plan.', 'Cerca PMI con progetti digitali, export o investimenti produttivi.', 'Consulenti certificati, network Confidi', 'Disponibilita dichiarata: check eligibility entro 5 giorni.', 72],
+      ['ExportLink Germania Srl', 'exportlinkgermania.it', 'Servizi B2B', 'Milano, Lombardia', 'Offre servizi/prodotti', 'Sviluppo export DACH, ricerca distributori, fiere e temporary export management.', 'Cerca produttori italiani con prodotti B2B esportabili in Germania.', 'AICE, consulenti madrelingua', 'Capacita dichiarata: 12 scouting distributori/mese.', 78],
+      ['Manutenzione Nord Ovest Srl', 'manutenzionenordovest.it', 'Manutenzione industriale', 'Torino, Piemonte', 'Offre servizi/prodotti', 'Manutenzione impianti industriali, fermo macchina, ricambi e contratti annuali.', 'Cerca stabilimenti manifatturieri in Piemonte e Lombardia.', 'ISO 9001, ISO 45001', 'Disponibilita dichiarata: pronto intervento 24/48h, 18 tecnici.', 82],
+      ['ServiceLine Emilia Srl', 'servicelineemilia.it', 'Manutenzione industriale', 'Modena, Emilia-Romagna', 'Offre servizi/prodotti', 'Manutenzione linee automatiche, nastri, confezionatrici e impianti packaging.', 'Cerca produttori alimentari e packaging con manutenzione programmata.', 'ISO 9001, tecnici certificati', 'Capacita dichiarata: 10 tecnici, SLA 48h Emilia e Veneto.', 79],
+      ['CoolingTech Pharma Srl', 'coolingtechpharma.it', 'Manutenzione industriale', 'Pavia, Lombardia', 'Offre servizi/prodotti', 'Manutenzione impianti HVAC, celle frigo, clean room e ambienti controllati.', 'Cerca aziende pharma e alimentari con impianti critici.', 'FGAS, ISO 9001, GMP awareness', 'Disponibilita dichiarata: reperibilita 24h, 6 squadre.', 83],
+      ['Sicurezza Impianti Sud Srl', 'sicurezzaimpiantisud.it', 'Manutenzione industriale', 'Bari, Puglia', 'Buyer e seller', 'Antincendio, sicurezza impianti, verifiche periodiche e manutenzione estintori.', 'Cerca clienti industriali e fornitori ricambi certificati.', 'ISO 9001, UNI 9994, DM 37/08', 'Capacita dichiarata: copertura Puglia e Basilicata, SLA 72h.', 74],
+      ['CleanRoom Service Veneto Srl', 'cleanroomserviceveneto.it', 'Manutenzione industriale', 'Treviso, Veneto', 'Offre servizi/prodotti', 'Pulizia tecnica clean room, sanificazione industriale e facility controllato.', 'Cerca aziende pharma, biomedicali e alimentari con ambienti certificati.', 'ISO 14644, ISO 9001', 'Disponibilita dichiarata: 4 squadre specializzate, lead time 10 giorni.', 77],
+      ['SolarBuild Italia Srl', 'solarbuilditalia.it', 'Energia e impianti', 'Roma, Lazio', 'Cerca fornitori o subappaltatori', 'EPC fotovoltaico industriale, storage e revamping energetico.', 'Cerca installatori elettrici certificati e strutture metalliche per cantieri Nord Italia.', 'SOA OS30, ISO 9001', 'Pipeline dichiarata: 12 MW cantieri Q3-Q4, necessita squadre esterne.', 82],
+      ['GreenRoof Lombardia Srl', 'greenrooflombardia.it', 'Energia e impianti', 'Milano, Lombardia', 'Offre servizi/prodotti', 'Coperture industriali, bonifiche, rinforzi e predisposizione fotovoltaico.', 'Cerca EPC e general contractor per cantieri energetici industriali.', 'SOA OG1, ISO 9001, sicurezza cantieri', 'Disponibilita dichiarata: 2 squadre entro 25 giorni.', 80],
+      ['Battery Systems Torino Srl', 'batterysystemstorino.it', 'Energia e impianti', 'Torino, Piemonte', 'Offre servizi/prodotti', 'Storage industriale, quadri batterie, BMS e installazione sistemi accumulo.', 'Cerca EPC fotovoltaici e produttori industriali con progetti storage.', 'CE, ISO 9001, IEC standards', 'Stock dichiarato: moduli 1.2 MWh disponibili, lead time 30 giorni.', 84],
+      ['IdroTermica Firenze Srl', 'idrotermicafirenze.it', 'Energia e impianti', 'Firenze, Toscana', 'Offre servizi/prodotti', 'Impianti termici, pompe di calore industriali, idraulica e centrale termica.', 'Cerca cantieri industriali, hotel e strutture sanitarie per revamping impianti.', 'FGAS, DM 37/08, ISO 9001', 'Disponibilita dichiarata: sopralluogo in 7 giorni, 5 squadre.', 76],
+      ['DACH Industrial Partners GmbH', 'dachindustrialpartners.com', 'Distribuzione B2B', 'Monaco, Germania', 'Offre servizi/prodotti', 'Distribuzione B2B in Germania, Austria e Svizzera per prodotti industriali italiani.', 'Cerca produttori italiani di macchinari, componenti e packaging tecnico.', 'ISO 9001, rete distributori DACH', 'Capacita dichiarata: scouting 20 buyer/mese, onboarding 30 giorni.', 81]
+    ];
+
     async function fetchCompanies() {
       if (!useSupabase) return getLocalCompanies();
 
@@ -1771,6 +1825,88 @@
       if (!response.ok) {
         const details = await response.text();
         throw new Error(details || 'Impossibile salvare azienda nel database.');
+      }
+    }
+
+    function buildDemoCompany(row, index) {
+      const [name, host, sector, area, mode, offers, needs, certifications, availability, threshold] = row;
+      const number = String(index + 1).padStart(2, '0');
+      return {
+        name,
+        email: `demo${number}@agentlink-demo.it`,
+        website: `https://www.${host}`,
+        vat: `ITDEMO${String(index + 1).padStart(6, '0')}`,
+        phone: `+39 02 9000 ${String(100 + index)}`,
+        sector,
+        area,
+        mode,
+        offers,
+        needs,
+        certifications,
+        availability,
+        match_threshold: threshold || 80,
+        beta_consent: true,
+        rules: 'Azienda demo simulata per mostrare la rete AgentLink. Dialogare solo dentro la piattaforma, non condividere prezzi sensibili prima della revisione umana e segnalare solo match sopra soglia.'
+      };
+    }
+
+    async function insertCompanies(companies) {
+      if (!companies.length) return;
+
+      if (!useSupabase) {
+        const current = getLocalCompanies();
+        localStorage.setItem('agentlink-demo-companies', JSON.stringify([...companies, ...current]));
+        return;
+      }
+
+      const response = await fetch(companiesEndpoint, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_PUBLISHABLE_KEY,
+          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal'
+        },
+        body: JSON.stringify(companies)
+      });
+
+      if (!response.ok) {
+        const details = await response.text();
+        throw new Error(details || 'Impossibile caricare la rete demo.');
+      }
+    }
+
+    async function seedDemoNetwork() {
+      const button = document.getElementById('seedDemoNetwork');
+      const originalText = button.textContent;
+
+      if (!confirm('Carico 50 aziende demo simulate nel registro AgentLink?')) return;
+
+      button.disabled = true;
+      button.textContent = 'Caricamento rete...';
+
+      try {
+        const existing = await fetchCompanies();
+        const existingNames = new Set(existing.map(company => String(company.name || '').toLowerCase()));
+        const demoCompanies = demoCompanyRows
+          .map(buildDemoCompany)
+          .filter(company => !existingNames.has(company.name.toLowerCase()));
+
+        if (!demoCompanies.length) {
+          alert('La rete demo e gia caricata. Non ho aggiunto doppioni.');
+          return;
+        }
+
+        await insertCompanies(demoCompanies);
+        await renderCompanies();
+        await renderAdminCompanies();
+        await populateMatchSelectors();
+        alert(`Rete demo caricata: ${demoCompanies.length} aziende simulate pronte per matching e scenari.`);
+      } catch (error) {
+        alert(`Errore caricamento rete demo: ${error.message}`);
+      } finally {
+        button.disabled = false;
+        button.textContent = originalText;
       }
     }
 
@@ -2095,6 +2231,7 @@
     populateMatchSelectors();
     document.getElementById('createBetaAccount').addEventListener('click', createBetaAccount);
     document.getElementById('refreshAdmin').addEventListener('click', renderAdminCompanies);
+    document.getElementById('seedDemoNetwork').addEventListener('click', seedDemoNetwork);
     document.getElementById('reloadMatchCompanies').addEventListener('click', populateMatchSelectors);
     document.getElementById('calculateMatch').addEventListener('click', renderManualMatch);
     document.getElementById('analyzeWithAi').addEventListener('click', analyzeMatchWithAi);
