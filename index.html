@@ -731,6 +731,119 @@
       font-size: 15px;
     }
 
+    .mission-console {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 18px;
+      align-items: start;
+      margin-top: 18px;
+    }
+
+    .mission-command {
+      display: grid;
+      gap: 12px;
+    }
+
+    .mission-command textarea {
+      min-height: 168px;
+      font-size: 18px;
+      line-height: 1.45;
+    }
+
+    .mission-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .preset-btn {
+      border: 1px solid rgba(148, 163, 184, .24);
+      background: rgba(7, 17, 31, .5);
+      color: #dce7f3;
+      padding: 9px 10px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .mission-board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .mission-stat {
+      border: 1px solid rgba(148, 163, 184, .16);
+      background: rgba(7, 17, 31, .46);
+      padding: 14px;
+      min-height: 112px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .mission-stat strong {
+      color: var(--teal);
+      font-size: 30px;
+      line-height: 1;
+    }
+
+    .mission-stat span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .mission-results {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .opportunity-card {
+      border: 1px solid rgba(72, 215, 207, .22);
+      background: rgba(7, 17, 31, .48);
+      padding: 16px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .opportunity-card header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .opportunity-card h3 {
+      margin: 0;
+      font-size: 21px;
+    }
+
+    .mission-score {
+      color: #06101b;
+      background: linear-gradient(135deg, var(--teal), var(--green));
+      padding: 8px 10px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .agent-log {
+      display: grid;
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .agent-log div {
+      border-left: 3px solid var(--teal);
+      padding: 10px 12px;
+      background: rgba(72, 215, 207, .08);
+      color: #dce7f3;
+      line-height: 1.42;
+    }
+
     .scenario-flow {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -1030,6 +1143,7 @@
       .sidebar-card { display: none; }
       .form-grid { grid-template-columns: 1fr; }
       .score, .op-row { grid-template-columns: 1fr; }
+      .mission-console, .mission-board { grid-template-columns: 1fr; }
       .logo-strip { flex-direction: column; align-items: flex-start; }
       .verified { margin-left: 0; }
       .company-row header { flex-direction: column; }
@@ -1056,10 +1170,11 @@
         <button data-screen="scenario"><span class="ico">03</span><span>Demo guidata</span></button>
         <button data-screen="admin"><span class="ico">04</span><span>Admin</span></button>
         <button data-screen="configure"><span class="ico">05</span><span>Configura agente</span></button>
-        <button data-screen="matchlab"><span class="ico">06</span><span>Match lab</span></button>
-        <button data-screen="matching"><span class="ico">07</span><span>Matching A2A</span></button>
-        <button data-screen="dialogue"><span class="ico">08</span><span>Dialogo agenti</span></button>
-        <button data-screen="handoff"><span class="ico">09</span><span>Hand-off umano</span></button>
+        <button data-screen="agent"><span class="ico">06</span><span>Il mio agente</span></button>
+        <button data-screen="matchlab"><span class="ico">07</span><span>Match lab</span></button>
+        <button data-screen="matching"><span class="ico">08</span><span>Matching A2A</span></button>
+        <button data-screen="dialogue"><span class="ico">09</span><span>Dialogo agenti</span></button>
+        <button data-screen="handoff"><span class="ico">10</span><span>Hand-off umano</span></button>
       </nav>
 
       <div class="sidebar-card">
@@ -1428,7 +1543,7 @@
         <div class="grid">
           <div class="panel span-12">
             <span class="label">Dashboard admin beta</span>
-            <h2>Aziende registrate nella rete AgentLink</h2>
+            <h2>Aziende registrate in AgentLink</h2>
             <p class="lead">Vista operativa per controllare le aziende entrate nel database, leggere bisogni/offerte e preparare i primi match manuali o agentici.</p>
             <div class="admin-toolbar">
               <div class="status-pill"><span class="dot"></span><span id="adminCount">0 aziende</span></div>
@@ -1454,6 +1569,65 @@
                   <tr><td colspan="6">Caricamento aziende...</td></tr>
                 </tbody>
               </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="agent">
+        <div class="grid">
+          <div class="panel span-12">
+            <span class="label">Agente operativo</span>
+            <h2>Il tuo agente AI lavora su una missione</h2>
+            <p class="lead">Scrivi un incarico in italiano. L'agente legge le aziende registrate, scarta quelle non utili e prepara una Top 3 con motivazioni, rischi e prossima azione.</p>
+
+            <div class="mission-console">
+              <div class="mission-command">
+                <div class="field">
+                  <label>Missione per l'agente</label>
+                  <textarea id="missionPrompt">Trova subappaltatori elettrici in Lombardia per un appalto fuori regione, con disponibilita entro 30 giorni, documentazione chiara e importo lavori sopra 50.000 euro.</textarea>
+                </div>
+                <div class="mission-presets">
+                  <button class="preset-btn" data-mission="Trova fornitori europei di acciaio inox 316L con certificazione EN 10204, stock disponibile e consegna in Nord Italia.">Acciaio inox 316L</button>
+                  <button class="preset-btn" data-mission="Trova subappaltatori elettrici in Lombardia per un appalto fuori regione, con disponibilita entro 30 giorni e documentazione chiara.">Subappalti elettrici</button>
+                  <button class="preset-btn" data-mission="Trova partner logistici refrigerati per prodotti alimentari con consegne GDO nel Centro-Nord.">Logistica refrigerata</button>
+                  <button class="preset-btn" data-mission="Trova fornitori packaging alimentare certificato MOCA per volumi sopra 100.000 pezzi al mese.">Packaging alimentare</button>
+                </div>
+                <div class="actions">
+                  <button class="btn" id="runMissionAgent">Avvia agente</button>
+                  <button class="btn secondary" id="refreshMissionData">Aggiorna database aziende</button>
+                </div>
+              </div>
+
+              <aside class="agent-card">
+                <div class="agent-head">
+                  <div>
+                    <h3>AgentLink Mission-01</h3>
+                    <p>Analizza il database, seleziona opportunita e prepara il report umano.</p>
+                  </div>
+                  <div class="avatar">AI</div>
+                </div>
+                <div class="rule"><span class="check">OK</span> Legge solo aziende registrate</div>
+                <div class="rule"><span class="check">OK</span> Scarta match deboli</div>
+                <div class="rule"><span class="check">OK</span> Non inventa dati mancanti</div>
+                <div class="rule"><span class="check">OK</span> Propone prossime azioni</div>
+              </aside>
+            </div>
+          </div>
+
+          <div class="panel span-12">
+            <span class="label">Lavoro dell'agente</span>
+            <div class="mission-board">
+              <div class="mission-stat"><span>Aziende analizzate</span><strong id="missionAnalyzed">--</strong></div>
+              <div class="mission-stat"><span>Scartate</span><strong id="missionDiscarded">--</strong></div>
+              <div class="mission-stat"><span>Compatibili</span><strong id="missionCompatible">--</strong></div>
+              <div class="mission-stat"><span>Opportunita Top</span><strong id="missionQualified">--</strong></div>
+            </div>
+            <div class="agent-log" id="missionLog">
+              <div>Agente in attesa. Scrivi una missione e premi "Avvia agente".</div>
+            </div>
+            <div class="mission-results" id="missionResults">
+              <div class="empty-state">Nessun report generato.</div>
             </div>
           </div>
         </div>
@@ -2147,6 +2321,91 @@
       }
     }
 
+    function renderMissionReport(report) {
+      document.getElementById('missionAnalyzed').textContent = report.analyzed_count ?? '--';
+      document.getElementById('missionDiscarded').textContent = report.discarded_count ?? '--';
+      document.getElementById('missionCompatible').textContent = report.compatible_count ?? '--';
+      document.getElementById('missionQualified').textContent = report.qualified_count ?? '--';
+
+      const log = report.agent_log || [];
+      document.getElementById('missionLog').innerHTML = log.length
+        ? log.map(item => `<div>${escapeHtml(item)}</div>`).join('')
+        : '<div>Missione completata. Report generato.</div>';
+
+      const matches = report.top_matches || [];
+      document.getElementById('missionResults').innerHTML = matches.length
+        ? matches.map(match => `
+          <article class="opportunity-card">
+            <header>
+              <div>
+                <h3>${escapeHtml(match.company_name || 'Azienda')}</h3>
+                <p class="lead">${escapeHtml(match.reason || report.summary || 'Opportunita individuata dall agente.')}</p>
+              </div>
+              <span class="mission-score">${escapeHtml(match.score || '--')}%</span>
+            </header>
+            <div class="insight"><strong>Punti forti:</strong> ${escapeHtml((match.strengths || []).join(' | ') || 'Da verificare')}</div>
+            <div class="insight"><strong>Rischi:</strong> ${escapeHtml((match.risks || []).join(' | ') || 'Nessun rischio evidente nei dati disponibili')}</div>
+            <div class="insight"><strong>Prossima azione:</strong> ${escapeHtml(match.next_action || 'Preparare revisione umana')}</div>
+          </article>
+        `).join('')
+        : `<div class="empty-state">${escapeHtml(report.summary || 'Nessuna opportunita qualificata trovata.')}</div>`;
+    }
+
+    async function runMissionAgent() {
+      const mission = document.getElementById('missionPrompt').value.trim();
+      const button = document.getElementById('runMissionAgent');
+      const originalText = button.textContent;
+
+      if (!mission) {
+        alert('Scrivi una missione per l agente.');
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = 'Agente al lavoro...';
+      document.getElementById('missionLog').innerHTML = '<div>Sto leggendo la missione...</div><div>Sto caricando le aziende registrate...</div>';
+      document.getElementById('missionResults').innerHTML = '<div class="empty-state">Analisi in corso...</div>';
+
+      try {
+        const companies = await fetchCompanies();
+        if (!companies.length) throw new Error('Nessuna azienda registrata nel database.');
+
+        document.getElementById('missionAnalyzed').textContent = companies.length;
+        document.getElementById('missionDiscarded').textContent = '--';
+        document.getElementById('missionCompatible').textContent = '--';
+        document.getElementById('missionQualified').textContent = '--';
+        document.getElementById('missionLog').innerHTML = `<div>${companies.length} aziende caricate. L agente sta valutando compatibilita, dati mancanti e prossima azione.</div>`;
+
+        const response = await fetch('/api/agent-mission', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mission, companies })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Missione agente non riuscita.');
+        renderMissionReport(data);
+      } catch (error) {
+        document.getElementById('missionResults').innerHTML = `<div class="insight"><strong>Errore agente:</strong> ${escapeHtml(error.message)}</div>`;
+      } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+      }
+    }
+
+    async function refreshMissionData() {
+      const log = document.getElementById('missionLog');
+      log.innerHTML = '<div>Aggiornamento database aziende...</div>';
+      try {
+        const companies = await fetchCompanies();
+        window.agentlinkCompanies = companies;
+        document.getElementById('missionAnalyzed').textContent = companies.length;
+        log.innerHTML = `<div>Database aggiornato: ${companies.length} aziende disponibili per le missioni.</div>`;
+      } catch (error) {
+        log.innerHTML = `<div>Errore aggiornamento: ${escapeHtml(error.message)}</div>`;
+      }
+    }
+
     async function renderAdminCompanies() {
       const rows = document.getElementById('adminCompanyRows');
       const count = document.getElementById('adminCount');
@@ -2235,6 +2494,13 @@
     document.getElementById('reloadMatchCompanies').addEventListener('click', populateMatchSelectors);
     document.getElementById('calculateMatch').addEventListener('click', renderManualMatch);
     document.getElementById('analyzeWithAi').addEventListener('click', analyzeMatchWithAi);
+    document.getElementById('runMissionAgent').addEventListener('click', runMissionAgent);
+    document.getElementById('refreshMissionData').addEventListener('click', refreshMissionData);
+    document.querySelectorAll('[data-mission]').forEach(button => {
+      button.addEventListener('click', () => {
+        document.getElementById('missionPrompt').value = button.dataset.mission;
+      });
+    });
     document.getElementById('startGuidedDemo').addEventListener('click', () => runGuidedDemo(1));
     document.getElementById('guidedNextStep').addEventListener('click', () => runGuidedDemo(guidedDemoStep + 1));
     document.getElementById('resetGuidedDemo').addEventListener('click', resetGuidedDemo);
