@@ -744,6 +744,40 @@
       gap: 12px;
     }
 
+    .mission-chat {
+      border: 1px solid rgba(148, 163, 184, .18);
+      background: rgba(7, 17, 31, .45);
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      max-height: 260px;
+      overflow: auto;
+    }
+
+    .mission-bubble {
+      border: 1px solid rgba(148, 163, 184, .18);
+      background: rgba(16, 34, 56, .7);
+      padding: 11px 12px;
+      color: #dce7f3;
+      line-height: 1.42;
+    }
+
+    .mission-bubble.user {
+      border-color: rgba(72, 215, 207, .28);
+      background: rgba(72, 215, 207, .08);
+    }
+
+    .mission-bubble.agent {
+      border-color: rgba(53, 207, 135, .25);
+      background: rgba(53, 207, 135, .08);
+    }
+
+    .mission-bubble strong {
+      color: var(--teal);
+      display: block;
+      margin-bottom: 5px;
+    }
+
     .mission-command textarea {
       min-height: 168px;
       font-size: 18px;
@@ -1583,6 +1617,12 @@
 
             <div class="mission-console">
               <div class="mission-command">
+                <div class="mission-chat" id="missionChat">
+                  <div class="mission-bubble agent">
+                    <strong>AgentLink Mission-01</strong>
+                    Scrivimi cosa vuoi ottenere. Se la richiesta e troppo vaga, prima ti faccio qualche domanda e poi lavoro sul database.
+                  </div>
+                </div>
                 <div class="field">
                   <label>Missione per l'agente</label>
                   <textarea id="missionPrompt">Trova subappaltatori elettrici in Lombardia per un appalto fuori regione, con disponibilita entro 30 giorni, documentazione chiara e importo lavori sopra 50.000 euro.</textarea>
@@ -2400,6 +2440,32 @@
       };
     }
 
+    function appendMissionBubble(type, title, text) {
+      const chat = document.getElementById('missionChat');
+      const bubble = document.createElement('div');
+      bubble.className = `mission-bubble ${type}`;
+      bubble.innerHTML = `<strong>${escapeHtml(title)}</strong>${escapeHtml(text)}`;
+      chat.appendChild(bubble);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function renderMissionQuestions(mission, report) {
+      appendMissionBubble('user', 'Tu', mission);
+      const questions = report.clarifying_questions || [];
+      appendMissionBubble(
+        'agent',
+        'AgentLink Mission-01',
+        `${report.summary || 'Mi servono alcuni dettagli prima di lavorare.'} ${questions.join(' ')}`
+      );
+
+      document.getElementById('missionAnalyzed').textContent = '--';
+      document.getElementById('missionDiscarded').textContent = '--';
+      document.getElementById('missionCompatible').textContent = '--';
+      document.getElementById('missionQualified').textContent = '--';
+      document.getElementById('missionLog').innerHTML = '<div>Agente in chiarimento: attende una missione piu precisa prima di analizzare il database.</div>';
+      document.getElementById('missionResults').innerHTML = '<div class="empty-state">Rispondi nella casella missione con settore, area, obiettivo e requisiti minimi. Poi premi di nuovo "Avvia agente".</div>';
+    }
+
     async function runMissionAgent() {
       const mission = document.getElementById('missionPrompt').value.trim();
       const button = document.getElementById('runMissionAgent');
@@ -2412,12 +2478,14 @@
 
       const clarification = getMissionClarification(mission);
       if (clarification) {
-        renderMissionReport(clarification);
+        renderMissionQuestions(mission, clarification);
         return;
       }
 
       button.disabled = true;
       button.textContent = 'Agente al lavoro...';
+      appendMissionBubble('user', 'Tu', mission);
+      appendMissionBubble('agent', 'AgentLink Mission-01', 'Missione chiara. Sto analizzando le aziende registrate e preparo le migliori opportunita.');
       document.getElementById('missionLog').innerHTML = '<div>Sto leggendo la missione...</div><div>Sto caricando le aziende registrate...</div>';
       document.getElementById('missionResults').innerHTML = '<div class="empty-state">Analisi in corso...</div>';
 
