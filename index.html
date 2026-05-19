@@ -784,6 +784,43 @@
       line-height: 1.45;
     }
 
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .source-option {
+      border: 1px solid rgba(148, 163, 184, .22);
+      background: rgba(7, 17, 31, .5);
+      padding: 11px;
+      color: #dce7f3;
+      display: grid;
+      gap: 6px;
+      cursor: pointer;
+      min-height: 92px;
+    }
+
+    .source-option:has(input:checked) {
+      border-color: rgba(72, 215, 207, .55);
+      background: rgba(72, 215, 207, .1);
+    }
+
+    .source-option input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--teal);
+    }
+
+    .source-option strong {
+      color: var(--text);
+    }
+
+    .source-option small {
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
     .mission-presets {
       display: flex;
       flex-wrap: wrap;
@@ -1177,7 +1214,7 @@
       .sidebar-card { display: none; }
       .form-grid { grid-template-columns: 1fr; }
       .score, .op-row { grid-template-columns: 1fr; }
-      .mission-console, .mission-board { grid-template-columns: 1fr; }
+      .mission-console, .mission-board, .source-grid { grid-template-columns: 1fr; }
       .logo-strip { flex-direction: column; align-items: flex-start; }
       .verified { margin-left: 0; }
       .company-row header { flex-direction: column; }
@@ -1626,6 +1663,31 @@
                 <div class="field">
                   <label>Missione per l'agente</label>
                   <textarea id="missionPrompt">Trova subappaltatori elettrici in Lombardia per un appalto fuori regione, con disponibilita entro 30 giorni, documentazione chiara e importo lavori sopra 50.000 euro.</textarea>
+                </div>
+                <div class="field">
+                  <label>Dove deve cercare</label>
+                  <div class="source-grid">
+                    <label class="source-option">
+                      <input type="radio" name="missionSource" value="internal" checked>
+                      <strong>Solo AgentLink</strong>
+                      <small>Aziende gia registrate nel database.</small>
+                    </label>
+                    <label class="source-option">
+                      <input type="radio" name="missionSource" value="web-simulated">
+                      <strong>Web simulato</strong>
+                      <small>Mostra scouting esterno da collegare via API.</small>
+                    </label>
+                    <label class="source-option">
+                      <input type="radio" name="missionSource" value="company-site">
+                      <strong>Sito aziendale</strong>
+                      <small>Valuta dati da pagine o cataloghi autorizzati.</small>
+                    </label>
+                    <label class="source-option">
+                      <input type="radio" name="missionSource" value="uploaded-files">
+                      <strong>File caricati</strong>
+                      <small>PDF, cataloghi, listini e schede tecniche.</small>
+                    </label>
+                  </div>
                 </div>
                 <div class="mission-presets">
                   <button class="preset-btn" data-mission="Trova fornitori europei di acciaio inox 316L con certificazione EN 10204, stock disponibile e consegna in Nord Italia.">Acciaio inox 316L</button>
@@ -2392,7 +2454,19 @@
 
       const matches = report.top_matches || [];
       document.getElementById('missionResults').innerHTML = matches.length
-        ? matches.map(match => `
+        ? `
+          <article class="opportunity-card">
+            <header>
+              <div>
+                <h3>Fonti e garanzia della ricerca</h3>
+                <p class="lead">${escapeHtml(report.summary || 'Missione completata dall agente.')}</p>
+              </div>
+              <span class="mission-score">${escapeHtml(report.confidence_score || '--')}%</span>
+            </header>
+            <div class="insight"><strong>Fonti consultate:</strong> ${escapeHtml((report.sources_used || []).join(' | ') || 'Database AgentLink')}</div>
+            <div class="insight"><strong>Garanzia:</strong> ${escapeHtml(report.confidence_note || 'Score basato solo sui dati disponibili e da confermare con revisione umana.')}</div>
+          </article>
+        ` + matches.map(match => `
           <article class="opportunity-card">
             <header>
               <div>
@@ -2401,6 +2475,7 @@
               </div>
               <span class="mission-score">${escapeHtml(match.score || '--')}%</span>
             </header>
+            <div class="insight"><strong>Confidenza:</strong> ${escapeHtml(match.confidence || 'Media')} - ${escapeHtml(match.confidence_reason || 'Valutazione basata sui dati disponibili.')}</div>
             <div class="insight"><strong>Punti forti:</strong> ${escapeHtml((match.strengths || []).join(' | ') || 'Da verificare')}</div>
             <div class="insight"><strong>Rischi:</strong> ${escapeHtml((match.risks || []).join(' | ') || 'Nessun rischio evidente nei dati disponibili')}</div>
             <div class="insight"><strong>Prossima azione:</strong> ${escapeHtml(match.next_action || 'Preparare revisione umana')}</div>
@@ -2468,6 +2543,7 @@
 
     async function runMissionAgent() {
       const mission = document.getElementById('missionPrompt').value.trim();
+      const sourceMode = document.querySelector('input[name="missionSource"]:checked')?.value || 'internal';
       const button = document.getElementById('runMissionAgent');
       const originalText = button.textContent;
 
@@ -2485,7 +2561,7 @@
       button.disabled = true;
       button.textContent = 'Agente al lavoro...';
       appendMissionBubble('user', 'Tu', mission);
-      appendMissionBubble('agent', 'AgentLink Mission-01', 'Missione chiara. Sto analizzando le aziende registrate e preparo le migliori opportunita.');
+      appendMissionBubble('agent', 'AgentLink Mission-01', `Missione chiara. Modalita ricerca: ${sourceMode}. Sto analizzando le fonti e preparo opportunita con score e confidenza.`);
       document.getElementById('missionLog').innerHTML = '<div>Sto leggendo la missione...</div><div>Sto caricando le aziende registrate...</div>';
       document.getElementById('missionResults').innerHTML = '<div class="empty-state">Analisi in corso...</div>';
 
@@ -2502,7 +2578,7 @@
         const response = await fetch('/api/agent-mission', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ mission, companies })
+          body: JSON.stringify({ mission, companies, sourceMode })
         });
 
         const data = await response.json();
