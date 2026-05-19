@@ -662,6 +662,23 @@
       line-height: 1.42;
     }
 
+    .matchlab-actions {
+      align-items: center;
+      gap: 10px;
+    }
+
+    .matchlab-actions .btn {
+      min-height: 40px;
+      padding: 10px 13px;
+      font-size: 14px;
+      line-height: 1.15;
+    }
+
+    #matchlab .insight {
+      padding: 11px 12px;
+      font-size: 15px;
+    }
+
     @media (max-width: 1040px) {
       .app { grid-template-columns: 1fr; }
       .sidebar {
@@ -1006,7 +1023,7 @@
             <div class="insight-list" id="manualInsights">
               <div class="insight">Nessun match calcolato.</div>
             </div>
-            <div class="actions">
+            <div class="actions matchlab-actions">
               <button class="btn" data-goto="dialogue">Prepara dialogo agent-to-agent</button>
               <button class="btn secondary" data-goto="handoff">Vai alla scheda opportunita</button>
             </div>
@@ -1205,6 +1222,7 @@
     function showScreen(id) {
       screens.forEach(screen => screen.classList.toggle('active', screen.id === id));
       navButtons.forEach(button => button.classList.toggle('active', button.dataset.screen === id));
+      if (id === 'dialogue') prepareAgentDialogue();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -1556,11 +1574,54 @@
     document.getElementById('calculateMatch').addEventListener('click', renderManualMatch);
     document.getElementById('analyzeWithAi').addEventListener('click', analyzeMatchWithAi);
 
-    const followUps = [
-      ['Buyer Agent - MetalNord', 'Puoi confermare MOQ minimo, disponibilita campioni e documentazione tecnica prima del contatto umano?'],
-      ['Seller Agent - SteelForge Europe', 'MOQ minimo 10 tonnellate. Campioni disponibili in 7 giorni. Schede tecniche e certificati caricabili in piattaforma.'],
-      ['AgentLink Matcher', 'Match aggiornato a 87%. Rischi residui: condizioni pagamento e disponibilita Q3. Hand-off consigliato.']
-    ];
+    function defaultFollowUps() {
+      return [
+        ['Buyer Agent - MetalNord', 'Puoi confermare MOQ minimo, disponibilita campioni e documentazione tecnica prima del contatto umano?'],
+        ['Seller Agent - SteelForge Europe', 'MOQ minimo 10 tonnellate. Campioni disponibili in 7 giorni. Schede tecniche e certificati caricabili in piattaforma.'],
+        ['AgentLink Matcher', 'Match aggiornato a 87%. Rischi residui: condizioni pagamento e disponibilita Q3. Hand-off consigliato.']
+      ];
+    }
+
+    function prepareAgentDialogue() {
+      const chat = document.getElementById('chatLog');
+      const match = window.agentlinkLastMatch;
+      messageIndex = 0;
+
+      if (!match) {
+        followUps = defaultFollowUps();
+        return;
+      }
+
+      const buyer = match.buyer;
+      const seller = match.seller;
+      const score = match.result?.score || '--';
+      const buyerNeed = buyer.needs || buyer.rules || 'Richiesta aziendale da qualificare.';
+      const sellerOffer = seller.offers || seller.availability || 'Offerta aziendale da qualificare.';
+      const sellerProof = [seller.certifications, seller.availability].filter(Boolean).join(' - ') || 'Documentazione da completare.';
+
+      chat.innerHTML = `
+        <div class="message">
+          <strong>Buyer Agent - ${escapeHtml(buyer.name)}</strong>
+          <p>${escapeHtml(buyerNeed)}</p>
+        </div>
+        <div class="message seller">
+          <strong>Seller Agent - ${escapeHtml(seller.name)}</strong>
+          <p>${escapeHtml(sellerOffer)}</p>
+        </div>
+        <div class="message system">
+          <strong>AgentLink Matcher</strong>
+          <p>Match preliminare ${escapeHtml(score)}%. Prima di passare all'umano servono conferme su documenti, disponibilita e prossimi passi.</p>
+        </div>
+      `;
+
+      followUps = [
+        [`Buyer Agent - ${buyer.name}`, `Puoi confermare documenti, disponibilita operativa e tempi reali rispetto a questa richiesta: ${buyerNeed}`],
+        [`Seller Agent - ${seller.name}`, `Confermo questi elementi disponibili: ${sellerProof}. Il referente umano dovra validare condizioni economiche e documenti finali.`],
+        ['AgentLink Matcher', `Match aggiornato a ${score}%. Hand-off consigliato solo dopo verifica umana dei punti mancanti e consenso al primo contatto.`]
+      ];
+    }
+
+    let followUps = defaultFollowUps();
     let messageIndex = 0;
 
     document.getElementById('nextMessage').addEventListener('click', () => {
