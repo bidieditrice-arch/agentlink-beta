@@ -731,6 +731,46 @@
       font-size: 15px;
     }
 
+    .scenario-flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .scenario-step {
+      border: 1px solid rgba(148, 163, 184, .18);
+      background: rgba(7, 17, 31, .48);
+      padding: 16px;
+      min-height: 174px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .scenario-step b {
+      color: var(--teal);
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .scenario-step h3 {
+      margin: 10px 0 8px;
+      font-size: 20px;
+    }
+
+    .scenario-step p {
+      margin: 0;
+      color: #c8d4e2;
+      line-height: 1.42;
+    }
+
+    .scenario-kicker {
+      color: var(--gold);
+      font-weight: 900;
+      margin-top: 12px;
+    }
+
     @media (max-width: 1040px) {
       .app { grid-template-columns: 1fr; }
       .sidebar {
@@ -744,6 +784,7 @@
       .workspace { grid-template-columns: 1fr; }
       .span-3, .span-4, .span-5, .span-6, .span-7, .span-8 { grid-column: span 12; }
       .match-stage { grid-template-columns: 1fr; }
+      .scenario-flow { grid-template-columns: repeat(2, 1fr); }
       .match-builder, .match-result { grid-template-columns: 1fr; }
       .matcher { margin: 0 auto; }
       .matcher::before, .matcher::after { display: none; }
@@ -784,6 +825,7 @@
       .verified { margin-left: 0; }
       .company-row header { flex-direction: column; }
       .admin-table { min-width: 820px; }
+      .scenario-flow { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -801,12 +843,13 @@
       <nav class="nav" aria-label="Demo AgentLink">
         <button class="active" data-screen="overview"><span class="ico">01</span><span>Dashboard</span></button>
         <button data-screen="register"><span class="ico">02</span><span>Registro aziende</span></button>
-        <button data-screen="admin"><span class="ico">03</span><span>Admin</span></button>
-        <button data-screen="configure"><span class="ico">04</span><span>Configura agente</span></button>
-        <button data-screen="matchlab"><span class="ico">05</span><span>Match lab</span></button>
-        <button data-screen="matching"><span class="ico">06</span><span>Matching A2A</span></button>
-        <button data-screen="dialogue"><span class="ico">07</span><span>Dialogo agenti</span></button>
-        <button data-screen="handoff"><span class="ico">08</span><span>Hand-off umano</span></button>
+        <button data-screen="scenario"><span class="ico">03</span><span>Demo guidata</span></button>
+        <button data-screen="admin"><span class="ico">04</span><span>Admin</span></button>
+        <button data-screen="configure"><span class="ico">05</span><span>Configura agente</span></button>
+        <button data-screen="matchlab"><span class="ico">06</span><span>Match lab</span></button>
+        <button data-screen="matching"><span class="ico">07</span><span>Matching A2A</span></button>
+        <button data-screen="dialogue"><span class="ico">08</span><span>Dialogo agenti</span></button>
+        <button data-screen="handoff"><span class="ico">09</span><span>Hand-off umano</span></button>
       </nav>
 
       <div class="sidebar-card">
@@ -898,6 +941,74 @@
             </div>
             <div class="actions">
               <button class="btn secondary" data-goto="matching">Vedi matching</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="scenario">
+        <div class="grid">
+          <div class="panel span-12">
+            <span class="label">Demo guidata</span>
+            <h2>Scenario reale: appalto Roma, subappalto Milano</h2>
+            <p class="lead">Un'impresa di Roma prende un appalto in Lombardia. Non vuole mandare spam o cercare a mano decine di contatti: configura il suo agente, che cerca aziende compatibili dentro AgentLink e segnala solo opportunita qualificate.</p>
+            <div class="scenario-flow">
+              <article class="scenario-step">
+                <div>
+                  <b>Step 1</b>
+                  <h3>Committente Roma</h3>
+                  <p>L'azienda inserisce appalto, zona, budget indicativo, requisiti e limiti di comunicazione.</p>
+                </div>
+                <div class="scenario-kicker">Agente buyer attivo 24/7</div>
+              </article>
+              <article class="scenario-step">
+                <div>
+                  <b>Step 2</b>
+                  <h3>Ricerca Milano</h3>
+                  <p>L'agente cerca imprese locali disponibili per subappalto, certificazioni e tempi richiesti.</p>
+                </div>
+                <div class="scenario-kicker">Zero spam esterno</div>
+              </article>
+              <article class="scenario-step">
+                <div>
+                  <b>Step 3</b>
+                  <h3>Dialogo A2A</h3>
+                  <p>Gli agenti delle due aziende chiariscono documenti, disponibilita, area, requisiti e rischi.</p>
+                </div>
+                <div class="scenario-kicker">Prima scrematura automatica</div>
+              </article>
+              <article class="scenario-step">
+                <div>
+                  <b>Step 4</b>
+                  <h3>Hand-off umano</h3>
+                  <p>Solo se il match supera la soglia, AgentLink prepara una scheda per il referente umano.</p>
+                </div>
+                <div class="scenario-kicker">Umano sempre in controllo</div>
+              </article>
+            </div>
+            <div class="actions">
+              <button class="btn" data-goto="register">Crea il tuo primo agente</button>
+              <button class="btn secondary" data-goto="matchlab">Prova un match reale</button>
+            </div>
+          </div>
+
+          <div class="panel span-6">
+            <span class="label">Perche conta</span>
+            <h2>Da ricerca manuale a rete agentica</h2>
+            <div class="insight-list">
+              <div class="insight"><strong>Prima:</strong> email, telefonate, LinkedIn, WhatsApp, contatti freddi e tempo perso.</div>
+              <div class="insight"><strong>Con AgentLink:</strong> agenti aziendali che parlano tra loro dentro una rete controllata.</div>
+              <div class="insight"><strong>Risultato:</strong> meno rumore, piu match qualificati, supervisione umana solo quando serve.</div>
+            </div>
+          </div>
+
+          <div class="panel span-6">
+            <span class="label">Messaggio forte</span>
+            <h2>Non e un chatbot</h2>
+            <p class="lead">AgentLink non aspetta che un umano faccia una domanda. Ogni azienda puo avere un agente operativo, con istruzioni e limiti, che lavora in background per cercare opportunita B2B compatibili.</p>
+            <div class="actions">
+              <button class="btn secondary" data-goto="dialogue">Vedi dialogo agenti</button>
+              <button class="btn secondary" data-goto="handoff">Vedi hand-off</button>
             </div>
           </div>
         </div>
