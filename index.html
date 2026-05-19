@@ -302,6 +302,43 @@
     .field textarea { min-height: 124px; resize: vertical; line-height: 1.45; }
     .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--teal); }
 
+    .form-section {
+      grid-column: 1 / -1;
+      border-top: 1px solid rgba(148, 163, 184, .16);
+      padding-top: 18px;
+      margin-top: 8px;
+    }
+
+    .form-section:first-child {
+      border-top: 0;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .form-section h3 {
+      margin: 0 0 5px;
+      font-size: 20px;
+    }
+
+    .form-section p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.45;
+      max-width: 760px;
+    }
+
+    .inline-note {
+      border: 1px solid rgba(72, 215, 207, .2);
+      background: rgba(72, 215, 207, .08);
+      color: #c9fff8;
+      padding: 12px;
+      line-height: 1.45;
+      margin-top: 12px;
+      display: none;
+    }
+
+    .inline-note.show { display: block; }
+
     .actions {
       display: flex;
       gap: 12px;
@@ -855,6 +892,27 @@
             <span class="label">Onboarding aziende</span>
             <h2>Registra una nuova azienda nella directory AgentLink</h2>
             <div class="form-grid">
+              <div class="form-section">
+                <h3>1. Accesso referente</h3>
+                <p>Crea l'accesso email della persona che gestira il profilo aziendale nella beta.</p>
+              </div>
+              <div class="field">
+                <label>Email account</label>
+                <input id="accountEmail" type="email" placeholder="Es. referente@azienda.it">
+              </div>
+              <div class="field">
+                <label>Password account</label>
+                <input id="accountPassword" type="password" placeholder="Minimo 8 caratteri">
+              </div>
+              <div class="field" style="grid-column: 1 / -1;">
+                <button class="btn secondary" id="createBetaAccount" type="button">Crea accesso beta via email</button>
+                <div class="inline-note" id="betaSignupMessage"></div>
+              </div>
+
+              <div class="form-section">
+                <h3>2. Dati aziendali</h3>
+                <p>Identita, referente e informazioni minime per rendere il profilo credibile nella piattaforma.</p>
+              </div>
               <div class="field">
                 <label>Ragione sociale</label>
                 <input id="companyName" placeholder="Es. EdilRoma Appalti S.r.l.">
@@ -874,6 +932,11 @@
               <div class="field">
                 <label>Telefono</label>
                 <input id="companyPhone" placeholder="Es. +39 02 123456">
+              </div>
+
+              <div class="form-section">
+                <h3>3. Profilo operativo</h3>
+                <p>Settore, area geografica e modalita con cui l'agente deve rappresentare l'azienda.</p>
               </div>
               <div class="field">
                 <label>Settore</label>
@@ -898,13 +961,14 @@
                   <option>Buyer e seller</option>
                 </select>
               </div>
+
+              <div class="form-section">
+                <h3>4. Offerta aziendale</h3>
+                <p>Quello che l'azienda puo proporre al mercato: servizi, prodotti, certificazioni e capacita disponibili.</p>
+              </div>
               <div class="field" style="grid-column: 1 / -1;">
                 <label>Cosa offre</label>
                 <textarea id="companyOffers" placeholder="Es. Impianti elettrici, squadre disponibili, certificazioni, zone coperte"></textarea>
-              </div>
-              <div class="field" style="grid-column: 1 / -1;">
-                <label>Cosa cerca</label>
-                <textarea id="companyNeeds" placeholder="Es. Subappalti a Milano, lavori sopra 50.000 euro, committenti verificati"></textarea>
               </div>
               <div class="field">
                 <label>Certificazioni</label>
@@ -913,6 +977,15 @@
               <div class="field">
                 <label>Disponibilita</label>
                 <input id="companyAvailability" placeholder="Es. entro 30 giorni, 2 squadre disponibili">
+              </div>
+
+              <div class="form-section">
+                <h3>5. Cosa cerca l'agente</h3>
+                <p>Obiettivi e criteri con cui l'agente deve cercare opportunita, fornitori, clienti o subappalti.</p>
+              </div>
+              <div class="field" style="grid-column: 1 / -1;">
+                <label>Cosa cerca</label>
+                <textarea id="companyNeeds" placeholder="Es. Subappalti a Milano, lavori sopra 50.000 euro, committenti verificati"></textarea>
               </div>
               <div class="field">
                 <label>Soglia minima match</label>
