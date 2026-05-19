@@ -809,6 +809,15 @@
       opacity: .86;
     }
 
+    .video-frame.has-preview video {
+      width: 100%;
+      height: 100%;
+      min-height: 360px;
+      object-fit: cover;
+      display: block;
+      background: #07111f;
+    }
+
     .video-frame.has-preview .video-overlay {
       position: absolute;
       inset: 0;
@@ -1081,10 +1090,10 @@
 
           <div class="panel span-12 video-demo">
             <div class="video-frame has-preview">
-              <img src="agentlink-video-preview.png" alt="Anteprima video AgentLink">
-              <div class="video-overlay">
-                <div class="play-badge">▶</div>
-              </div>
+              <video controls preload="metadata" poster="agentlink-video-preview.png">
+                <source src="agentlink-demo.mp4" type="video/mp4">
+                Il tuo browser non supporta il video HTML5.
+              </video>
             </div>
             <aside class="video-side">
               <div>
