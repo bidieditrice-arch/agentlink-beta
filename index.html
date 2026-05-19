@@ -214,6 +214,21 @@
       min-width: 0;
     }
 
+    .panel-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .panel-heading .btn {
+      min-height: 38px;
+      padding: 9px 12px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
     .panel.light {
       background: var(--paper);
       color: var(--ink);
@@ -867,7 +882,10 @@
           </div>
 
           <div class="panel span-5">
-            <span class="label">Stato agente</span>
+            <div class="panel-heading">
+              <span class="label">Stato agente</span>
+              <button class="btn" data-goto="register">Registra azienda</button>
+            </div>
             <div class="progress-list">
               <div class="progress-row done"><span class="ico">âœ“</span><span>Profilo aziendale verificato</span><strong>100%</strong></div>
               <div class="bar"><span style="--w:100%"></span></div>
@@ -879,7 +897,6 @@
               <div class="bar"><span style="--w:42%"></span></div>
             </div>
             <div class="actions">
-              <button class="btn" data-goto="register">Registra azienda</button>
               <button class="btn secondary" data-goto="matching">Vedi matching</button>
             </div>
           </div>
