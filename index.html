@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="it">
 <head>
   <meta charset="utf-8">
@@ -682,7 +682,7 @@
       <section class="screen active" id="overview">
         <div class="grid">
           <div class="span-12 logo-strip">
-            <img src="agentlink-logo.png" alt="AgentLink logo">
+            <img src="assets/agentlink-logo.png" alt="AgentLink logo">
             <div>
               <strong>Profilo aziendale verificato</strong>
               <p class="lead">MetalNord Components S.r.l. cerca fornitori europei di acciaio inox 316L certificato.</p>
@@ -739,13 +739,13 @@
           <div class="panel span-5">
             <span class="label">Stato agente</span>
             <div class="progress-list">
-              <div class="progress-row done"><span class="ico">✓</span><span>Profilo aziendale verificato</span><strong>100%</strong></div>
+              <div class="progress-row done"><span class="ico">âœ“</span><span>Profilo aziendale verificato</span><strong>100%</strong></div>
               <div class="bar"><span style="--w:100%"></span></div>
-              <div class="progress-row done"><span class="ico">✓</span><span>Istruzioni operative caricate</span><strong>100%</strong></div>
+              <div class="progress-row done"><span class="ico">âœ“</span><span>Istruzioni operative caricate</span><strong>100%</strong></div>
               <div class="bar"><span style="--w:100%"></span></div>
-              <div class="progress-row"><span class="ico">↗</span><span>Matching agent-to-agent</span><strong>68%</strong></div>
+              <div class="progress-row"><span class="ico">â†—</span><span>Matching agent-to-agent</span><strong>68%</strong></div>
               <div class="bar"><span style="--w:68%"></span></div>
-              <div class="progress-row"><span class="ico">↳</span><span>Opportunita pronte per review</span><strong>3</strong></div>
+              <div class="progress-row"><span class="ico">â†³</span><span>Opportunita pronte per review</span><strong>3</strong></div>
               <div class="bar"><span style="--w:42%"></span></div>
             </div>
             <div class="actions">
@@ -803,7 +803,7 @@
               </div>
             </div>
             <div class="actions">
-              <button class="btn" id="saveCompany">Salva azienda nella demo</button>
+              <button class="btn" id="saveCompany">Salva azienda nella beta</button>
               <button class="btn secondary" id="loadExample">Carica esempio subappalto</button>
               <button class="btn secondary" id="clearCompanies">Svuota registro</button>
             </div>
@@ -812,7 +812,7 @@
           <aside class="panel">
             <span class="label">Directory locale</span>
             <h2>Aziende registrate</h2>
-            <p class="lead">Per questa prova i dati vengono salvati solo nel browser su questo computer. Per una demo pubblica serviranno database, login e verifica aziende.</p>
+            <p class="lead">Le aziende registrate vengono salvate nel database beta AgentLink. La fase successiva aggiungera login, verifica aziendale e agenti AI reali.</p>
             <div class="registry-list" id="companyList"></div>
           </aside>
         </div>
@@ -867,11 +867,11 @@
               </div>
               <div class="avatar">AI</div>
             </div>
-            <div class="rule"><span class="check">✓</span> Non invia offerte all'esterno</div>
-            <div class="rule"><span class="check">✓</span> Non conclude accordi senza umano</div>
-            <div class="rule"><span class="check">✓</span> Registra ogni conversazione A2A</div>
-            <div class="rule"><span class="check">✓</span> Blocca contatti non verificati</div>
-            <div class="rule"><span class="check">✓</span> Protegge dati sensibili e prezzo target</div>
+            <div class="rule"><span class="check">âœ“</span> Non invia offerte all'esterno</div>
+            <div class="rule"><span class="check">âœ“</span> Non conclude accordi senza umano</div>
+            <div class="rule"><span class="check">âœ“</span> Registra ogni conversazione A2A</div>
+            <div class="rule"><span class="check">âœ“</span> Blocca contatti non verificati</div>
+            <div class="rule"><span class="check">âœ“</span> Protegge dati sensibili e prezzo target</div>
           </aside>
         </div>
       </section>
@@ -948,11 +948,11 @@
 
           <div class="panel span-4">
             <span class="label">Controlli automatici</span>
-            <div class="rule"><span class="check">✓</span> Dati aziendali verificati</div>
-            <div class="rule"><span class="check">✓</span> Certificazioni richieste</div>
-            <div class="rule"><span class="check">✓</span> Area geografica compatibile</div>
-            <div class="rule"><span class="check">✓</span> Nessun prezzo target condiviso</div>
-            <div class="rule"><span class="check">✓</span> Supervisione umana richiesta</div>
+            <div class="rule"><span class="check">âœ“</span> Dati aziendali verificati</div>
+            <div class="rule"><span class="check">âœ“</span> Certificazioni richieste</div>
+            <div class="rule"><span class="check">âœ“</span> Area geografica compatibile</div>
+            <div class="rule"><span class="check">âœ“</span> Nessun prezzo target condiviso</div>
+            <div class="rule"><span class="check">âœ“</span> Supervisione umana richiesta</div>
           </div>
         </div>
       </section>
@@ -1023,24 +1023,71 @@
       rules: document.getElementById('companyRules')
     };
     const companyList = document.getElementById('companyList');
-    const storageKey = 'agentlink-demo-companies';
+    const SUPABASE_URL = 'https://yyucwvuwmpaltpurwinx.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_LGE6-ZJXnAV60mMs_p15gQ_j2pKHTZR';
+    const companiesEndpoint = `${SUPABASE_URL}/rest/v1/companies`;
+    const useSupabase = SUPABASE_PUBLISHABLE_KEY && !SUPABASE_PUBLISHABLE_KEY.includes('INSERISCI_');
 
-    function getCompanies() {
+    async function fetchCompanies() {
+      if (!useSupabase) return getLocalCompanies();
+
+      const response = await fetch(`${companiesEndpoint}?select=*&order=created_at.desc`, {
+        headers: {
+          apikey: SUPABASE_PUBLISHABLE_KEY,
+          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`
+        }
+      });
+
+      if (!response.ok) throw new Error('Impossibile leggere il database aziende.');
+      return response.json();
+    }
+
+    async function saveCompany(company) {
+      if (!useSupabase) {
+        const companies = getLocalCompanies();
+        companies.unshift({ ...company, created_at: new Date().toISOString() });
+        localStorage.setItem('agentlink-demo-companies', JSON.stringify(companies));
+        return;
+      }
+
+      const response = await fetch(companiesEndpoint, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_PUBLISHABLE_KEY,
+          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal'
+        },
+        body: JSON.stringify(company)
+      });
+
+      if (!response.ok) {
+        const details = await response.text();
+        throw new Error(details || 'Impossibile salvare azienda nel database.');
+      }
+    }
+
+    function getLocalCompanies() {
       try {
-        return JSON.parse(localStorage.getItem(storageKey)) || [];
+        return JSON.parse(localStorage.getItem('agentlink-demo-companies')) || [];
       } catch {
         return [];
       }
     }
 
-    function setCompanies(companies) {
-      localStorage.setItem(storageKey, JSON.stringify(companies));
-    }
+    async function renderCompanies() {
+      companyList.innerHTML = '<div class="empty-state">Caricamento aziende...</div>';
 
-    function renderCompanies() {
-      const companies = getCompanies();
+      let companies = [];
+      try {
+        companies = await fetchCompanies();
+      } catch (error) {
+        companyList.innerHTML = `<div class="empty-state">Database non raggiungibile: ${escapeHtml(error.message)}</div>`;
+        return;
+      }
+
       if (!companies.length) {
-        companyList.innerHTML = "<div class=\"empty-state\">Nessuna azienda registrata. Inserisci una prima azienda o carica l'esempio subappalto.</div>";
+        companyList.innerHTML = '<div class="empty-state">Nessuna azienda registrata. Inserisci una prima azienda o carica l\'esempio subappalto.</div>';
         return;
       }
 
@@ -1068,19 +1115,22 @@
         .replaceAll("'", '&#039;');
     }
 
-    document.getElementById('saveCompany').addEventListener('click', () => {
+    document.getElementById('saveCompany').addEventListener('click', async () => {
       const company = Object.fromEntries(Object.entries(companyFields).map(([key, field]) => [key, field.value.trim()]));
       if (!company.name || !company.area) {
         alert('Inserisci almeno ragione sociale e area operativa.');
         return;
       }
-      const companies = getCompanies();
-      companies.unshift({ ...company, createdAt: new Date().toISOString() });
-      setCompanies(companies);
-      Object.values(companyFields).forEach(field => {
-        if (field.tagName !== 'SELECT') field.value = '';
-      });
-      renderCompanies();
+      try {
+        await saveCompany(company);
+        Object.values(companyFields).forEach(field => {
+          if (field.tagName !== 'SELECT') field.value = '';
+        });
+        await renderCompanies();
+        alert('Azienda salvata nel registro AgentLink.');
+      } catch (error) {
+        alert(`Errore salvataggio: ${error.message}`);
+      }
     });
 
     document.getElementById('loadExample').addEventListener('click', () => {
@@ -1094,8 +1144,12 @@
     });
 
     document.getElementById('clearCompanies').addEventListener('click', () => {
-      if (confirm('Vuoi svuotare il registro aziende di questa demo?')) {
-        localStorage.removeItem(storageKey);
+      if (useSupabase) {
+        alert('Nella beta online il registro Supabase non viene svuotato dal browser. In seguito aggiungeremo un pannello admin.');
+        return;
+      }
+      if (confirm('Vuoi svuotare il registro locale di questa demo?')) {
+        localStorage.removeItem('agentlink-demo-companies');
         renderCompanies();
       }
     });
@@ -1122,3 +1176,4 @@
   </script>
 </body>
 </html>
+
