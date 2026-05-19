@@ -633,6 +633,35 @@
       border: 1px solid rgba(148, 163, 184, .18);
     }
 
+    .match-builder {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .match-result {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 18px;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    .insight-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .insight {
+      border: 1px solid rgba(148, 163, 184, .16);
+      background: rgba(7, 17, 31, .45);
+      padding: 12px;
+      color: #dce7f3;
+      line-height: 1.42;
+    }
+
     @media (max-width: 1040px) {
       .app { grid-template-columns: 1fr; }
       .sidebar {
@@ -646,6 +675,7 @@
       .workspace { grid-template-columns: 1fr; }
       .span-3, .span-4, .span-5, .span-6, .span-7, .span-8 { grid-column: span 12; }
       .match-stage { grid-template-columns: 1fr; }
+      .match-builder, .match-result { grid-template-columns: 1fr; }
       .matcher { margin: 0 auto; }
       .matcher::before, .matcher::after { display: none; }
     }
@@ -704,9 +734,10 @@
         <button data-screen="register"><span class="ico">02</span><span>Registro aziende</span></button>
         <button data-screen="admin"><span class="ico">03</span><span>Admin</span></button>
         <button data-screen="configure"><span class="ico">04</span><span>Configura agente</span></button>
-        <button data-screen="matching"><span class="ico">05</span><span>Matching A2A</span></button>
-        <button data-screen="dialogue"><span class="ico">06</span><span>Dialogo agenti</span></button>
-        <button data-screen="handoff"><span class="ico">07</span><span>Hand-off umano</span></button>
+        <button data-screen="matchlab"><span class="ico">05</span><span>Match lab</span></button>
+        <button data-screen="matching"><span class="ico">06</span><span>Matching A2A</span></button>
+        <button data-screen="dialogue"><span class="ico">07</span><span>Dialogo agenti</span></button>
+        <button data-screen="handoff"><span class="ico">08</span><span>Hand-off umano</span></button>
       </nav>
 
       <div class="sidebar-card">
@@ -931,6 +962,52 @@
                   <tr><td colspan="6">Caricamento aziende...</td></tr>
                 </tbody>
               </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="matchlab">
+        <div class="grid">
+          <div class="panel span-12">
+            <span class="label">Matching manuale assistito</span>
+            <h2>Confronta due aziende registrate</h2>
+            <p class="lead">Prima versione del motore di matching: confronta settore, area, bisogni, offerte, certificazioni e disponibilita. Nel punto successivo sara potenziata dagli agenti AI.</p>
+            <div class="match-builder">
+              <div class="field">
+                <label>Azienda buyer / richiesta</label>
+                <select id="buyerSelect"></select>
+              </div>
+              <div class="field">
+                <label>Azienda seller / offerta</label>
+                <select id="sellerSelect"></select>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="btn" id="calculateMatch">Calcola compatibilita</button>
+              <button class="btn secondary" id="reloadMatchCompanies">Aggiorna aziende</button>
+            </div>
+          </div>
+
+          <div class="panel span-5">
+            <span class="label">Score preliminare</span>
+            <div class="match-result">
+              <div class="score-ring" id="manualScoreRing"><b id="manualScore">--</b></div>
+              <div>
+                <h2 id="manualScoreTitle">Seleziona due aziende</h2>
+                <p class="lead" id="manualScoreText">Il sistema preparera una prima valutazione prima dell'intervento degli agenti AI.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel span-7">
+            <span class="label">Analisi match</span>
+            <div class="insight-list" id="manualInsights">
+              <div class="insight">Nessun match calcolato.</div>
+            </div>
+            <div class="actions">
+              <button class="btn" data-goto="dialogue">Prepara dialogo agent-to-agent</button>
+              <button class="btn secondary" data-goto="handoff">Vai alla scheda opportunita</button>
             </div>
           </div>
         </div>
@@ -1244,6 +1321,103 @@
         .replaceAll("'", '&#039;');
     }
 
+    function normalizedWords(value) {
+      return String(value || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .split(/[^a-z0-9]+/)
+        .filter(word => word.length > 3);
+    }
+
+    function overlapScore(left, right) {
+      const a = new Set(normalizedWords(left));
+      const b = new Set(normalizedWords(right));
+      if (!a.size || !b.size) return 0;
+      const matches = [...a].filter(word => b.has(word)).length;
+      return Math.min(30, Math.round((matches / Math.min(a.size, b.size)) * 30));
+    }
+
+    function calculateCompatibility(buyer, seller) {
+      let score = 25;
+      const strengths = [];
+      const risks = [];
+      const missing = [];
+
+      if (buyer.sector && seller.sector && buyer.sector === seller.sector) {
+        score += 15;
+        strengths.push('Settore coerente tra le due aziende.');
+      } else {
+        risks.push('Settore non identico: serve verifica umana sulla compatibilita reale.');
+      }
+
+      const areaMatch = normalizedWords(buyer.area).some(word => normalizedWords(seller.area).includes(word));
+      if (areaMatch) {
+        score += 15;
+        strengths.push('Area geografica compatibile.');
+      } else {
+        risks.push('Area geografica da verificare.');
+      }
+
+      const semantic = overlapScore(`${buyer.needs} ${buyer.rules}`, `${seller.offers} ${seller.certifications} ${seller.availability}`);
+      score += semantic;
+      if (semantic > 12) strengths.push('Bisogni e offerta hanno parole chiave compatibili.');
+      if (!seller.certifications) missing.push('Certificazioni seller non complete.');
+      if (!seller.availability) missing.push('Disponibilita operativa non completa.');
+      if (!buyer.email || !seller.email) missing.push('Uno dei referenti non ha email compilata.');
+
+      if (seller.beta_consent) {
+        score += 8;
+        strengths.push('Il seller ha dato consenso a essere contattato per la beta.');
+      }
+
+      score = Math.max(0, Math.min(96, score));
+      return { score, strengths, risks, missing };
+    }
+
+    async function populateMatchSelectors() {
+      const buyerSelect = document.getElementById('buyerSelect');
+      const sellerSelect = document.getElementById('sellerSelect');
+      buyerSelect.innerHTML = '<option>Caricamento...</option>';
+      sellerSelect.innerHTML = '<option>Caricamento...</option>';
+
+      try {
+        window.agentlinkCompanies = await fetchCompanies();
+        const options = window.agentlinkCompanies.map(company => `<option value="${company.id}">${escapeHtml(company.name)} - ${escapeHtml(company.area || '')}</option>`).join('');
+        buyerSelect.innerHTML = options || '<option value="">Nessuna azienda</option>';
+        sellerSelect.innerHTML = options || '<option value="">Nessuna azienda</option>';
+      } catch (error) {
+        buyerSelect.innerHTML = '<option value="">Errore database</option>';
+        sellerSelect.innerHTML = '<option value="">Errore database</option>';
+      }
+    }
+
+    function renderManualMatch() {
+      const buyerId = Number(document.getElementById('buyerSelect').value);
+      const sellerId = Number(document.getElementById('sellerSelect').value);
+      const companies = window.agentlinkCompanies || [];
+      const buyer = companies.find(company => company.id === buyerId);
+      const seller = companies.find(company => company.id === sellerId);
+
+      if (!buyer || !seller || buyer.id === seller.id) {
+        alert('Seleziona due aziende diverse.');
+        return;
+      }
+
+      const result = calculateCompatibility(buyer, seller);
+      document.getElementById('manualScore').textContent = `${result.score}%`;
+      document.getElementById('manualScoreRing').style.background = `conic-gradient(var(--green) 0 ${result.score}%, rgba(148, 163, 184, .15) ${result.score}% 100%)`;
+      document.getElementById('manualScoreTitle').textContent = result.score >= 80 ? 'Match forte' : result.score >= 60 ? 'Match interessante' : 'Match da verificare';
+      document.getElementById('manualScoreText').textContent = `${buyer.name} e ${seller.name}: valutazione preliminare basata su dati aziendali strutturati.`;
+
+      const items = [
+        ...result.strengths.map(text => `<div class="insight"><strong>Punto forte:</strong> ${escapeHtml(text)}</div>`),
+        ...result.risks.map(text => `<div class="insight"><strong>Rischio:</strong> ${escapeHtml(text)}</div>`),
+        ...result.missing.map(text => `<div class="insight"><strong>Dato mancante:</strong> ${escapeHtml(text)}</div>`)
+      ];
+      document.getElementById('manualInsights').innerHTML = items.join('') || '<div class="insight">Nessun elemento rilevante.</div>';
+    }
+
     async function renderAdminCompanies() {
       const rows = document.getElementById('adminCompanyRows');
       const count = document.getElementById('adminCount');
@@ -1325,7 +1499,10 @@
 
     renderCompanies();
     renderAdminCompanies();
+    populateMatchSelectors();
     document.getElementById('refreshAdmin').addEventListener('click', renderAdminCompanies);
+    document.getElementById('reloadMatchCompanies').addEventListener('click', populateMatchSelectors);
+    document.getElementById('calculateMatch').addEventListener('click', renderManualMatch);
 
     const followUps = [
       ['Buyer Agent - MetalNord', 'Puoi confermare MOQ minimo, disponibilita campioni e documentazione tecnica prima del contatto umano?'],
