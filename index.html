@@ -817,8 +817,12 @@
       justify-content: flex-end;
       gap: 12px;
       padding: 22px;
-      background: linear-gradient(180deg, rgba(7, 17, 31, .08), rgba(7, 17, 31, .78));
+      background: linear-gradient(180deg, rgba(7, 17, 31, .02), rgba(7, 17, 31, .2));
       z-index: 1;
+    }
+
+    .video-frame.has-preview .video-overlay > *:not(.play-badge) {
+      display: none;
     }
 
     .play-badge {
@@ -1080,16 +1084,13 @@
               <img src="agentlink-video-preview.png" alt="Anteprima video AgentLink">
               <div class="video-overlay">
                 <div class="play-badge">▶</div>
-                <div class="video-scene-label">Video demo</div>
-                <h2 class="video-scene-title">Guarda AgentLink lavorare</h2>
-                <p class="video-scene-text">Anteprima del video: persone in azienda configurano l'agente, avviano la ricerca e vedono gli agenti AI qualificare opportunita in autonomia.</p>
               </div>
             </div>
             <aside class="video-side">
               <div>
-                <span class="label">Asset video da produrre</span>
-                <h2>Serve un video reale, non una finta animazione</h2>
-                <p class="lead">Obiettivo: 60-90 secondi con persone, interfaccia AgentLink, agenti che lavorano in background e risultato finale leggibile.</p>
+                <span class="label">Video demo</span>
+                <h2>AgentLink in azione</h2>
+                <p class="lead">Guarda il flusso: azienda, agente AI, ricerca automatica, match qualificato e passaggio finale al referente umano.</p>
               </div>
               <div class="actions">
                 <button class="btn secondary" data-goto="scenario">Apri demo guidata</button>
