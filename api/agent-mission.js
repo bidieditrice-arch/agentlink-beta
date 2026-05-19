@@ -39,7 +39,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { mission, companies } = req.body || {};
+    const { mission, companies, sourceMode } = req.body || {};
     if (!mission || !String(mission).trim()) {
       return res.status(400).json({ error: 'Scrivi una missione per l agente.' });
     }
@@ -49,6 +49,12 @@ module.exports = async function handler(req, res) {
     }
 
     const cleanCompanies = companies.slice(0, 80).map(cleanCompany);
+    const sourceLabel = {
+      internal: 'Solo database AgentLink',
+      'web-simulated': 'Database AgentLink + fonti web simulate nella demo',
+      'company-site': 'Database AgentLink + sito aziendale o cataloghi autorizzati',
+      'uploaded-files': 'Database AgentLink + file caricati dall utente'
+    }[sourceMode] || 'Solo database AgentLink';
 
     const openaiResponse = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
@@ -63,17 +69,28 @@ module.exports = async function handler(req, res) {
           'Ricevi una missione aziendale e una lista di aziende registrate.',
           'Devi valutare solo i dati forniti: non inventare aziende, certificazioni, stock, prezzi o contatti.',
           'Lavora come un primo filtro: scarta aziende non pertinenti, seleziona opportunita e prepara un report per supervisione umana.',
+          'Se la missione e troppo vaga, prima fai domande di chiarimento invece di forzare risultati.',
+          'Ogni risultato deve avere score, confidenza e motivo della confidenza.',
+          'Se la fonte e simulata o non collegata realmente, dichiaralo in modo trasparente.',
           'Rispondi solo con JSON valido, senza markdown.'
         ].join(' '),
         input: `Missione dell utente:
 ${String(mission).trim()}
+
+Modalita fonti selezionata:
+${sourceLabel}
 
 Aziende registrate:
 ${JSON.stringify(cleanCompanies, null, 2)}
 
 Restituisci JSON con questa struttura:
 {
+  "needs_clarification": true oppure false,
+  "clarifying_questions": ["massimo 4 domande se servono chiarimenti"],
   "summary": "massimo 2 frasi sul risultato della missione",
+  "sources_used": ["fonti consultate o simulate"],
+  "confidence_score": numero da 0 a 100,
+  "confidence_note": "spiega quanto sono affidabili i risultati e cosa manca per validarli",
   "analyzed_count": numero aziende ricevute,
   "discarded_count": numero aziende scartate,
   "compatible_count": numero aziende compatibili,
@@ -85,6 +102,8 @@ Restituisci JSON con questa struttura:
     {
       "company_name": "nome esatto azienda dai dati",
       "score": numero da 0 a 100,
+      "confidence": "Alta, Media o Bassa",
+      "confidence_reason": "perche questa valutazione e affidabile o da verificare",
       "reason": "perche e compatibile con la missione",
       "strengths": ["massimo 3 punti forti"],
       "risks": ["massimo 3 rischi o dati da verificare"],
@@ -94,10 +113,14 @@ Restituisci JSON con questa struttura:
 }
 
 Regole:
+- Se la missione non specifica almeno obiettivo, settore/prodotto/servizio o area geografica, imposta needs_clarification a true.
+- Quando needs_clarification e true, fai domande utili e non forzare top_matches: puoi lasciarlo vuoto.
 - top_matches deve contenere massimo 3 aziende.
 - Se non ci sono opportunita forti, lascia top_matches vuoto e spiega nel summary.
 - analyzed_count deve essere uguale al numero di aziende ricevute.
-- discarded_count + compatible_count deve essere uguale ad analyzed_count.`
+- discarded_count + compatible_count deve essere uguale ad analyzed_count.
+- Se la modalita include fonti esterne simulate, inserisci "Fonti web simulate nella demo" in sources_used e spiega che la validazione reale richiede API o fonti autorizzate.
+- Non dare mai confidenza Alta se mancano certificazioni, disponibilita o area geografica coerente.`
       })
     });
 
