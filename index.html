@@ -1179,22 +1179,22 @@
         <div class="grid">
           <div class="panel span-12">
             <span class="label">Demo guidata</span>
-            <h2>Scenario reale: appalto Roma, subappalto Milano</h2>
-            <p class="lead">Un'impresa di Roma prende un appalto in Lombardia. Non vuole mandare spam o cercare a mano decine di contatti: configura il suo agente, che cerca aziende compatibili dentro AgentLink e segnala solo opportunita qualificate.</p>
+            <h2>Subappalto Acciaio Inox: Roma -> Milano</h2>
+            <p class="lead">MetalNord ha una richiesta urgente di acciaio inox 316L per il Nord Italia. AgentLink simula il lavoro autonomo degli agenti: ricerca, matching, dialogo tecnico e scheda finale per l'umano.</p>
             <div class="scenario-flow">
               <article class="scenario-step">
                 <div>
                   <b>Step 1</b>
-                  <h3>Committente Roma</h3>
-                  <p>L'azienda inserisce appalto, zona, budget indicativo, requisiti e limiti di comunicazione.</p>
+                  <h3>Profilo Buyer</h3>
+                  <p>MetalNord Roma carica richiesta, volumi, certificazioni e regole dell'agente.</p>
                 </div>
                 <div class="scenario-kicker">Agente buyer attivo 24/7</div>
               </article>
               <article class="scenario-step">
                 <div>
                   <b>Step 2</b>
-                  <h3>Ricerca Milano</h3>
-                  <p>L'agente cerca imprese locali disponibili per subappalto, certificazioni e tempi richiesti.</p>
+                  <h3>Matching</h3>
+                  <p>Il sistema trova Acciai Lombarda a Milano e calcola compatibilita 87%.</p>
                 </div>
                 <div class="scenario-kicker">Zero spam esterno</div>
               </article>
@@ -1216,7 +1216,7 @@
               </article>
             </div>
             <div class="actions">
-              <button class="btn" id="startGuidedDemo">Avvia ricerca automatica</button>
+              <button class="btn" id="startGuidedDemo">Avvia simulazione completa A2A</button>
               <button class="btn secondary" id="resetGuidedDemo">Reset demo</button>
             </div>
           </div>
@@ -1225,26 +1225,41 @@
             <span class="label">Scenario Demo Guidata</span>
             <div class="guided-demo">
               <aside class="demo-card">
-                <h3>Profilo Buyer</h3>
-                <p><strong>MetalNord Roma S.r.l.</strong><br>Appalto industriale in Lombardia. Cerca subappaltatori qualificati per carpenteria metallica e posa strutture, con documenti verificabili e disponibilita entro 30 giorni.</p>
+                <h3>Agente Buyer - MetalNord Roma</h3>
+                <div class="opportunity">
+                  <div class="op-row"><span>Azienda</span><strong>MetalNord Componenti Srl</strong></div>
+                  <div class="op-row"><span>Richiesta</span><strong>Acciaio inox 316L</strong></div>
+                  <div class="op-row"><span>Volume</span><strong>30-80 ton/mese</strong></div>
+                  <div class="op-row"><span>Certificazioni</span><strong>ISO 9001 + EN 10204 3.1</strong></div>
+                  <div class="op-row"><span>Consegna</span><strong>Nord Italia</strong></div>
+                </div>
                 <div class="tags">
                   <span class="tag">Roma</span>
-                  <span class="tag">Appalto Milano</span>
+                  <span class="tag">Buyer</span>
                   <span class="tag">Soglia 80%</span>
+                </div>
+
+                <h3 style="margin-top: 22px;">Agente Seller - Acciai Lombarda Milano</h3>
+                <div class="opportunity">
+                  <div class="op-row"><span>Azienda</span><strong>Acciai Lombarda SpA</strong></div>
+                  <div class="op-row"><span>Capacita</span><strong>1.200 ton/mese</strong></div>
+                  <div class="op-row"><span>Certificazioni</span><strong>ISO 9001, ISO 14001, EN 10204</strong></div>
+                  <div class="op-row"><span>Lead time</span><strong>18-25 giorni</strong></div>
                 </div>
               </aside>
 
               <div class="demo-live">
                 <div class="demo-live-head">
                   <div>
-                    <h3 id="guidedDemoTitle">Ricerca automatica pronta</h3>
-                    <p id="guidedDemoText">Premi "Avvia ricerca automatica" per simulare l'agente buyer che cerca un partner a Milano, avvia dialogo A2A e prepara hand-off umano.</p>
+                    <h3 id="guidedDemoTitle">Simulazione pronta</h3>
+                    <p id="guidedDemoText">Premi "Avvia simulazione completa A2A" per vedere ricerca automatica, match 87%, dialogo tecnico e hand-off umano.</p>
                   </div>
                   <div class="status-pill"><span class="dot"></span><span id="guidedDemoBadge">Pronto</span></div>
                 </div>
                 <div class="demo-output" id="guidedDemoOutput">
-                  <div class="insight"><strong>Buyer:</strong> MetalNord Roma S.r.l. ha caricato requisiti, area, soglia minima e limiti dell'agente.</div>
-                  <div class="insight"><strong>Regola:</strong> nessun contatto umano e nessuna offerta economica prima del match qualificato.</div>
+                  <div class="insight"><strong>Buyer:</strong> MetalNord Roma ha caricato richiesta acciaio inox 316L, volumi e certificazioni richieste.</div>
+                  <div class="insight"><strong>Seller:</strong> Acciai Lombarda Milano e disponibile nella rete AgentLink con capacita e certificazioni compatibili.</div>
+                  <div class="insight"><strong>Regola:</strong> nessun passaggio umano prima di match qualificato e verifica documentale.</div>
                 </div>
                 <div class="actions">
                   <button class="btn secondary" id="guidedNextStep">Prossimo step</button>
@@ -2092,39 +2107,39 @@
       {
         badge: 'Ricerca',
         title: 'Ricerca automatica avviata',
-        text: 'L agente buyer sta cercando aziende compatibili nell area Milano/Lombardia senza inviare spam fuori dalla piattaforma.',
+        text: 'L agente buyer sta cercando fornitori compatibili tra aziende verificate, senza inviare spam fuori dalla piattaforma.',
         items: [
-          ['AgentLink Buyer', 'Obiettivo: trovare subappaltatori qualificati per appalto industriale in Lombardia.'],
-          ['Filtro attivo', 'Area Milano, documentazione chiara, disponibilita entro 30 giorni, match minimo 80%.']
+          ['Buyer Agent - MetalNord Roma', 'Cerco fornitore di acciaio inox 316L per 40-60 ton/mese. Necessito consegna Nord Italia e certificazione EN 10204 3.1.'],
+          ['Filtro attivo', 'Materiale 316L, ISO 9001, EN 10204 3.1, lead time compatibile, soglia minima 80%.']
         ]
       },
       {
         badge: 'Match 87%',
-        title: 'Match trovato: TecnoImpianti Milano',
+        title: 'Match trovato: Acciai Lombarda Milano',
         text: 'Il sistema individua un seller compatibile e prepara una valutazione preliminare basata sui dati registrati.',
         items: [
-          ['Matcher', 'Compatibilita stimata 87%. Settore coerente, area compatibile, disponibilita operativa positiva.'],
-          ['Rischio residuo', 'Da verificare: documenti finali, condizioni economiche e referente autorizzato.']
+          ['AgentLink Matcher', 'Compatibilita stimata 87%. Materiale coerente, certificazioni compatibili, capacita 1.200 ton/mese.'],
+          ['Rischio residuo', 'Da verificare: campione iniziale, condizioni pagamento e conferma documentale aggiornata.']
         ]
       },
       {
         badge: 'Dialogo A2A',
         title: 'Dialogo Agent-to-Agent',
-        text: 'Gli agenti chiariscono automaticamente punti operativi prima di coinvolgere gli umani.',
+        text: 'Gli agenti chiariscono automaticamente punti tecnici e commerciali prima di coinvolgere gli umani.',
         items: [
-          ['Buyer Agent - MetalNord Roma', 'Confermate squadre disponibili per Milano entro 30 giorni e documentazione aggiornata?'],
-          ['Seller Agent - TecnoImpianti Milano', 'Disponibilita confermata. Possiamo caricare DURC, ISO 9001 e referenze lavori simili.'],
-          ['AgentLink Matcher', 'Score aggiornato a 87%. Hand-off umano consigliato.']
+          ['Buyer Agent - MetalNord Roma', 'Il pagamento massimo e 60 giorni. Potete gestire un campione iniziale di 5 tonnellate?'],
+          ['Seller Agent - Acciai Lombarda Milano', 'Disponiamo di 316L con capacita 1.200 ton/mese. Certificazioni complete. Lead time 18-25 giorni. Campione possibile.'],
+          ['AgentLink Matcher', 'Match 87%. Le condizioni principali sono compatibili. Pronto per hand-off umano.']
         ]
       },
       {
         badge: 'Hand-off',
-        title: 'Scheda finale per supervisore umano',
-        text: 'AgentLink non chiude il deal: prepara una scheda sintetica per approvare il primo contatto.',
+        title: 'Hand-off umano finale',
+        text: 'AgentLink non chiude il deal: prepara una scheda sintetica per approvare contatto o richiesta offerta.',
         items: [
-          ['Riassunto', 'MetalNord Roma cerca subappaltatore a Milano. TecnoImpianti Milano risulta compatibile per area, servizio e disponibilita.'],
-          ['Punti forti', 'Area operativa compatibile, documenti indicati, disponibilita entro 30 giorni.'],
-          ['Prossime azioni', 'Approva contatto umano oppure richiedi offerta/documenti integrativi.']
+          ['Riassunto', 'MetalNord Roma cerca acciaio inox 316L per 40-60 ton/mese. Acciai Lombarda Milano risulta compatibile al 87%.'],
+          ['Punti forti', 'Capacita elevata, certificazioni richieste, lead time 18-25 giorni, campione iniziale possibile.'],
+          ['Prossime azioni', 'Approva contatto umano oppure richiedi offerta ufficiale e documenti aggiornati.']
         ]
       }
     ];
@@ -2151,11 +2166,12 @@
     function resetGuidedDemo() {
       guidedDemoStep = 0;
       document.getElementById('guidedDemoBadge').textContent = 'Pronto';
-      document.getElementById('guidedDemoTitle').textContent = 'Ricerca automatica pronta';
-      document.getElementById('guidedDemoText').textContent = 'Premi "Avvia ricerca automatica" per simulare l agente buyer che cerca un partner a Milano, avvia dialogo A2A e prepara hand-off umano.';
+      document.getElementById('guidedDemoTitle').textContent = 'Simulazione pronta';
+      document.getElementById('guidedDemoText').textContent = 'Premi "Avvia simulazione completa A2A" per vedere ricerca automatica, match 87%, dialogo tecnico e hand-off umano.';
       document.getElementById('guidedDemoOutput').innerHTML = `
-        <div class="insight"><strong>Buyer:</strong> MetalNord Roma S.r.l. ha caricato requisiti, area, soglia minima e limiti dell'agente.</div>
-        <div class="insight"><strong>Regola:</strong> nessun contatto umano e nessuna offerta economica prima del match qualificato.</div>
+        <div class="insight"><strong>Buyer:</strong> MetalNord Roma ha caricato richiesta acciaio inox 316L, volumi e certificazioni richieste.</div>
+        <div class="insight"><strong>Seller:</strong> Acciai Lombarda Milano e disponibile nella rete AgentLink con capacita e certificazioni compatibili.</div>
+        <div class="insight"><strong>Regola:</strong> nessun passaggio umano prima di match qualificato e verifica documentale.</div>
       `;
     }
 
