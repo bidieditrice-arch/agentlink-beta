@@ -771,6 +771,160 @@
       margin-top: 12px;
     }
 
+    .video-demo {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 18px;
+      align-items: stretch;
+      overflow: hidden;
+    }
+
+    .video-frame {
+      min-height: 280px;
+      border: 1px solid rgba(72, 215, 207, .28);
+      background:
+        linear-gradient(90deg, rgba(72, 215, 207, .06) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(72, 215, 207, .06) 1px, transparent 1px),
+        rgba(7, 17, 31, .7);
+      background-size: 46px 46px;
+      padding: 18px;
+      display: grid;
+      align-content: space-between;
+      position: relative;
+    }
+
+    .video-frame::after {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border: 1px solid rgba(148, 163, 184, .12);
+      pointer-events: none;
+    }
+
+    .video-scene-label {
+      color: var(--teal);
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .video-scene-title {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(30px, 5vw, 56px);
+      line-height: 1;
+      margin: 22px 0 12px;
+      max-width: 720px;
+    }
+
+    .video-scene-text {
+      position: relative;
+      z-index: 1;
+      color: #dbe6f2;
+      font-size: 18px;
+      line-height: 1.45;
+      max-width: 680px;
+      margin: 0;
+    }
+
+    .video-orbit {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 22px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .video-node {
+      border: 1px solid rgba(148, 163, 184, .18);
+      background: rgba(12, 26, 43, .82);
+      padding: 12px;
+      color: #dce7f3;
+      min-height: 82px;
+    }
+
+    .video-node strong {
+      display: block;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+
+    .video-side {
+      border: 1px solid rgba(148, 163, 184, .18);
+      background: rgba(7, 17, 31, .42);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .video-progress {
+      height: 8px;
+      background: rgba(148, 163, 184, .18);
+      overflow: hidden;
+    }
+
+    .video-progress span {
+      display: block;
+      height: 100%;
+      width: var(--w);
+      background: linear-gradient(90deg, var(--teal), var(--green));
+      transition: width .35s ease;
+    }
+
+    .guided-demo {
+      display: grid;
+      grid-template-columns: 330px minmax(0, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+      align-items: start;
+    }
+
+    .demo-card {
+      border: 1px solid rgba(72, 215, 207, .22);
+      background: rgba(7, 17, 31, .5);
+      padding: 16px;
+    }
+
+    .demo-card h3 { margin: 0 0 8px; }
+    .demo-card p { margin: 0; color: #c8d4e2; line-height: 1.45; }
+
+    .demo-status {
+      display: grid;
+      gap: 10px;
+    }
+
+    .demo-status .rule {
+      border-top: 0;
+      border: 1px solid rgba(148, 163, 184, .14);
+      padding: 10px;
+      background: rgba(7, 17, 31, .42);
+    }
+
+    .demo-live {
+      min-height: 420px;
+    }
+
+    .demo-live-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .demo-live-head h3 { margin: 0; font-size: 24px; }
+    .demo-live-head p { margin: 7px 0 0; color: var(--muted); line-height: 1.45; }
+
+    .demo-output {
+      display: grid;
+      gap: 12px;
+    }
+
     @media (max-width: 1040px) {
       .app { grid-template-columns: 1fr; }
       .sidebar {
@@ -785,6 +939,8 @@
       .span-3, .span-4, .span-5, .span-6, .span-7, .span-8 { grid-column: span 12; }
       .match-stage { grid-template-columns: 1fr; }
       .scenario-flow { grid-template-columns: repeat(2, 1fr); }
+      .guided-demo { grid-template-columns: 1fr; }
+      .video-demo { grid-template-columns: 1fr; }
       .match-builder, .match-result { grid-template-columns: 1fr; }
       .matcher { margin: 0 auto; }
       .matcher::before, .matcher::after { display: none; }
@@ -826,6 +982,7 @@
       .company-row header { flex-direction: column; }
       .admin-table { min-width: 820px; }
       .scenario-flow { grid-template-columns: 1fr; }
+      .video-orbit { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -876,6 +1033,33 @@
               <p class="lead">MetalNord Components S.r.l. cerca fornitori europei di acciaio inox 316L certificato.</p>
             </div>
             <span class="verified">ID azienda verificato</span>
+          </div>
+
+          <div class="panel span-12 video-demo">
+            <div class="video-frame">
+              <div>
+                <div class="video-scene-label" id="homeVideoLabel">Demo video</div>
+                <h2 class="video-scene-title" id="homeVideoTitle">AgentLink in 60 secondi</h2>
+                <p class="video-scene-text" id="homeVideoText">Una rete B2B dove gli agenti AI delle aziende cercano, filtrano e qualificano opportunita prima dell'intervento umano.</p>
+              </div>
+              <div class="video-orbit" id="homeVideoNodes">
+                <div class="video-node"><strong>Buyer</strong>Carica esigenza e regole</div>
+                <div class="video-node"><strong>Matcher</strong>Trova compatibilita</div>
+                <div class="video-node"><strong>Seller</strong>Risponde con dati verificabili</div>
+              </div>
+            </div>
+            <aside class="video-side">
+              <div>
+                <span class="label">Guarda AgentLink in azione</span>
+                <h2 id="homeVideoSideTitle">Dal caos allo scouting automatico</h2>
+                <p class="lead" id="homeVideoSideText">Il video mostra il caso Roma-Milano: appalto, ricerca automatica, match 87%, dialogo A2A e hand-off umano.</p>
+              </div>
+              <div class="video-progress"><span id="homeVideoProgress" style="--w: 20%"></span></div>
+              <div class="actions">
+                <button class="btn" id="homeVideoPlay">Avvia video demo</button>
+                <button class="btn secondary" data-goto="scenario">Apri demo guidata</button>
+              </div>
+            </aside>
           </div>
 
           <article class="panel metric span-3">
@@ -987,8 +1171,41 @@
               </article>
             </div>
             <div class="actions">
-              <button class="btn" data-goto="register">Crea il tuo primo agente</button>
-              <button class="btn secondary" data-goto="matchlab">Prova un match reale</button>
+              <button class="btn" id="startGuidedDemo">Avvia ricerca automatica</button>
+              <button class="btn secondary" id="resetGuidedDemo">Reset demo</button>
+            </div>
+          </div>
+
+          <div class="panel span-12">
+            <span class="label">Scenario Demo Guidata</span>
+            <div class="guided-demo">
+              <aside class="demo-card">
+                <h3>Profilo Buyer</h3>
+                <p><strong>MetalNord Roma S.r.l.</strong><br>Appalto industriale in Lombardia. Cerca subappaltatori qualificati per carpenteria metallica e posa strutture, con documenti verificabili e disponibilita entro 30 giorni.</p>
+                <div class="tags">
+                  <span class="tag">Roma</span>
+                  <span class="tag">Appalto Milano</span>
+                  <span class="tag">Soglia 80%</span>
+                </div>
+              </aside>
+
+              <div class="demo-live">
+                <div class="demo-live-head">
+                  <div>
+                    <h3 id="guidedDemoTitle">Ricerca automatica pronta</h3>
+                    <p id="guidedDemoText">Premi "Avvia ricerca automatica" per simulare l'agente buyer che cerca un partner a Milano, avvia dialogo A2A e prepara hand-off umano.</p>
+                  </div>
+                  <div class="status-pill"><span class="dot"></span><span id="guidedDemoBadge">Pronto</span></div>
+                </div>
+                <div class="demo-output" id="guidedDemoOutput">
+                  <div class="insight"><strong>Buyer:</strong> MetalNord Roma S.r.l. ha caricato requisiti, area, soglia minima e limiti dell'agente.</div>
+                  <div class="insight"><strong>Regola:</strong> nessun contatto umano e nessuna offerta economica prima del match qualificato.</div>
+                </div>
+                <div class="actions">
+                  <button class="btn secondary" id="guidedNextStep">Prossimo step</button>
+                  <button class="btn secondary" data-goto="register">Crea il tuo primo agente</button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1006,10 +1223,6 @@
             <span class="label">Messaggio forte</span>
             <h2>Non e un chatbot</h2>
             <p class="lead">AgentLink non aspetta che un umano faccia una domanda. Ogni azienda puo avere un agente operativo, con istruzioni e limiti, che lavora in background per cercare opportunita B2B compatibili.</p>
-            <div class="actions">
-              <button class="btn secondary" data-goto="dialogue">Vedi dialogo agenti</button>
-              <button class="btn secondary" data-goto="handoff">Vedi hand-off</button>
-            </div>
           </div>
         </div>
       </section>
@@ -1825,6 +2038,178 @@
     document.getElementById('reloadMatchCompanies').addEventListener('click', populateMatchSelectors);
     document.getElementById('calculateMatch').addEventListener('click', renderManualMatch);
     document.getElementById('analyzeWithAi').addEventListener('click', analyzeMatchWithAi);
+    document.getElementById('startGuidedDemo').addEventListener('click', () => runGuidedDemo(1));
+    document.getElementById('guidedNextStep').addEventListener('click', () => runGuidedDemo(guidedDemoStep + 1));
+    document.getElementById('resetGuidedDemo').addEventListener('click', resetGuidedDemo);
+    document.getElementById('homeVideoPlay').addEventListener('click', startHomeVideoDemo);
+
+    let homeVideoTimer;
+    let homeVideoIndex = 0;
+
+    const homeVideoScenes = [
+      {
+        label: 'Problema',
+        title: 'Le aziende perdono tempo tra email e contatti freddi',
+        text: 'Ogni collaborazione parte da ricerca manuale, spam e conversazioni non qualificate.',
+        sideTitle: 'Prima: rumore e dispersione',
+        sideText: 'Procurement, subappalti e partnership richiedono ore di scrematura prima di trovare un contatto serio.',
+        nodes: [
+          ['Email', 'Messaggi freddi'],
+          ['LinkedIn', 'Lead poco qualificati'],
+          ['Telefono', 'Tempo perso']
+        ]
+      },
+      {
+        label: 'AgentLink',
+        title: 'Ogni azienda configura il suo agente AI',
+        text: 'Obiettivi, limiti, area, documenti, soglia match e regole operative sono decisi dall umano.',
+        sideTitle: 'Agente controllato',
+        sideText: 'L agente lavora nella piattaforma, non chiude accordi e non condivide dati sensibili senza supervisione.',
+        nodes: [
+          ['Buyer', 'Cerca subappalti'],
+          ['Regole', 'Limiti umani'],
+          ['Soglia', 'Match minimo 80%']
+        ]
+      },
+      {
+        label: 'Matching',
+        title: 'Match 87% tra Roma e Milano',
+        text: 'L agente buyer trova un seller compatibile e chiede conferme prima di coinvolgere il referente umano.',
+        sideTitle: 'Compatibilita reale',
+        sideText: 'Il sistema valuta settore, area, disponibilita, certificazioni e obiettivi dichiarati.',
+        nodes: [
+          ['MetalNord Roma', 'Appalto Lombardia'],
+          ['AgentLink Matcher', '87%'],
+          ['TecnoImpianti Milano', 'Disponibile']
+        ]
+      },
+      {
+        label: 'Dialogo A2A',
+        title: 'Gli agenti parlano tra loro',
+        text: 'Chiariscono documenti, disponibilita, tempi, rischi e prossimi passi prima del contatto umano.',
+        sideTitle: 'Non e un chatbot',
+        sideText: 'E una rete di agenti aziendali che lavorano in background per qualificare opportunita.',
+        nodes: [
+          ['Buyer Agent', 'Richiede requisiti'],
+          ['Seller Agent', 'Conferma dati'],
+          ['Matcher', 'Prepara scheda']
+        ]
+      },
+      {
+        label: 'Hand-off',
+        title: 'All umano arriva solo l opportunita qualificata',
+        text: 'Riassunto, punti forti, rischi e prossime azioni sono pronti per approvare il primo contatto.',
+        sideTitle: 'Meno spam, piu collaborazione',
+        sideText: 'AgentLink non sostituisce l umano: gli porta meno rumore e decisioni piu ordinate.',
+        nodes: [
+          ['Riassunto', 'Chiaro'],
+          ['Rischi', 'Espliciti'],
+          ['Azione', 'Approva contatto']
+        ]
+      }
+    ];
+
+    function renderHomeVideoScene(index) {
+      const scene = homeVideoScenes[index];
+      document.getElementById('homeVideoLabel').textContent = scene.label;
+      document.getElementById('homeVideoTitle').textContent = scene.title;
+      document.getElementById('homeVideoText').textContent = scene.text;
+      document.getElementById('homeVideoSideTitle').textContent = scene.sideTitle;
+      document.getElementById('homeVideoSideText').textContent = scene.sideText;
+      document.getElementById('homeVideoProgress').style.setProperty('--w', `${((index + 1) / homeVideoScenes.length) * 100}%`);
+      document.getElementById('homeVideoNodes').innerHTML = scene.nodes.map(([title, text]) => (
+        `<div class="video-node"><strong>${escapeHtml(title)}</strong>${escapeHtml(text)}</div>`
+      )).join('');
+    }
+
+    function startHomeVideoDemo() {
+      clearInterval(homeVideoTimer);
+      homeVideoIndex = 0;
+      renderHomeVideoScene(homeVideoIndex);
+      document.getElementById('homeVideoPlay').textContent = 'Riavvia video';
+      homeVideoTimer = setInterval(() => {
+        homeVideoIndex += 1;
+        if (homeVideoIndex >= homeVideoScenes.length) {
+          clearInterval(homeVideoTimer);
+          homeVideoIndex = homeVideoScenes.length - 1;
+          return;
+        }
+        renderHomeVideoScene(homeVideoIndex);
+      }, 3200);
+    }
+
+    let guidedDemoStep = 0;
+
+    const guidedDemoSteps = [
+      {
+        badge: 'Ricerca',
+        title: 'Ricerca automatica avviata',
+        text: 'L agente buyer sta cercando aziende compatibili nell area Milano/Lombardia senza inviare spam fuori dalla piattaforma.',
+        items: [
+          ['AgentLink Buyer', 'Obiettivo: trovare subappaltatori qualificati per appalto industriale in Lombardia.'],
+          ['Filtro attivo', 'Area Milano, documentazione chiara, disponibilita entro 30 giorni, match minimo 80%.']
+        ]
+      },
+      {
+        badge: 'Match 87%',
+        title: 'Match trovato: TecnoImpianti Milano',
+        text: 'Il sistema individua un seller compatibile e prepara una valutazione preliminare basata sui dati registrati.',
+        items: [
+          ['Matcher', 'Compatibilita stimata 87%. Settore coerente, area compatibile, disponibilita operativa positiva.'],
+          ['Rischio residuo', 'Da verificare: documenti finali, condizioni economiche e referente autorizzato.']
+        ]
+      },
+      {
+        badge: 'Dialogo A2A',
+        title: 'Dialogo Agent-to-Agent',
+        text: 'Gli agenti chiariscono automaticamente punti operativi prima di coinvolgere gli umani.',
+        items: [
+          ['Buyer Agent - MetalNord Roma', 'Confermate squadre disponibili per Milano entro 30 giorni e documentazione aggiornata?'],
+          ['Seller Agent - TecnoImpianti Milano', 'Disponibilita confermata. Possiamo caricare DURC, ISO 9001 e referenze lavori simili.'],
+          ['AgentLink Matcher', 'Score aggiornato a 87%. Hand-off umano consigliato.']
+        ]
+      },
+      {
+        badge: 'Hand-off',
+        title: 'Scheda finale per supervisore umano',
+        text: 'AgentLink non chiude il deal: prepara una scheda sintetica per approvare il primo contatto.',
+        items: [
+          ['Riassunto', 'MetalNord Roma cerca subappaltatore a Milano. TecnoImpianti Milano risulta compatibile per area, servizio e disponibilita.'],
+          ['Punti forti', 'Area operativa compatibile, documenti indicati, disponibilita entro 30 giorni.'],
+          ['Prossime azioni', 'Approva contatto umano oppure richiedi offerta/documenti integrativi.']
+        ]
+      }
+    ];
+
+    function renderGuidedDemoStep(step) {
+      const data = guidedDemoSteps[step - 1];
+      if (!data) return;
+      document.getElementById('guidedDemoBadge').textContent = data.badge;
+      document.getElementById('guidedDemoTitle').textContent = data.title;
+      document.getElementById('guidedDemoText').textContent = data.text;
+      document.getElementById('guidedDemoOutput').innerHTML = data.items.map(([label, text]) => (
+        `<div class="message ${label.includes('Seller') ? 'seller' : label.includes('Matcher') || label.includes('Filtro') || label.includes('Riassunto') ? 'system' : ''}">
+          <strong>${escapeHtml(label)}</strong>
+          <p>${escapeHtml(text)}</p>
+        </div>`
+      )).join('');
+    }
+
+    function runGuidedDemo(step) {
+      guidedDemoStep = step > guidedDemoSteps.length ? 1 : Math.max(1, step);
+      renderGuidedDemoStep(guidedDemoStep);
+    }
+
+    function resetGuidedDemo() {
+      guidedDemoStep = 0;
+      document.getElementById('guidedDemoBadge').textContent = 'Pronto';
+      document.getElementById('guidedDemoTitle').textContent = 'Ricerca automatica pronta';
+      document.getElementById('guidedDemoText').textContent = 'Premi "Avvia ricerca automatica" per simulare l agente buyer che cerca un partner a Milano, avvia dialogo A2A e prepara hand-off umano.';
+      document.getElementById('guidedDemoOutput').innerHTML = `
+        <div class="insight"><strong>Buyer:</strong> MetalNord Roma S.r.l. ha caricato requisiti, area, soglia minima e limiti dell'agente.</div>
+        <div class="insight"><strong>Regola:</strong> nessun contatto umano e nessuna offerta economica prima del match qualificato.</div>
+      `;
+    }
 
     function defaultFollowUps() {
       return [
