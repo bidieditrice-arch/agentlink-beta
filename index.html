@@ -590,6 +590,49 @@
       line-height: 1.45;
     }
 
+    .admin-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      font-size: 14px;
+    }
+
+    .admin-table th,
+    .admin-table td {
+      border-bottom: 1px solid rgba(148, 163, 184, .16);
+      padding: 13px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .admin-table th {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .admin-table td {
+      color: #dce7f3;
+      line-height: 1.35;
+    }
+
+    .admin-table strong { color: var(--text); }
+
+    .table-wrap {
+      width: 100%;
+      overflow: auto;
+      border: 1px solid rgba(148, 163, 184, .18);
+    }
+
     @media (max-width: 1040px) {
       .app { grid-template-columns: 1fr; }
       .sidebar {
@@ -641,6 +684,7 @@
       .logo-strip { flex-direction: column; align-items: flex-start; }
       .verified { margin-left: 0; }
       .company-row header { flex-direction: column; }
+      .admin-table { min-width: 820px; }
     }
   </style>
 </head>
@@ -658,10 +702,11 @@
       <nav class="nav" aria-label="Demo AgentLink">
         <button class="active" data-screen="overview"><span class="ico">01</span><span>Dashboard</span></button>
         <button data-screen="register"><span class="ico">02</span><span>Registro aziende</span></button>
-        <button data-screen="configure"><span class="ico">03</span><span>Configura agente</span></button>
-        <button data-screen="matching"><span class="ico">04</span><span>Matching A2A</span></button>
-        <button data-screen="dialogue"><span class="ico">05</span><span>Dialogo agenti</span></button>
-        <button data-screen="handoff"><span class="ico">06</span><span>Hand-off umano</span></button>
+        <button data-screen="admin"><span class="ico">03</span><span>Admin</span></button>
+        <button data-screen="configure"><span class="ico">04</span><span>Configura agente</span></button>
+        <button data-screen="matching"><span class="ico">05</span><span>Matching A2A</span></button>
+        <button data-screen="dialogue"><span class="ico">06</span><span>Dialogo agenti</span></button>
+        <button data-screen="handoff"><span class="ico">07</span><span>Hand-off umano</span></button>
       </nav>
 
       <div class="sidebar-card">
@@ -854,6 +899,40 @@
             <p class="lead">Le aziende registrate vengono salvate nel database beta AgentLink. La fase successiva aggiungera login, verifica aziendale e agenti AI reali.</p>
             <div class="registry-list" id="companyList"></div>
           </aside>
+        </div>
+      </section>
+
+      <section class="screen" id="admin">
+        <div class="grid">
+          <div class="panel span-12">
+            <span class="label">Dashboard admin beta</span>
+            <h2>Aziende registrate in AgentLink</h2>
+            <p class="lead">Vista operativa per controllare le aziende entrate nel database, leggere bisogni/offerte e preparare i primi match manuali o agentici.</p>
+            <div class="admin-toolbar">
+              <div class="status-pill"><span class="dot"></span><span id="adminCount">0 aziende</span></div>
+              <div class="actions" style="margin-top: 0;">
+                <button class="btn secondary" id="refreshAdmin">Aggiorna lista</button>
+                <button class="btn" data-goto="matching">Prepara match</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Azienda</th>
+                    <th>Contatto</th>
+                    <th>Settore / Area</th>
+                    <th>Offre</th>
+                    <th>Cerca</th>
+                    <th>Beta</th>
+                  </tr>
+                </thead>
+                <tbody id="adminCompanyRows">
+                  <tr><td colspan="6">Caricamento aziende...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1165,6 +1244,35 @@
         .replaceAll("'", '&#039;');
     }
 
+    async function renderAdminCompanies() {
+      const rows = document.getElementById('adminCompanyRows');
+      const count = document.getElementById('adminCount');
+      rows.innerHTML = '<tr><td colspan="6">Caricamento aziende...</td></tr>';
+
+      try {
+        const companies = await fetchCompanies();
+        count.textContent = `${companies.length} aziende`;
+        if (!companies.length) {
+          rows.innerHTML = '<tr><td colspan="6">Nessuna azienda registrata.</td></tr>';
+          return;
+        }
+
+        rows.innerHTML = companies.map(company => `
+          <tr>
+            <td><strong>${escapeHtml(company.name)}</strong><br>VAT: ${escapeHtml(company.vat || 'n/d')}</td>
+            <td>${escapeHtml(company.email || 'n/d')}<br>${escapeHtml(company.phone || '')}<br>${escapeHtml(company.website || '')}</td>
+            <td>${escapeHtml(company.sector)}<br>${escapeHtml(company.area)}</td>
+            <td>${escapeHtml(company.offers || 'Da completare')}<br><small>${escapeHtml(company.certifications || '')}</small></td>
+            <td>${escapeHtml(company.needs || 'Da completare')}<br><small>Soglia ${escapeHtml(company.match_threshold || 80)}%</small></td>
+            <td>${company.beta_consent ? 'Consenso beta' : 'Solo demo'}<br>${escapeHtml(company.availability || '')}</td>
+          </tr>
+        `).join('');
+      } catch (error) {
+        count.textContent = 'Errore';
+        rows.innerHTML = `<tr><td colspan="6">Errore caricamento: ${escapeHtml(error.message)}</td></tr>`;
+      }
+    }
+
     document.getElementById('saveCompany').addEventListener('click', async () => {
       const company = Object.fromEntries(Object.entries(companyFields).map(([key, field]) => [key, field.value.trim()]));
       company.match_threshold = Number(company.match_threshold || 80);
@@ -1179,6 +1287,7 @@
           if (field.tagName !== 'SELECT') field.value = '';
         });
         await renderCompanies();
+        await renderAdminCompanies();
         alert('Azienda salvata nel registro AgentLink.');
       } catch (error) {
         alert(`Errore salvataggio: ${error.message}`);
@@ -1215,6 +1324,8 @@
     });
 
     renderCompanies();
+    renderAdminCompanies();
+    document.getElementById('refreshAdmin').addEventListener('click', renderAdminCompanies);
 
     const followUps = [
       ['Buyer Agent - MetalNord', 'Puoi confermare MOQ minimo, disponibilita campioni e documentazione tecnica prima del contatto umano?'],
