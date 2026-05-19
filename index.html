@@ -1184,10 +1184,10 @@
           <div class="panel span-5">
             <span class="label">Match score finale</span>
             <div class="score">
-              <div class="score-ring"><b>87%</b></div>
+              <div class="score-ring" id="handoffScoreRing"><b id="handoffScore">87%</b></div>
               <div>
-                <h2>Opportunita qualificata</h2>
-                <p class="lead">Il match supera la soglia impostata dall'azienda. AgentLink prepara una scheda chiara per decisione umana.</p>
+                <h2 id="handoffTitle">Opportunita qualificata</h2>
+                <p class="lead" id="handoffText">Il match supera la soglia impostata dall'azienda. AgentLink prepara una scheda chiara per decisione umana.</p>
               </div>
             </div>
           </div>
@@ -1195,11 +1195,11 @@
           <div class="panel span-7">
             <span class="label">Scheda per supervisore umano</span>
             <div class="opportunity">
-              <div class="op-row"><span>Buyer</span><strong>MetalNord Components S.r.l.</strong></div>
-              <div class="op-row"><span>Seller</span><strong>SteelForge Europe GmbH</strong></div>
-              <div class="op-row"><span>Richiesta</span><strong>Acciaio inox 316L, 20-80 t/mese, EN 10204</strong></div>
-              <div class="op-row"><span>Punti forti</span><strong>Certificazioni presenti, lead time compatibile, export UE</strong></div>
-              <div class="op-row"><span>Da verificare</span><strong>Campione materiale, condizioni pagamento, disponibilita Q3</strong></div>
+              <div class="op-row"><span>Buyer</span><strong id="handoffBuyer">MetalNord Components S.r.l.</strong></div>
+              <div class="op-row"><span>Seller</span><strong id="handoffSeller">SteelForge Europe GmbH</strong></div>
+              <div class="op-row"><span>Richiesta</span><strong id="handoffRequest">Acciaio inox 316L, 20-80 t/mese, EN 10204</strong></div>
+              <div class="op-row"><span>Punti forti</span><strong id="handoffStrengths">Certificazioni presenti, lead time compatibile, export UE</strong></div>
+              <div class="op-row"><span>Da verificare</span><strong id="handoffRisks">Campione materiale, condizioni pagamento, disponibilita Q3</strong></div>
             </div>
             <div class="human-box">
               <h3>Decisione umana richiesta</h3>
@@ -1223,6 +1223,7 @@
       screens.forEach(screen => screen.classList.toggle('active', screen.id === id));
       navButtons.forEach(button => button.classList.toggle('active', button.dataset.screen === id));
       if (id === 'dialogue') prepareAgentDialogue();
+      if (id === 'handoff') prepareHumanHandoff();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -1619,6 +1620,32 @@
         [`Seller Agent - ${seller.name}`, `Confermo questi elementi disponibili: ${sellerProof}. Il referente umano dovra validare condizioni economiche e documenti finali.`],
         ['AgentLink Matcher', `Match aggiornato a ${score}%. Hand-off consigliato solo dopo verifica umana dei punti mancanti e consenso al primo contatto.`]
       ];
+    }
+
+    function readableList(items, fallback) {
+      return items && items.length ? items.join(' ') : fallback;
+    }
+
+    function prepareHumanHandoff() {
+      const match = window.agentlinkLastMatch;
+      if (!match) return;
+
+      const buyer = match.buyer;
+      const seller = match.seller;
+      const result = match.result || calculateCompatibility(buyer, seller);
+      const score = result.score || 0;
+      const threshold = Number(buyer.match_threshold || 80);
+      const title = score >= threshold ? 'Opportunita qualificata' : score >= 60 ? 'Opportunita da approfondire' : 'Match da verificare';
+
+      document.getElementById('handoffScore').textContent = `${score}%`;
+      document.getElementById('handoffScoreRing').style.background = `conic-gradient(var(--green) 0 ${score}%, rgba(148, 163, 184, .15) ${score}% 100%)`;
+      document.getElementById('handoffTitle').textContent = title;
+      document.getElementById('handoffText').textContent = `${buyer.name} e ${seller.name}: scheda preparata per revisione umana, con soglia buyer impostata a ${threshold}%.`;
+      document.getElementById('handoffBuyer').textContent = buyer.name || 'Buyer non definito';
+      document.getElementById('handoffSeller').textContent = seller.name || 'Seller non definito';
+      document.getElementById('handoffRequest').textContent = buyer.needs || buyer.rules || 'Richiesta da completare.';
+      document.getElementById('handoffStrengths').textContent = readableList(result.strengths, seller.offers || 'Nessun punto forte automatico rilevato.');
+      document.getElementById('handoffRisks').textContent = readableList([...result.risks, ...result.missing], 'Nessun rischio evidente, ma serve comunque revisione umana.');
     }
 
     let followUps = defaultFollowUps();
