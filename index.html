@@ -793,6 +793,46 @@
       position: relative;
     }
 
+    .video-frame.has-preview {
+      padding: 0;
+      min-height: 360px;
+      overflow: hidden;
+      background: #07111f;
+    }
+
+    .video-frame.has-preview img {
+      width: 100%;
+      height: 100%;
+      min-height: 360px;
+      object-fit: cover;
+      display: block;
+      opacity: .86;
+    }
+
+    .video-frame.has-preview .video-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 12px;
+      padding: 22px;
+      background: linear-gradient(180deg, rgba(7, 17, 31, .08), rgba(7, 17, 31, .78));
+      z-index: 1;
+    }
+
+    .play-badge {
+      width: 64px;
+      height: 64px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(72, 215, 207, .42);
+      background: rgba(7, 17, 31, .68);
+      color: var(--teal);
+      font-weight: 950;
+      font-size: 22px;
+    }
+
     .video-frame::after {
       content: "";
       position: absolute;
@@ -1036,27 +1076,22 @@
           </div>
 
           <div class="panel span-12 video-demo">
-            <div class="video-frame">
-              <div>
-                <div class="video-scene-label" id="homeVideoLabel">Demo video</div>
-                <h2 class="video-scene-title" id="homeVideoTitle">AgentLink in 60 secondi</h2>
-                <p class="video-scene-text" id="homeVideoText">Una rete B2B dove gli agenti AI delle aziende cercano, filtrano e qualificano opportunita prima dell'intervento umano.</p>
-              </div>
-              <div class="video-orbit" id="homeVideoNodes">
-                <div class="video-node"><strong>Buyer</strong>Carica esigenza e regole</div>
-                <div class="video-node"><strong>Matcher</strong>Trova compatibilita</div>
-                <div class="video-node"><strong>Seller</strong>Risponde con dati verificabili</div>
+            <div class="video-frame has-preview">
+              <img src="assets/agentlink-video-preview.png" alt="Anteprima video AgentLink">
+              <div class="video-overlay">
+                <div class="play-badge">▶</div>
+                <div class="video-scene-label">Video demo</div>
+                <h2 class="video-scene-title">Guarda AgentLink lavorare</h2>
+                <p class="video-scene-text">Anteprima del video: persone in azienda configurano l'agente, avviano la ricerca e vedono gli agenti AI qualificare opportunita in autonomia.</p>
               </div>
             </div>
             <aside class="video-side">
               <div>
-                <span class="label">Guarda AgentLink in azione</span>
-                <h2 id="homeVideoSideTitle">Dal caos allo scouting automatico</h2>
-                <p class="lead" id="homeVideoSideText">Il video mostra il caso Roma-Milano: appalto, ricerca automatica, match 87%, dialogo A2A e hand-off umano.</p>
+                <span class="label">Asset video da produrre</span>
+                <h2>Serve un video reale, non una finta animazione</h2>
+                <p class="lead">Obiettivo: 60-90 secondi con persone, interfaccia AgentLink, agenti che lavorano in background e risultato finale leggibile.</p>
               </div>
-              <div class="video-progress"><span id="homeVideoProgress" style="--w: 20%"></span></div>
               <div class="actions">
-                <button class="btn" id="homeVideoPlay">Avvia video demo</button>
                 <button class="btn secondary" data-goto="scenario">Apri demo guidata</button>
               </div>
             </aside>
@@ -2041,103 +2076,6 @@
     document.getElementById('startGuidedDemo').addEventListener('click', () => runGuidedDemo(1));
     document.getElementById('guidedNextStep').addEventListener('click', () => runGuidedDemo(guidedDemoStep + 1));
     document.getElementById('resetGuidedDemo').addEventListener('click', resetGuidedDemo);
-    document.getElementById('homeVideoPlay').addEventListener('click', startHomeVideoDemo);
-
-    let homeVideoTimer;
-    let homeVideoIndex = 0;
-
-    const homeVideoScenes = [
-      {
-        label: 'Problema',
-        title: 'Le aziende perdono tempo tra email e contatti freddi',
-        text: 'Ogni collaborazione parte da ricerca manuale, spam e conversazioni non qualificate.',
-        sideTitle: 'Prima: rumore e dispersione',
-        sideText: 'Procurement, subappalti e partnership richiedono ore di scrematura prima di trovare un contatto serio.',
-        nodes: [
-          ['Email', 'Messaggi freddi'],
-          ['LinkedIn', 'Lead poco qualificati'],
-          ['Telefono', 'Tempo perso']
-        ]
-      },
-      {
-        label: 'AgentLink',
-        title: 'Ogni azienda configura il suo agente AI',
-        text: 'Obiettivi, limiti, area, documenti, soglia match e regole operative sono decisi dall umano.',
-        sideTitle: 'Agente controllato',
-        sideText: 'L agente lavora nella piattaforma, non chiude accordi e non condivide dati sensibili senza supervisione.',
-        nodes: [
-          ['Buyer', 'Cerca subappalti'],
-          ['Regole', 'Limiti umani'],
-          ['Soglia', 'Match minimo 80%']
-        ]
-      },
-      {
-        label: 'Matching',
-        title: 'Match 87% tra Roma e Milano',
-        text: 'L agente buyer trova un seller compatibile e chiede conferme prima di coinvolgere il referente umano.',
-        sideTitle: 'Compatibilita reale',
-        sideText: 'Il sistema valuta settore, area, disponibilita, certificazioni e obiettivi dichiarati.',
-        nodes: [
-          ['MetalNord Roma', 'Appalto Lombardia'],
-          ['AgentLink Matcher', '87%'],
-          ['TecnoImpianti Milano', 'Disponibile']
-        ]
-      },
-      {
-        label: 'Dialogo A2A',
-        title: 'Gli agenti parlano tra loro',
-        text: 'Chiariscono documenti, disponibilita, tempi, rischi e prossimi passi prima del contatto umano.',
-        sideTitle: 'Non e un chatbot',
-        sideText: 'E una rete di agenti aziendali che lavorano in background per qualificare opportunita.',
-        nodes: [
-          ['Buyer Agent', 'Richiede requisiti'],
-          ['Seller Agent', 'Conferma dati'],
-          ['Matcher', 'Prepara scheda']
-        ]
-      },
-      {
-        label: 'Hand-off',
-        title: 'All umano arriva solo l opportunita qualificata',
-        text: 'Riassunto, punti forti, rischi e prossime azioni sono pronti per approvare il primo contatto.',
-        sideTitle: 'Meno spam, piu collaborazione',
-        sideText: 'AgentLink non sostituisce l umano: gli porta meno rumore e decisioni piu ordinate.',
-        nodes: [
-          ['Riassunto', 'Chiaro'],
-          ['Rischi', 'Espliciti'],
-          ['Azione', 'Approva contatto']
-        ]
-      }
-    ];
-
-    function renderHomeVideoScene(index) {
-      const scene = homeVideoScenes[index];
-      document.getElementById('homeVideoLabel').textContent = scene.label;
-      document.getElementById('homeVideoTitle').textContent = scene.title;
-      document.getElementById('homeVideoText').textContent = scene.text;
-      document.getElementById('homeVideoSideTitle').textContent = scene.sideTitle;
-      document.getElementById('homeVideoSideText').textContent = scene.sideText;
-      document.getElementById('homeVideoProgress').style.setProperty('--w', `${((index + 1) / homeVideoScenes.length) * 100}%`);
-      document.getElementById('homeVideoNodes').innerHTML = scene.nodes.map(([title, text]) => (
-        `<div class="video-node"><strong>${escapeHtml(title)}</strong>${escapeHtml(text)}</div>`
-      )).join('');
-    }
-
-    function startHomeVideoDemo() {
-      clearInterval(homeVideoTimer);
-      homeVideoIndex = 0;
-      renderHomeVideoScene(homeVideoIndex);
-      document.getElementById('homeVideoPlay').textContent = 'Riavvia video';
-      homeVideoTimer = setInterval(() => {
-        homeVideoIndex += 1;
-        if (homeVideoIndex >= homeVideoScenes.length) {
-          clearInterval(homeVideoTimer);
-          homeVideoIndex = homeVideoScenes.length - 1;
-          return;
-        }
-        renderHomeVideoScene(homeVideoIndex);
-      }, 3200);
-    }
-
     let guidedDemoStep = 0;
 
     const guidedDemoSteps = [
