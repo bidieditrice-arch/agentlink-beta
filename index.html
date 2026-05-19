@@ -767,6 +767,22 @@
                 <input id="companyName" placeholder="Es. EdilRoma Appalti S.r.l.">
               </div>
               <div class="field">
+                <label>Email referente</label>
+                <input id="companyEmail" type="email" placeholder="Es. nome@azienda.it">
+              </div>
+              <div class="field">
+                <label>Sito web</label>
+                <input id="companyWebsite" placeholder="Es. https://azienda.it">
+              </div>
+              <div class="field">
+                <label>Partita IVA / VAT</label>
+                <input id="companyVat" placeholder="Es. IT01234567890">
+              </div>
+              <div class="field">
+                <label>Telefono</label>
+                <input id="companyPhone" placeholder="Es. +39 02 123456">
+              </div>
+              <div class="field">
                 <label>Settore</label>
                 <select id="companySector">
                   <option>Subappalti ed edilizia</option>
@@ -796,6 +812,29 @@
               <div class="field" style="grid-column: 1 / -1;">
                 <label>Cosa cerca</label>
                 <textarea id="companyNeeds" placeholder="Es. Subappalti a Milano, lavori sopra 50.000 euro, committenti verificati"></textarea>
+              </div>
+              <div class="field">
+                <label>Certificazioni</label>
+                <input id="companyCertifications" placeholder="Es. DURC, ISO 9001, SOA, EN 10204">
+              </div>
+              <div class="field">
+                <label>Disponibilita</label>
+                <input id="companyAvailability" placeholder="Es. entro 30 giorni, 2 squadre disponibili">
+              </div>
+              <div class="field">
+                <label>Soglia minima match</label>
+                <select id="companyMatchThreshold">
+                  <option value="80">80%</option>
+                  <option value="70">70%</option>
+                  <option value="90">90%</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Consenso beta</label>
+                <select id="companyBetaConsent">
+                  <option value="true">Si, posso essere contattato per la beta</option>
+                  <option value="false">No, solo demo</option>
+                </select>
               </div>
               <div class="field" style="grid-column: 1 / -1;">
                 <label>Regole dell'agente</label>
@@ -1015,11 +1054,19 @@
 
     const companyFields = {
       name: document.getElementById('companyName'),
+      email: document.getElementById('companyEmail'),
+      website: document.getElementById('companyWebsite'),
+      vat: document.getElementById('companyVat'),
+      phone: document.getElementById('companyPhone'),
       sector: document.getElementById('companySector'),
       area: document.getElementById('companyArea'),
       mode: document.getElementById('companyMode'),
       offers: document.getElementById('companyOffers'),
       needs: document.getElementById('companyNeeds'),
+      certifications: document.getElementById('companyCertifications'),
+      availability: document.getElementById('companyAvailability'),
+      match_threshold: document.getElementById('companyMatchThreshold'),
+      beta_consent: document.getElementById('companyBetaConsent'),
       rules: document.getElementById('companyRules')
     };
     const companyList = document.getElementById('companyList');
@@ -1100,8 +1147,11 @@
             </div>
             <span class="mini-badge">${escapeHtml(company.mode)}</span>
           </header>
+          <p><strong>Contatto:</strong> ${escapeHtml(company.email || 'Da completare')} ${company.website ? `- ${escapeHtml(company.website)}` : ''}</p>
           <p><strong>Offre:</strong> ${escapeHtml(company.offers || 'Da completare')}</p>
           <p><strong>Cerca:</strong> ${escapeHtml(company.needs || 'Da completare')}</p>
+          <p><strong>Certificazioni:</strong> ${escapeHtml(company.certifications || 'Da completare')}</p>
+          <p><strong>Disponibilita:</strong> ${escapeHtml(company.availability || 'Da completare')} - <strong>Soglia match:</strong> ${escapeHtml(company.match_threshold || '80')}%</p>
         </article>
       `).join('');
     }
@@ -1117,6 +1167,8 @@
 
     document.getElementById('saveCompany').addEventListener('click', async () => {
       const company = Object.fromEntries(Object.entries(companyFields).map(([key, field]) => [key, field.value.trim()]));
+      company.match_threshold = Number(company.match_threshold || 80);
+      company.beta_consent = company.beta_consent === 'true';
       if (!company.name || !company.area) {
         alert('Inserisci almeno ragione sociale e area operativa.');
         return;
@@ -1135,11 +1187,19 @@
 
     document.getElementById('loadExample').addEventListener('click', () => {
       companyFields.name.value = 'TecnoImpianti Milano S.r.l.';
+      companyFields.email.value = 'commerciale@tecnoimpiantimilano.it';
+      companyFields.website.value = 'https://tecnoimpiantimilano.it';
+      companyFields.vat.value = 'IT09876540961';
+      companyFields.phone.value = '+39 02 1234567';
       companyFields.sector.value = 'Subappalti ed edilizia';
       companyFields.area.value = 'Milano, Lombardia';
       companyFields.mode.value = 'Offre servizi/prodotti';
       companyFields.offers.value = 'Impianti elettrici civili e industriali, squadre disponibili entro 30 giorni, manutenzione e lavori in subappalto.';
       companyFields.needs.value = 'Cerca appalti e subappalti in Lombardia con committenti verificati, importo sopra 50.000 euro.';
+      companyFields.certifications.value = 'DURC regolare, ISO 9001, abilitazioni impianti DM 37/08';
+      companyFields.availability.value = '2 squadre disponibili entro 30 giorni';
+      companyFields.match_threshold.value = '80';
+      companyFields.beta_consent.value = 'true';
       companyFields.rules.value = 'Segnalare solo opportunita con documentazione chiara. Non condividere prezzi prima della revisione umana.';
     });
 
