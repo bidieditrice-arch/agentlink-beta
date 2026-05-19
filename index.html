@@ -1331,6 +1331,7 @@
     const SUPABASE_URL = 'https://yyucwvuwmpaltpurwinx.supabase.co';
     const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_LGE6-ZJXnAV60mMs_p15gQ_j2pKHTZR';
     const companiesEndpoint = `${SUPABASE_URL}/rest/v1/companies`;
+    const authSignupEndpoint = `${SUPABASE_URL}/auth/v1/signup`;
     const useSupabase = SUPABASE_PUBLISHABLE_KEY && !SUPABASE_PUBLISHABLE_KEY.includes('INSERISCI_');
 
     async function fetchCompanies() {
@@ -1369,6 +1370,54 @@
       if (!response.ok) {
         const details = await response.text();
         throw new Error(details || 'Impossibile salvare azienda nel database.');
+      }
+    }
+
+    async function createBetaAccount() {
+      const email = document.getElementById('accountEmail').value.trim();
+      const password = document.getElementById('accountPassword').value;
+      const message = document.getElementById('betaSignupMessage');
+      message.className = 'inline-note show';
+
+      if (!email || !password) {
+        message.textContent = 'Inserisci email e password per creare l accesso beta.';
+        return;
+      }
+
+      if (password.length < 8) {
+        message.textContent = 'La password deve avere almeno 8 caratteri.';
+        return;
+      }
+
+      if (!useSupabase) {
+        message.textContent = 'Modalita locale: account simulato creato per la demo.';
+        companyFields.email.value = email;
+        return;
+      }
+
+      message.textContent = 'Creazione accesso beta in corso...';
+
+      try {
+        const response = await fetch(authSignupEndpoint, {
+          method: 'POST',
+          headers: {
+            apikey: SUPABASE_PUBLISHABLE_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.msg || data.message || data.error_description || 'Registrazione email non riuscita.');
+        }
+
+        companyFields.email.value = email;
+        message.textContent = data.user?.confirmed_at
+          ? 'Accesso beta creato. Ora puoi completare il profilo aziendale.'
+          : 'Accesso beta creato. Se Supabase richiede conferma, controlla la casella email prima del login.';
+      } catch (error) {
+        message.textContent = `Errore registrazione email: ${error.message}`;
       }
     }
 
@@ -1643,6 +1692,7 @@
     renderCompanies();
     renderAdminCompanies();
     populateMatchSelectors();
+    document.getElementById('createBetaAccount').addEventListener('click', createBetaAccount);
     document.getElementById('refreshAdmin').addEventListener('click', renderAdminCompanies);
     document.getElementById('reloadMatchCompanies').addEventListener('click', populateMatchSelectors);
     document.getElementById('calculateMatch').addEventListener('click', renderManualMatch);
