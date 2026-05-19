@@ -985,6 +985,7 @@
             </div>
             <div class="actions">
               <button class="btn" id="calculateMatch">Calcola compatibilita</button>
+              <button class="btn" id="analyzeWithAi">Analizza con AI</button>
               <button class="btn secondary" id="reloadMatchCompanies">Aggiorna aziende</button>
             </div>
           </div>
@@ -1008,6 +1009,15 @@
             <div class="actions">
               <button class="btn" data-goto="dialogue">Prepara dialogo agent-to-agent</button>
               <button class="btn secondary" data-goto="handoff">Vai alla scheda opportunita</button>
+            </div>
+          </div>
+
+          <div class="panel span-12">
+            <span class="label">Primo agente AI reale</span>
+            <h2>Analisi generata da OpenAI</h2>
+            <p class="lead">Questo riquadro chiama una funzione server su Vercel: la chiave OpenAI resta nascosta e l'AI valuta il match usando i dati reali registrati.</p>
+            <div class="insight-list" id="aiInsights">
+              <div class="insight">Calcola un match e poi premi "Analizza con AI".</div>
             </div>
           </div>
         </div>
@@ -1405,6 +1415,7 @@
       }
 
       const result = calculateCompatibility(buyer, seller);
+      window.agentlinkLastMatch = { buyer, seller, result };
       document.getElementById('manualScore').textContent = `${result.score}%`;
       document.getElementById('manualScoreRing').style.background = `conic-gradient(var(--green) 0 ${result.score}%, rgba(148, 163, 184, .15) ${result.score}% 100%)`;
       document.getElementById('manualScoreTitle').textContent = result.score >= 80 ? 'Match forte' : result.score >= 60 ? 'Match interessante' : 'Match da verificare';
@@ -1416,6 +1427,46 @@
         ...result.missing.map(text => `<div class="insight"><strong>Dato mancante:</strong> ${escapeHtml(text)}</div>`)
       ];
       document.getElementById('manualInsights').innerHTML = items.join('') || '<div class="insight">Nessun elemento rilevante.</div>';
+    }
+
+    function renderAiAnalysis(analysis) {
+      const listItems = [
+        `<div class="insight"><strong>Score AI:</strong> ${escapeHtml(analysis.score_ai || '--')}%</div>`,
+        `<div class="insight"><strong>Sintesi:</strong> ${escapeHtml(analysis.sintesi || 'Nessuna sintesi disponibile.')}</div>`,
+        ...(analysis.punti_forti || []).map(text => `<div class="insight"><strong>Punto forte AI:</strong> ${escapeHtml(text)}</div>`),
+        ...(analysis.rischi || []).map(text => `<div class="insight"><strong>Rischio AI:</strong> ${escapeHtml(text)}</div>`),
+        ...(analysis.domande_da_fare || []).map(text => `<div class="insight"><strong>Domanda da fare:</strong> ${escapeHtml(text)}</div>`),
+        `<div class="insight"><strong>Prossima azione:</strong> ${escapeHtml(analysis.prossima_azione || 'Da definire con revisione umana.')}</div>`,
+        `<div class="insight"><strong>Hand-off umano:</strong> ${analysis.handoff_umano ? 'Consigliato' : 'Non ancora necessario'}</div>`
+      ];
+      document.getElementById('aiInsights').innerHTML = listItems.join('');
+    }
+
+    async function analyzeMatchWithAi() {
+      if (!window.agentlinkLastMatch) renderManualMatch();
+      const match = window.agentlinkLastMatch;
+      if (!match) return;
+
+      const aiBox = document.getElementById('aiInsights');
+      aiBox.innerHTML = '<div class="insight">Agente AI al lavoro: sta leggendo buyer, seller, rischi e dati mancanti...</div>';
+
+      try {
+        const response = await fetch('/api/analyze-match', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            buyer: match.buyer,
+            seller: match.seller,
+            manualResult: match.result
+          })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Analisi AI non riuscita.');
+        renderAiAnalysis(data);
+      } catch (error) {
+        aiBox.innerHTML = `<div class="insight"><strong>Errore AI:</strong> ${escapeHtml(error.message)}</div>`;
+      }
     }
 
     async function renderAdminCompanies() {
@@ -1503,6 +1554,7 @@
     document.getElementById('refreshAdmin').addEventListener('click', renderAdminCompanies);
     document.getElementById('reloadMatchCompanies').addEventListener('click', populateMatchSelectors);
     document.getElementById('calculateMatch').addEventListener('click', renderManualMatch);
+    document.getElementById('analyzeWithAi').addEventListener('click', analyzeMatchWithAi);
 
     const followUps = [
       ['Buyer Agent - MetalNord', 'Puoi confermare MOQ minimo, disponibilita campioni e documentazione tecnica prima del contatto umano?'],
