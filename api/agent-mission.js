@@ -1,5 +1,6 @@
 function cleanCompany(company) {
   return {
+    id: company?.id || '',
     name: company?.name || '',
     sector: company?.sector || '',
     area: company?.area || '',
@@ -11,6 +12,24 @@ function cleanCompany(company) {
     rules: company?.rules || '',
     match_threshold: company?.match_threshold || 80,
     beta_consent: Boolean(company?.beta_consent)
+  };
+}
+
+function cleanAsset(asset) {
+  return {
+    company_id: asset?.company_id || '',
+    asset_type: asset?.asset_type || '',
+    name: asset?.name || '',
+    description: asset?.description || '',
+    category: asset?.category || '',
+    quantity: asset?.quantity || '',
+    unit: asset?.unit || '',
+    area: asset?.area || '',
+    availability: asset?.availability || '',
+    certifications: asset?.certifications || '',
+    visibility: asset?.visibility || '',
+    agent_rules: asset?.agent_rules || '',
+    source_filename: asset?.source_filename || ''
   };
 }
 
@@ -39,7 +58,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { mission, companies, sourceMode } = req.body || {};
+    const { mission, companies, assets, sourceMode } = req.body || {};
     if (!mission || !String(mission).trim()) {
       return res.status(400).json({ error: 'Scrivi una missione per l agente.' });
     }
@@ -49,6 +68,7 @@ module.exports = async function handler(req, res) {
     }
 
     const cleanCompanies = companies.slice(0, 80).map(cleanCompany);
+    const cleanAssets = Array.isArray(assets) ? assets.slice(0, 160).map(cleanAsset) : [];
     const sourceLabel = {
       internal: 'Solo database AgentLink',
       'web-simulated': 'Database AgentLink + fonti web simulate nella demo',
@@ -67,7 +87,9 @@ module.exports = async function handler(req, res) {
         instructions: [
           'Sei AgentLink Mission Agent, un agente AI operativo per il B2B.',
           'Ricevi una missione aziendale e una lista di aziende registrate.',
+          'Ricevi anche asset operativi aziendali: servizi, stock, cataloghi, certificazioni, file o capacita.',
           'Devi valutare solo i dati forniti: non inventare aziende, certificazioni, stock, prezzi o contatti.',
+          'Quando esistono asset collegati a una azienda, usali come prova piu forte del semplice testo profilo.',
           'Lavora come un primo filtro: scarta aziende non pertinenti, seleziona opportunita e prepara un report per supervisione umana.',
           'Se la missione e troppo vaga, prima fai domande di chiarimento invece di forzare risultati.',
           'Ogni risultato deve avere score, confidenza e motivo della confidenza.',
@@ -82,6 +104,9 @@ ${sourceLabel}
 
 Aziende registrate:
 ${JSON.stringify(cleanCompanies, null, 2)}
+
+Asset operativi registrati:
+${JSON.stringify(cleanAssets, null, 2)}
 
 Restituisci JSON con questa struttura:
 {
@@ -119,6 +144,7 @@ Regole:
 - Se non ci sono opportunita forti, lascia top_matches vuoto e spiega nel summary.
 - analyzed_count deve essere uguale al numero di aziende ricevute.
 - discarded_count + compatible_count deve essere uguale ad analyzed_count.
+- Se un match usa stock, cataloghi, certificazioni o file, cita questi asset in strengths o confidence_reason.
 - Se la modalita include fonti esterne simulate, inserisci "Fonti web simulate nella demo" in sources_used e spiega che la validazione reale richiede API o fonti autorizzate.
 - Non dare mai confidenza Alta se mancano certificazioni, disponibilita o area geografica coerente.`
       })
