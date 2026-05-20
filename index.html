@@ -2930,37 +2930,6 @@
         : `<div class="empty-state">${escapeHtml(report.summary || 'Nessuna opportunita qualificata trovata.')}</div>`;
     }
 
-    function getMissionClarification(mission) {
-      const text = normalizedWords(mission).join(' ');
-      const hasIntent = /(trova|cerca|seleziona|valuta|fornitor|subappalt|client|partner|distributor|collabor|stock|appalt|logistic|packaging|acciaio|impiant)/.test(text);
-      const hasArea = /(lombardia|milano|roma|lazio|italia|europa|germania|veneto|piemonte|toscana|emilia|campania|puglia|sicilia|nord|sud|centro)/.test(text);
-      const hasTarget = /(acciaio|inox|elettric|impiant|logistic|refrigerat|packaging|alimentar|edilizia|manutenzion|energia|macchinar|servizi|subappalt|fornitor|partner|collabor)/.test(text);
-      const isQuestionOnly = /(secondo|possiamo|potremmo|quali|qualcuna|collaborare|consigli)/.test(text) && text.length < 90;
-
-      if (hasIntent && hasArea && hasTarget && !isQuestionOnly) return null;
-
-      const questions = [];
-      if (!hasTarget) questions.push('Che tipo di azienda vuoi trovare: fornitore, cliente, subappaltatore o partner commerciale?');
-      if (!hasArea) questions.push('In quale area geografica devo cercare: citta, regione, Italia o Europa?');
-      if (!hasIntent || isQuestionOnly) questions.push('Qual e l obiettivo concreto della collaborazione: comprare, vendere, subappaltare, distribuire o verificare stock?');
-      questions.push('Ci sono requisiti minimi come certificazioni, disponibilita, budget, tempi o soglia match?');
-
-      return {
-        needs_clarification: true,
-        clarifying_questions: questions.slice(0, 4),
-        summary: 'La missione e ancora troppo ampia. Per lavorare bene, l agente deve prima chiarire obiettivo, settore e area.',
-        analyzed_count: '--',
-        discarded_count: '--',
-        compatible_count: '--',
-        qualified_count: '--',
-        agent_log: [
-          'Ho letto la richiesta, ma non ci sono ancora criteri sufficienti per selezionare aziende in modo responsabile.',
-          'Prima di analizzare il database devo chiarire il tipo di collaborazione, il settore e l area di ricerca.'
-        ],
-        top_matches: []
-      };
-    }
-
     function appendMissionBubble(type, title, text) {
       const chat = document.getElementById('missionChat');
       const bubble = document.createElement('div');
@@ -2998,16 +2967,10 @@
         return;
       }
 
-      const clarification = getMissionClarification(mission);
-      if (clarification) {
-        renderMissionQuestions(mission, clarification);
-        return;
-      }
-
       button.disabled = true;
       button.textContent = 'Agente al lavoro...';
       appendMissionBubble('user', 'Tu', mission);
-      appendMissionBubble('agent', 'AgentLink Mission-01', `Missione chiara. Modalita ricerca: ${sourceMode}. Sto analizzando le fonti e preparo opportunita con score e confidenza.`);
+      appendMissionBubble('agent', 'AgentLink Mission-01', `Ricevuto. Modalita ricerca: ${sourceMode}. Analizzo il database e la memoria asset; se mancano dati importanti te li chiedo dopo aver verificato cosa esiste davvero.`);
       document.getElementById('missionLog').innerHTML = '<div>Sto leggendo la missione...</div><div>Sto caricando le aziende registrate...</div>';
       document.getElementById('missionResults').innerHTML = '<div class="empty-state">Analisi in corso...</div>';
 
