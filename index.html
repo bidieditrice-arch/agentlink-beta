@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="it">
 <head>
   <meta charset="utf-8">
@@ -1758,570 +1758,374 @@
       .video-orbit { grid-template-columns: 1fr; }
       .auth-actions { grid-template-columns: 1fr; }
     }
- /* =========================================================
-   AGENTLINK · UI MINIMALISTA — Home + Profilo
-   Aggiungi questo blocco dentro <style> esistente,
-   subito prima della chiusura </style>.
-   I nuovi stili usano il prefisso .al-* per non confliggere.
-   ========================================================= */
 
-/* === Home minimalista === */
-.al-home {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 20px 0 40px;
-}
+    /* =========================================================
+       AGENTLINK · UI MINIMALISTA — Home + Profilo
+       Stili namespace .al-* per non conflittare
+       ========================================================= */
+    .al-home { max-width: 720px; margin: 0 auto; padding: 20px 0 40px; }
 
-.al-eyebrow {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  color: var(--gold);
-  margin-bottom: 14px;
-  text-transform: uppercase;
-}
+    .al-eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--gold);
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
 
-.al-hero-title {
-  font-size: clamp(36px, 5vw, 56px);
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.025em;
-  margin: 0 0 14px;
-  color: var(--text);
-}
-.al-hero-title .accent { color: var(--teal); }
+    .al-hero-title {
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      margin: 0 0 14px;
+      color: var(--text);
+    }
+    .al-hero-title .accent { color: var(--teal); }
 
-.al-hero-sub {
-  color: #a9b8ca;
-  font-size: 16px;
-  line-height: 1.55;
-  max-width: 620px;
-  margin: 0 0 32px;
-}
+    .al-hero-sub {
+      color: #a9b8ca;
+      font-size: 16px;
+      line-height: 1.55;
+      max-width: 620px;
+      margin: 0 0 32px;
+    }
 
-.al-input-wrap {
-  position: relative;
-  margin-bottom: 16px;
-}
+    .al-input-wrap { position: relative; margin-bottom: 16px; }
+    .al-input {
+      background: rgba(7, 17, 31, 0.62);
+      border: 2px solid rgba(72, 215, 207, 0.35);
+      border-radius: 14px;
+      padding: 22px 22px 22px 90px;
+      min-height: 110px;
+      width: 100%;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 17px;
+      line-height: 1.5;
+      resize: vertical;
+      transition: border-color 0.2s, background 0.2s;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .al-input::placeholder { color: #6b7d96; font-style: italic; }
+    .al-input:focus {
+      border-color: var(--teal);
+      background: rgba(7, 17, 31, 0.75);
+    }
 
-.al-input {
-  background: rgba(7, 17, 31, 0.62);
-  border: 2px solid rgba(72, 215, 207, 0.35);
-  border-radius: 14px;
-  padding: 22px 22px 22px 90px;
-  min-height: 110px;
-  width: 100%;
-  color: var(--text);
-  font-family: inherit;
-  font-size: 17px;
-  line-height: 1.5;
-  resize: vertical;
-  transition: border-color 0.2s, background 0.2s;
-  outline: none;
-  box-sizing: border-box;
-}
-.al-input::placeholder {
-  color: #6b7d96;
-  font-style: italic;
-}
-.al-input:focus {
-  border-color: var(--teal);
-  background: rgba(7, 17, 31, 0.75);
-}
+    .al-mic {
+      position: absolute;
+      left: 22px; top: 22px;
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--green));
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s, box-shadow 0.2s;
+      z-index: 2;
+    }
+    .al-mic:hover { transform: scale(1.05); }
+    .al-mic.recording {
+      background: linear-gradient(135deg, #ff6767, #ff8c8c);
+      animation: al-pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes al-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 103, 103, 0.6); }
+      50%      { box-shadow: 0 0 0 14px rgba(255, 103, 103, 0); }
+    }
+    .al-mic svg { width: 26px; height: 26px; }
 
-.al-mic {
-  position: absolute;
-  left: 22px;
-  top: 22px;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--teal), var(--green));
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.15s, box-shadow 0.2s;
-  z-index: 2;
-}
-.al-mic:hover { transform: scale(1.05); }
-.al-mic.recording {
-  background: linear-gradient(135deg, #ff6767, #ff8c8c);
-  animation: al-pulse 1.2s ease-in-out infinite;
-}
-@keyframes al-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 103, 103, 0.6); }
-  50%      { box-shadow: 0 0 0 14px rgba(255, 103, 103, 0); }
-}
-.al-mic svg { width: 26px; height: 26px; }
+    .al-pills { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+    .al-pill {
+      background: rgba(16, 34, 56, 0.58);
+      color: #b9c8da;
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+    .al-pill:hover { color: var(--text); border-color: rgba(72, 215, 207, 0.45); }
+    .al-pill.active {
+      background: linear-gradient(135deg, rgba(72, 215, 207, 0.28), rgba(53, 207, 135, 0.19));
+      border-color: rgba(72, 215, 207, 0.58);
+      color: #e9fffb;
+    }
+    .al-pill svg { width: 15px; height: 15px; }
 
-.al-pills {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
-}
-.al-pill {
-  background: rgba(16, 34, 56, 0.58);
-  color: #b9c8da;
-  border: 1px solid rgba(148, 163, 184, 0.28);
-  border-radius: 999px;
-  padding: 10px 22px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.15s;
-}
-.al-pill:hover {
-  color: var(--text);
-  border-color: rgba(72, 215, 207, 0.45);
-}
-.al-pill.active {
-  background: linear-gradient(135deg, rgba(72, 215, 207, 0.28), rgba(53, 207, 135, 0.19));
-  border-color: rgba(72, 215, 207, 0.58);
-  color: #e9fffb;
-}
-.al-pill svg { width: 15px; height: 15px; }
+    .al-cta {
+      width: 100%;
+      background: linear-gradient(135deg, var(--teal), var(--green));
+      color: #06101b;
+      border: none;
+      border-radius: 12px;
+      padding: 22px 24px;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: filter 0.2s, transform 0.1s;
+      text-transform: uppercase;
+      box-shadow: 0 16px 34px rgba(53, 207, 135, 0.18);
+    }
+    .al-cta:hover { filter: brightness(1.08); }
+    .al-cta:active { transform: scale(0.99); }
+    .al-cta:disabled { background: rgba(148, 163, 184, 0.3); color: #6b7d96; cursor: not-allowed; box-shadow: none; }
+    .al-cta svg { width: 22px; height: 22px; }
 
-.al-cta {
-  width: 100%;
-  background: linear-gradient(135deg, var(--teal), var(--green));
-  color: #06101b;
-  border: none;
-  border-radius: 12px;
-  padding: 22px 24px;
-  font-size: 18px;
-  font-weight: 900;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  transition: filter 0.2s, transform 0.1s;
-  text-transform: uppercase;
-  box-shadow: 0 16px 34px rgba(53, 207, 135, 0.18);
-}
-.al-cta:hover { filter: brightness(1.08); }
-.al-cta:active { transform: scale(0.99); }
-.al-cta:disabled {
-  background: rgba(148, 163, 184, 0.3);
-  color: #6b7d96;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-.al-cta svg { width: 22px; height: 22px; }
+    .al-hint { margin-top: 14px; font-size: 13px; color: #6b7d96; }
+    .al-hint a { color: var(--teal); font-weight: 700; text-decoration: none; margin-left: 4px; }
+    .al-hint a:hover { text-decoration: underline; }
 
-.al-hint {
-  margin-top: 14px;
-  font-size: 13px;
-  color: #6b7d96;
-}
-.al-hint a {
-  color: var(--teal);
-  font-weight: 700;
-  text-decoration: none;
-  margin-left: 4px;
-}
-.al-hint a:hover { text-decoration: underline; }
+    .al-feed {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(148, 163, 184, 0.16);
+    }
+    .al-feed-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #91a6c1;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+    .al-feed-count { color: #6f84a0; font-size: 11px; letter-spacing: 0.12em; font-weight: 700; }
+    .al-feed-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+    .al-feed-list li {
+      display: grid;
+      grid-template-columns: 14px minmax(0, 1fr) minmax(0, 200px);
+      gap: 12px;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+      color: #dce7f3;
+      font-size: 14px;
+    }
+    .al-feed-list li:last-child { border-bottom: none; }
+    .al-feed-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--teal);
+      animation: al-blink 2s ease-in-out infinite;
+    }
+    .al-feed-dot.warn  { background: var(--gold); animation: none; }
+    .al-feed-dot.muted { background: #7b8ea7; animation: none; }
+    .al-feed-dot.done  { background: var(--green); animation: none; }
+    @keyframes al-blink {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: 0.4; }
+    }
+    .al-feed-status { color: #8ea2bc; font-size: 13px; text-align: right; }
 
-.al-feed {
-  margin-top: 48px;
-  padding-top: 24px;
-  border-top: 1px solid rgba(148, 163, 184, 0.16);
-}
-.al-feed-label {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #91a6c1;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  margin-bottom: 14px;
-  text-transform: uppercase;
-}
-.al-feed-count {
-  color: #6f84a0;
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  font-weight: 700;
-}
-.al-feed-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 4px;
-}
-.al-feed-list li {
-  display: grid;
-  grid-template-columns: 14px minmax(0, 1fr) minmax(0, 200px);
-  gap: 12px;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
-  color: #dce7f3;
-  font-size: 14px;
-}
-.al-feed-list li:last-child { border-bottom: none; }
-.al-feed-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--teal);
-  animation: al-blink 2s ease-in-out infinite;
-}
-.al-feed-dot.warn  { background: var(--gold); animation: none; }
-.al-feed-dot.muted { background: #7b8ea7; animation: none; }
-.al-feed-dot.done  { background: var(--green); animation: none; }
-@keyframes al-blink {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.4; }
-}
-.al-feed-status {
-  color: #8ea2bc;
-  font-size: 13px;
-  text-align: right;
-}
+    /* Modal esempi */
+    .al-modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .al-modal-bg.open { display: flex; }
+    .al-modal {
+      background: var(--panel);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 16px;
+      padding: 28px;
+      max-width: 480px;
+      width: 100%;
+    }
+    .al-modal h3 { margin: 0 0 8px; font-size: 20px; color: var(--text); }
+    .al-modal p { color: var(--muted); font-size: 14px; margin: 0 0 20px; }
+    .al-ex {
+      background: rgba(16, 34, 56, 0.72);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #dce7f3;
+      transition: all 0.15s;
+    }
+    .al-ex:hover { border-color: var(--teal); background: rgba(72, 215, 207, 0.08); }
+    .al-ex-tag {
+      display: inline-block;
+      font-size: 10px;
+      color: var(--teal);
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+    .al-modal-close {
+      background: none;
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      color: var(--muted);
+      padding: 9px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+    .al-modal-close:hover { color: var(--text); }
 
-/* === Modal esempi === */
-.al-modal-bg {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 20px;
-}
-.al-modal-bg.open { display: flex; }
-.al-modal {
-  background: var(--panel);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  border-radius: 16px;
-  padding: 28px;
-  max-width: 480px;
-  width: 100%;
-}
-.al-modal h3 { margin: 0 0 8px; font-size: 20px; color: var(--text); }
-.al-modal p { color: var(--muted); font-size: 14px; margin: 0 0 20px; }
-.al-ex {
-  background: rgba(16, 34, 56, 0.72);
-  border: 1px solid rgba(148, 163, 184, 0.22);
-  border-radius: 10px;
-  padding: 14px 16px;
-  margin-bottom: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #dce7f3;
-  transition: all 0.15s;
-}
-.al-ex:hover {
-  border-color: var(--teal);
-  background: rgba(72, 215, 207, 0.08);
-}
-.al-ex-tag {
-  display: inline-block;
-  font-size: 10px;
-  color: var(--teal);
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  margin-bottom: 4px;
-  text-transform: uppercase;
-}
-.al-modal-close {
-  background: none;
-  border: 1px solid rgba(148, 163, 184, 0.28);
-  color: var(--muted);
-  padding: 9px 18px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 700;
-  margin-top: 8px;
-}
-.al-modal-close:hover { color: var(--text); }
+    /* Profilo agente */
+    .al-profile { max-width: 880px; margin: 0 auto; padding: 20px 0 40px; }
+    .al-progress-wrap {
+      background: rgba(12, 26, 43, 0.86);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      border-radius: 14px;
+      padding: 18px 22px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .al-progress-circle { position: relative; width: 56px; height: 56px; flex-shrink: 0; }
+    .al-progress-circle svg { width: 56px; height: 56px; transform: rotate(-90deg); }
+    .al-progress-circle circle { fill: none; stroke-width: 4; }
+    .al-progress-bg-ring { stroke: rgba(148, 163, 184, 0.18); }
+    .al-progress-fg-ring { stroke: var(--teal); stroke-linecap: round; transition: stroke-dashoffset 0.4s ease; }
+    .al-progress-pct {
+      position: absolute;
+      inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: var(--text);
+    }
+    .al-progress-info { flex: 1; }
+    .al-progress-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .al-progress-msg { font-size: 13px; color: var(--muted); }
 
-/* === Profilo agente === */
-.al-profile { max-width: 880px; margin: 0 auto; padding: 20px 0 40px; }
+    .al-section {
+      background: rgba(12, 26, 43, 0.86);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      border-radius: 14px;
+      padding: 26px 28px;
+      margin-bottom: 18px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+    }
+    .al-section-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: rgba(72, 215, 207, 0.18);
+      color: var(--teal);
+      font-size: 12px;
+      font-weight: 900;
+      margin-right: 10px;
+    }
+    .al-section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      margin: 0 0 6px;
+    }
+    .al-section-desc { color: var(--muted); font-size: 13.5px; line-height: 1.5; margin: 0 0 22px 38px; }
 
-.al-progress-wrap {
-  background: rgba(12, 26, 43, 0.86);
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  border-radius: 14px;
-  padding: 18px 22px;
-  margin-bottom: 28px;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-.al-progress-circle {
-  position: relative;
-  width: 56px; height: 56px;
-  flex-shrink: 0;
-}
-.al-progress-circle svg {
-  width: 56px; height: 56px;
-  transform: rotate(-90deg);
-}
-.al-progress-circle circle {
-  fill: none;
-  stroke-width: 4;
-}
-.al-progress-bg-ring { stroke: rgba(148, 163, 184, 0.18); }
-.al-progress-fg-ring {
-  stroke: var(--teal);
-  stroke-linecap: round;
-  transition: stroke-dashoffset 0.4s ease;
-}
-.al-progress-pct {
-  position: absolute;
-  inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 800; color: var(--text);
-}
-.al-progress-info { flex: 1; }
-.al-progress-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
-.al-progress-msg { font-size: 13px; color: var(--muted); }
+    .al-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; }
+    .al-grid-full { grid-column: 1 / -1; }
 
-.al-section {
-  background: rgba(12, 26, 43, 0.86);
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  border-radius: 14px;
-  padding: 26px 28px;
-  margin-bottom: 18px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
-}
-.al-section-num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  background: rgba(72, 215, 207, 0.18);
-  color: var(--teal);
-  font-size: 12px;
-  font-weight: 900;
-  margin-right: 10px;
-}
-.al-section-title {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  margin: 0 0 6px;
-}
-.al-section-desc {
-  color: var(--muted);
-  font-size: 13.5px;
-  line-height: 1.5;
-  margin: 0 0 22px 38px;
-}
+    .al-field { display: flex; flex-direction: column; gap: 6px; }
+    .al-field label { font-size: 12px; font-weight: 700; color: #bfd0e3; letter-spacing: 0.02em; }
+    .al-field label .req { color: var(--teal); margin-left: 2px; }
+    .al-field label .opt { color: #6b7d96; font-weight: 500; margin-left: 4px; }
 
-.al-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px 18px;
-}
-.al-grid-full { grid-column: 1 / -1; }
+    .al-field input,
+    .al-field select,
+    .al-field textarea {
+      background: rgba(7, 17, 31, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      border-radius: 8px;
+      padding: 11px 14px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      width: 100%;
+      transition: border-color 0.15s, background 0.15s;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .al-field input::placeholder, .al-field textarea::placeholder { color: #6b7d96; }
+    .al-field input:focus, .al-field select:focus, .al-field textarea:focus {
+      border-color: var(--teal);
+      background: rgba(7, 17, 31, 0.85);
+    }
+    .al-field select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%2394a3b8' stroke-width='2'%3e%3cpath d='M3 5l3 3 3-3'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 38px;
+    }
+    .al-field textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 
-.al-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.al-field label {
-  font-size: 12px;
-  font-weight: 700;
-  color: #bfd0e3;
-  letter-spacing: 0.02em;
-}
-.al-field label .req { color: var(--teal); margin-left: 2px; }
-.al-field label .opt { color: #6b7d96; font-weight: 500; margin-left: 4px; }
+    .al-privacy {
+      background: rgba(243, 168, 79, 0.1);
+      border-left: 3px solid var(--gold);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .al-privacy svg { width: 16px; height: 16px; color: var(--gold); flex-shrink: 0; margin-top: 2px; }
+    .al-privacy strong { color: var(--text); }
 
-.al-field input,
-.al-field select,
-.al-field textarea {
-  background: rgba(7, 17, 31, 0.7);
-  border: 1px solid rgba(148, 163, 184, 0.24);
-  border-radius: 8px;
-  padding: 11px 14px;
-  color: var(--text);
-  font-family: inherit;
-  font-size: 14px;
-  width: 100%;
-  transition: border-color 0.15s, background 0.15s;
-  outline: none;
-  box-sizing: border-box;
-}
-.al-field input::placeholder, .al-field textarea::placeholder { color: #6b7d96; }
-.al-field input:focus, .al-field select:focus, .al-field textarea:focus {
-  border-color: var(--teal);
-  background: rgba(7, 17, 31, 0.85);
-}
-.al-field select {
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%2394a3b8' stroke-width='2'%3e%3cpath d='M3 5l3 3 3-3'/%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  padding-right: 38px;
-}
-.al-field textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
+    .al-footer-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 26px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(148, 163, 184, 0.16);
+      flex-wrap: wrap;
+    }
 
-.al-info-box {
-  background: rgba(7, 17, 31, 0.7);
-  border: 1px solid rgba(148, 163, 184, 0.24);
-  border-radius: 10px;
-  overflow: hidden;
-}
-.al-info-box textarea {
-  background: transparent;
-  border: none;
-  padding: 16px 18px;
-  min-height: 140px;
-  width: 100%;
-  color: var(--text);
-  font-family: inherit;
-  font-size: 14px;
-  line-height: 1.5;
-  resize: vertical;
-  outline: none;
-  box-sizing: border-box;
-}
-.al-info-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  border-top: 1px solid rgba(148, 163, 184, 0.16);
-  background: rgba(12, 26, 43, 0.72);
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.al-info-toolbar-left {
-  display: flex; align-items: center; gap: 8px;
-  color: var(--muted); font-size: 12px;
-}
-.al-file-btn {
-  background: rgba(72, 215, 207, 0.12);
-  color: var(--teal);
-  border: 1px solid rgba(72, 215, 207, 0.3);
-  border-radius: 8px;
-  padding: 8px 14px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.15s;
-}
-.al-file-btn:hover { background: rgba(72, 215, 207, 0.22); color: var(--text); }
-.al-file-btn input { display: none; }
-.al-file-btn svg { width: 15px; height: 15px; }
+    @media (max-width: 680px) {
+      .al-grid { grid-template-columns: 1fr; }
+      .al-input { padding: 100px 16px 16px 16px; min-height: 140px; }
+      .al-mic { top: 16px; left: 16px; }
+      .al-section { padding: 22px 20px; }
+      .al-feed-list li { grid-template-columns: 14px 1fr; }
+      .al-feed-status { grid-column: 2; text-align: left; padding-left: 0; }
+      .al-footer-actions { flex-direction: column-reverse; }
+      .al-footer-actions .btn { width: 100%; justify-content: center; }
+    }
 
-.al-files-list {
-  padding: 0 14px 12px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.al-file-chip {
-  background: rgba(16, 34, 56, 0.72);
-  border: 1px solid rgba(148, 163, 184, 0.22);
-  border-radius: 6px;
-  padding: 6px 10px 6px 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: var(--muted);
-}
-.al-file-chip .name { color: var(--text); font-weight: 600; }
-.al-file-chip button {
-  background: none; border: none;
-  color: #6b7d96; cursor: pointer;
-  padding: 0; line-height: 1;
-  font-size: 16px; margin-left: 4px;
-}
-.al-file-chip button:hover { color: var(--red); }
-
-.al-privacy {
-  background: rgba(243, 168, 79, 0.1);
-  border-left: 3px solid var(--gold);
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin-top: 14px;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.5;
-}
-.al-privacy svg {
-  width: 16px; height: 16px;
-  color: var(--gold);
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.al-privacy strong { color: var(--text); }
-
-.al-footer-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-top: 26px;
-  padding-top: 22px;
-  border-top: 1px solid rgba(148, 163, 184, 0.16);
-  flex-wrap: wrap;
-}
-
-.al-toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: var(--panel);
-  border: 1px solid var(--teal);
-  border-left: 4px solid var(--teal);
-  border-radius: 10px;
-  padding: 14px 20px;
-  color: var(--text);
-  font-size: 14px;
-  font-weight: 600;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  transform: translateY(120%);
-  transition: transform 0.35s ease;
-  z-index: 1500;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.al-toast.show { transform: translateY(0); }
-.al-toast svg { width: 18px; height: 18px; color: var(--teal); }
-
-/* Responsive */
-@media (max-width: 680px) {
-  .al-grid { grid-template-columns: 1fr; }
-  .al-input { padding: 100px 16px 16px 16px; min-height: 140px; }
-  .al-mic { top: 16px; left: 16px; }
-  .al-section { padding: 22px 20px; }
-  .al-feed-list li { grid-template-columns: 14px 1fr; }
-  .al-feed-status { grid-column: 2; text-align: left; padding-left: 0; }
-  .al-footer-actions { flex-direction: column-reverse; }
-  .al-footer-actions .btn { width: 100%; justify-content: center; }
-}
- </style>
+  </style>
 </head>
 <body>
   <div class="app">
@@ -2362,20 +2166,117 @@
       </div>
 
       <section class="screen active" id="quickmission">
-   <!-- =========================================================
-     AGENTLINK · NUOVA HOME (sostituisce #quickmission)
-     Cerca nel tuo index.html questo blocco:
-       <section class="screen active" id="quickmission">
-         ...
-       </section>
-     E sostituiscilo INTERAMENTE con il blocco qui sotto.
+        <div class="al-home">
 
-     IMPORTANTE: il JavaScript NON viene toccato. Le funzioni
-     runQuickMission(), setQuickMode(), setQuickFeed(),
-     quickUseExampleMission() continuano a funzionare perché
-     gli ID degli elementi sono identici a quelli originali.
-     ========================================================= -->
+          <span class="al-eyebrow">COSA CERCHI · COSA OFFRI</span>
 
+          <h2 class="al-hero-title">
+            Una richiesta.<br>
+            <span class="accent">Un agente al lavoro.</span>
+          </h2>
+
+          <p class="al-hero-sub">
+            Scrivi in modo naturale, o registra un messaggio vocale.
+            AgentLink cerca disponibilità reali e ti porta solo opportunità azionabili.
+          </p>
+
+          <textarea id="quickCompanyProfile" style="display:none"></textarea>
+
+          <div class="al-input-wrap">
+            <button class="al-mic" id="quickMicBtn" type="button" aria-label="Registra messaggio vocale" title="Tieni premuto per registrare">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#06101b" stroke-width="2.2">
+                <rect x="9" y="3" width="6" height="12" rx="3" fill="#06101b"/>
+                <path d="M5 11a7 7 0 0014 0M12 19v3" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <textarea
+              id="quickMissionPrompt"
+              class="al-input"
+              rows="3"
+              placeholder='Es. "Bullone M8 zona Vitinia, consegna entro stasera" · "3 ore tornio libere venerdì pomeriggio"'></textarea>
+          </div>
+
+          <div class="al-pills" role="tablist">
+            <button class="al-pill active" type="button" data-quick-mode="search" role="tab">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                <circle cx="11" cy="11" r="7"/>
+                <path d="M21 21l-5-5" stroke-linecap="round"/>
+              </svg>
+              Cosa cerchi
+            </button>
+            <button class="al-pill" type="button" data-quick-mode="offer" role="tab">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                <path d="M3 8l9-5 9 5v8l-9 5-9-5V8z"/>
+                <path d="M3 8l9 5 9-5" stroke-linecap="round"/>
+              </svg>
+              Cosa offri
+            </button>
+          </div>
+
+          <button class="al-cta" id="runQuickMission" type="button">
+            Avvia agente
+            <svg viewBox="0 0 24 24" fill="none" stroke="#06101b" stroke-width="2.6">
+              <path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <div class="al-hint">
+            Non sai cosa scrivere?
+            <a href="#" id="quickExampleLink">Prova un esempio →</a>
+          </div>
+
+          <button class="btn secondary" id="quickExampleMission" type="button" style="display:none">Carica esempio</button>
+          <div id="quickMissionParsed" style="display:none">Minimo richiesto: cosa. Consigliati: dove, quando, vincoli.</div>
+
+          <section class="al-feed" aria-label="Agenti al lavoro">
+            <div class="al-feed-label">
+              <span>AGENTI AL LAVORO</span>
+              <span class="al-feed-count" id="quickFeedCount">3 attive</span>
+            </div>
+            <ul class="al-feed-list" id="quickFeedList">
+              <li>
+                <span class="al-feed-dot"></span>
+                <span>Ricerca bulloni M8 zona Vitinia</span>
+                <span class="al-feed-status">In trattativa con 3 ferramenta</span>
+              </li>
+              <li>
+                <span class="al-feed-dot"></span>
+                <span>Capacità venerdì libero, team pulizie</span>
+                <span class="al-feed-status">Scansione richieste in corso</span>
+              </li>
+              <li>
+                <span class="al-feed-dot warn"></span>
+                <span>Sourcing inox 316L EN 10204</span>
+                <span class="al-feed-status">Match qualificato — review umana</span>
+              </li>
+            </ul>
+          </section>
+
+          <div class="quick-report" style="display:none; margin-top: 36px;">
+            <div id="quickReportSummary" style="background: rgba(72, 215, 207, 0.08); border: 1px solid rgba(72, 215, 207, 0.2); padding: 14px; color: #dce7f3; line-height: 1.45; border-radius: 10px;">
+              Report d'azione: appena avvii la missione qui trovi aziende, disponibilità, rischi e prossimi passi.
+            </div>
+            <div class="table-wrap" style="margin-top: 12px;">
+              <table class="admin-table quick-report-table">
+                <thead>
+                  <tr>
+                    <th>Azienda trovata</th>
+                    <th>Disponibile da</th>
+                    <th>Area</th>
+                    <th>Quantità / ore</th>
+                    <th>Contatto</th>
+                    <th>Azione operativa</th>
+                  </tr>
+                </thead>
+                <tbody id="quickReportRows">
+                  <tr><td colspan="6">Nessuna missione avviata.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="quickEmailDraft" style="display:none; margin-top: 12px;"></div>
+          </div>
+
+        </div>
       </section>
 
       <section class="screen" id="overview">
@@ -2590,182 +2491,241 @@
 
       <section class="screen" id="register">
         <div class="workspace">
-          <div class="panel">
-            <span class="label">Onboarding aziende</span>
-            <h2>Configura il tuo agente parlando, non compilando</h2>
-            <div class="quick-agent-box">
-              <div class="quick-agent-head">
-                <div>
-                  <h3>Raccontami la tua azienda</h3>
-                  <p>Scrivi come parleresti a un collaboratore: cosa vendi, che servizi offri, cosa hai a stock, dove lavori e cosa vuoi cercare. L'agente compila sotto i dati strutturati.</p>
+          <div class="panel" style="background: transparent; border: none; box-shadow: none; padding: 0;">
+            <div class="al-profile">
+
+              <span class="al-eyebrow">PROFILO AGENTE</span>
+              <h2 class="al-hero-title" style="font-size: clamp(28px, 4vw, 38px); margin-bottom: 12px;">
+                Più informazioni dai, <span class="accent">migliori opportunità trovi.</span>
+              </h2>
+              <p class="al-hero-sub">
+                Compila il profilo della tua azienda. Il tuo agente AI userà questi dati per cercare opportunità, parlare con altri agenti e portarti solo quello che vale.
+              </p>
+
+              <div class="al-progress-wrap">
+                <div class="al-progress-circle">
+                  <svg viewBox="0 0 56 56">
+                    <circle class="al-progress-bg-ring" cx="28" cy="28" r="22"/>
+                    <circle id="alProgressRing" class="al-progress-fg-ring" cx="28" cy="28" r="22"
+                            stroke-dasharray="138.23" stroke-dashoffset="138.23"/>
+                  </svg>
+                  <div class="al-progress-pct" id="alProgressPct">0%</div>
                 </div>
-                <span class="status-pill"><span class="dot"></span> Onboarding veloce</span>
-              </div>
-              <div class="mission-chat" id="registerAgentChat">
-                <div class="mission-bubble agent">
-                  <strong>AgentLink Onboarding</strong>
-                  Dimmi cosa fa la tua azienda. Puoi anche caricare un file TXT o CSV con stock, servizi o catalogo: nella beta lo uso per aiutarti a compilare il profilo.
+                <div class="al-progress-info">
+                  <div class="al-progress-title">Completamento profilo</div>
+                  <div class="al-progress-msg" id="alProgressMsg">Inizia compilando i dati aziendali.</div>
                 </div>
               </div>
-              <div class="quick-agent-input">
-                <div class="field">
+
+              <div class="al-section">
+                <h3 class="al-section-title">
+                  <span class="al-section-num">1</span>
+                  Raccontami la tua azienda
+                </h3>
+                <p class="al-section-desc">
+                  Scrivi come parleresti a un collaboratore: cosa vendi, cosa offri, dove lavori. L'agente compila i dati strutturati per te.
+                </p>
+
+                <div class="mission-chat" id="registerAgentChat">
+                  <div class="mission-bubble agent">
+                    <strong>AgentLink Onboarding</strong>
+                    Dimmi cosa fa la tua azienda. Puoi anche caricare un file TXT o CSV con stock, servizi o catalogo: nella beta lo uso per aiutarti a compilare il profilo.
+                  </div>
+                </div>
+
+                <div class="al-field" style="margin-top: 14px;">
                   <label>Messaggio per l'agente</label>
                   <textarea id="registerAgentPrompt" placeholder="Es. Siamo un'impresa elettrica a Milano, abbiamo 2 squadre disponibili da giugno, cerchiamo subappalti sopra 50.000 euro. Non comunicare prezzi senza approvazione."></textarea>
                 </div>
-                <div class="actions" style="margin-top: 0;">
-                  <label class="btn secondary" for="registerAgentFile">+ File</label>
+
+                <div class="actions" style="margin-top: 14px;">
+                  <label class="btn secondary" for="registerAgentFile" style="cursor: pointer;">+ File</label>
                   <input id="registerAgentFile" type="file" accept=".txt,.csv,.tsv,.json,.pdf,.xlsx,.xls" style="display:none">
                   <button class="btn" id="askRegisterAgent" type="button">Parla con l'agente</button>
+                  <button class="btn secondary" id="fillFastExample" type="button">Esempio rapido PMI</button>
+                  <button class="btn secondary" id="clearRegisterAgent" type="button">Pulisci conversazione</button>
+                </div>
+
+                <div id="registerFileList" style="margin-top: 12px;"></div>
+
+                <div class="asset-preview" id="assetPreview" style="margin-top: 14px;">
+                  <h4>Memoria che verrà salvata per l'agente</h4>
+                  <p>Qui vedi servizi, stock, cataloghi, certificazioni e file che l'agente potrà usare nelle missioni.</p>
+                  <div class="asset-preview-grid" id="assetPreviewGrid"></div>
                 </div>
               </div>
-              <div id="registerFileList"></div>
-              <div class="asset-preview" id="assetPreview">
-                <h4>Memoria che verra salvata per l'agente</h4>
-                <p>Qui vedi servizi, stock, cataloghi, certificazioni e file che l'agente potra usare nelle missioni.</p>
-                <div class="asset-preview-grid" id="assetPreviewGrid"></div>
-              </div>
-              <div class="actions" style="margin-top: 0;">
-                <button class="btn secondary" id="fillFastExample" type="button">Esempio rapido PMI</button>
-                <button class="btn secondary" id="clearRegisterAgent" type="button">Pulisci conversazione</button>
-              </div>
-            </div>
-            <div class="form-grid">
-              <div class="form-section">
-                <h3>1. Dati aziendali</h3>
-                <p>Identita, referente e informazioni minime per rendere il profilo credibile nella piattaforma.</p>
-              </div>
-              <div class="field">
-                <label>Ragione sociale</label>
-                <input id="companyName" placeholder="Es. EdilRoma Appalti S.r.l.">
-              </div>
-              <div class="field">
-                <label>Email referente</label>
-                <input id="companyEmail" type="email" placeholder="Es. nome@azienda.it">
-              </div>
-              <div class="field">
-                <label>Sito web</label>
-                <input id="companyWebsite" placeholder="Es. https://azienda.it">
-              </div>
-              <div class="field">
-                <label>Partita IVA / VAT</label>
-                <input id="companyVat" placeholder="Es. IT01234567890">
-              </div>
-              <div class="field">
-                <label>Telefono</label>
-                <input id="companyPhone" placeholder="Es. +39 02 123456">
+
+              <div class="al-section">
+                <h3 class="al-section-title">
+                  <span class="al-section-num">2</span>
+                  Dati aziendali
+                </h3>
+                <p class="al-section-desc">Identità minima per rendere il profilo credibile sulla rete AgentLink.</p>
+
+                <div class="al-grid">
+                  <div class="al-field al-grid-full">
+                    <label>Ragione sociale <span class="req">*</span></label>
+                    <input id="companyName" placeholder="Es. EdilRoma Appalti S.r.l.">
+                  </div>
+                  <div class="al-field">
+                    <label>Email referente <span class="req">*</span></label>
+                    <input id="companyEmail" type="email" placeholder="nome@azienda.it">
+                  </div>
+                  <div class="al-field">
+                    <label>Telefono</label>
+                    <input id="companyPhone" placeholder="+39 02 1234567">
+                  </div>
+                  <div class="al-field">
+                    <label>Sito web <span class="opt">facoltativo</span></label>
+                    <input id="companyWebsite" placeholder="https://azienda.it">
+                  </div>
+                  <div class="al-field">
+                    <label>Partita IVA <span class="req">*</span></label>
+                    <input id="companyVat" placeholder="IT01234567890">
+                  </div>
+                </div>
               </div>
 
-              <div class="form-section">
-                <h3>2. Profilo operativo</h3>
-                <p>Settore, area geografica e modalita con cui l'agente deve rappresentare l'azienda.</p>
-              </div>
-              <div class="field">
-                <label>Settore</label>
-                <select id="companySector">
-                  <option>Subappalti ed edilizia</option>
-                  <option>Sourcing industriale</option>
-                  <option>Logistica e trasporti</option>
-                  <option>Servizi B2B</option>
-                  <option>Manifattura</option>
-                </select>
-              </div>
-              <div class="field">
-                <label>Citta / area operativa</label>
-                <input id="companyArea" placeholder="Es. Milano, Lombardia">
-              </div>
-              <div class="field">
-                <label>Modalita agente</label>
-                <select id="companyMode">
-                  <option>Offre servizi/prodotti</option>
-                  <option>Cerca fornitori o subappaltatori</option>
-                  <option>Cerca opportunita commerciali</option>
-                  <option>Buyer e seller</option>
-                </select>
+              <div class="al-section">
+                <h3 class="al-section-title">
+                  <span class="al-section-num">3</span>
+                  Profilo operativo
+                </h3>
+                <p class="al-section-desc">Settore, area e modalità: indicano come l'agente ti rappresenterà.</p>
+
+                <div class="al-grid">
+                  <div class="al-field">
+                    <label>Settore <span class="req">*</span></label>
+                    <select id="companySector">
+                      <option>Subappalti ed edilizia</option>
+                      <option>Sourcing industriale</option>
+                      <option>Logistica e trasporti</option>
+                      <option>Servizi B2B</option>
+                      <option>Manifattura</option>
+                    </select>
+                  </div>
+                  <div class="al-field">
+                    <label>Città / area operativa <span class="req">*</span></label>
+                    <input id="companyArea" placeholder="Es. Milano, Lombardia">
+                  </div>
+                  <div class="al-field al-grid-full">
+                    <label>Modalità agente <span class="req">*</span></label>
+                    <select id="companyMode">
+                      <option>Offre servizi/prodotti</option>
+                      <option>Cerca fornitori o subappaltatori</option>
+                      <option>Cerca opportunità commerciali</option>
+                      <option>Buyer e seller</option>
+                    </select>
+                  </div>
+                </div>
               </div>
 
-              <div class="form-section">
-                <h3>3. Offerta aziendale</h3>
-                <p>Quello che l'azienda puo proporre al mercato: servizi, prodotti, certificazioni e capacita disponibili.</p>
-              </div>
-              <div class="field" style="grid-column: 1 / -1;">
-                <label>Cosa offre</label>
-                <textarea id="companyOffers" placeholder="Es. Impianti elettrici, squadre disponibili, certificazioni, zone coperte"></textarea>
-              </div>
-              <div class="field">
-                <label>Certificazioni</label>
-                <input id="companyCertifications" placeholder="Es. DURC, ISO 9001, SOA, EN 10204">
-              </div>
-              <div class="field">
-                <label>Disponibilita</label>
-                <input id="companyAvailability" placeholder="Es. entro 30 giorni, 2 squadre disponibili">
-              </div>
-              <div class="field">
-                <label>Tipo disponibilita</label>
-                <select id="capacityType">
-                  <option>Stock prodotto</option>
-                  <option>Slot servizio</option>
-                  <option>Ore uomo disponibili</option>
-                  <option>Ore macchina disponibili</option>
-                  <option>Capacita logistica</option>
-                </select>
-              </div>
-              <div class="field">
-                <label>Nome capacita</label>
-                <input id="capacityName" placeholder="Es. Bullone M8 zincato, squadra pulizie serale">
-              </div>
-              <div class="field">
-                <label>Quantita o ore</label>
-                <input id="capacityQuantity" placeholder="Es. 200 pezzi, 18 ore, 2 squadre">
-              </div>
-              <div class="field">
-                <label>Unita</label>
-                <input id="capacityUnit" placeholder="Es. pezzi, ore, squadre, pallet">
-              </div>
-              <div class="field">
-                <label>Finestra temporale</label>
-                <input id="capacityWindow" placeholder="Es. da venerdi 14:00 a venerdi 23:00">
-              </div>
-              <div class="field">
-                <label>Zona coperta</label>
-                <input id="capacityArea" placeholder="Es. Roma sud, Vitinia, Milano ovest">
-              </div>
-              <div class="field" style="grid-column: 1 / -1;">
-                <label>Note operative capacita</label>
-                <textarea id="capacityNotes" placeholder="Es. uscita urgente in 4 ore, minimo ordine 50 pezzi, solo clienti verificati."></textarea>
+              <div class="al-section">
+                <h3 class="al-section-title">
+                  <span class="al-section-num">4</span>
+                  Cosa offri al mercato
+                </h3>
+                <p class="al-section-desc">Servizi, prodotti, certificazioni e disponibilità che l'agente può proporre.</p>
+
+                <div class="al-grid">
+                  <div class="al-field al-grid-full">
+                    <label>Cosa offri <span class="opt">descrivi liberamente</span></label>
+                    <textarea id="companyOffers" placeholder="Es. Impianti elettrici, squadre disponibili, certificazioni, zone coperte"></textarea>
+                  </div>
+                  <div class="al-field">
+                    <label>Certificazioni</label>
+                    <input id="companyCertifications" placeholder="ISO 9001, EN 10204 3.1, SOA, DURC...">
+                  </div>
+                  <div class="al-field">
+                    <label>Disponibilità attuale</label>
+                    <input id="companyAvailability" placeholder="Es. 2 squadre · 50 ore/mese · da giugno">
+                  </div>
+                  <div class="al-field">
+                    <label>Tipo disponibilità</label>
+                    <select id="capacityType">
+                      <option>Stock prodotto</option>
+                      <option>Slot servizio</option>
+                      <option>Ore uomo disponibili</option>
+                      <option>Ore macchina disponibili</option>
+                      <option>Capacità logistica</option>
+                    </select>
+                  </div>
+                  <div class="al-field">
+                    <label>Nome capacità</label>
+                    <input id="capacityName" placeholder="Es. Bullone M8 zincato, squadra pulizie">
+                  </div>
+                  <div class="al-field">
+                    <label>Quantità o ore</label>
+                    <input id="capacityQuantity" placeholder="Es. 200, 18, 2">
+                  </div>
+                  <div class="al-field">
+                    <label>Unità</label>
+                    <input id="capacityUnit" placeholder="Es. pezzi, ore, squadre, pallet">
+                  </div>
+                  <div class="al-field">
+                    <label>Finestra temporale</label>
+                    <input id="capacityWindow" placeholder="Es. da venerdì 14:00 a venerdì 23:00">
+                  </div>
+                  <div class="al-field">
+                    <label>Zona coperta</label>
+                    <input id="capacityArea" placeholder="Es. Roma sud, Vitinia, Milano ovest">
+                  </div>
+                  <div class="al-field al-grid-full">
+                    <label>Note operative capacità</label>
+                    <textarea id="capacityNotes" placeholder="Es. uscita urgente in 4 ore, minimo ordine 50 pezzi, solo clienti verificati."></textarea>
+                  </div>
+                </div>
               </div>
 
-              <div class="form-section">
-                <h3>4. Cosa cerca l'agente</h3>
-                <p>Obiettivi e criteri con cui l'agente deve cercare opportunita, fornitori, clienti o subappalti.</p>
+              <div class="al-section">
+                <h3 class="al-section-title">
+                  <span class="al-section-num">5</span>
+                  Cosa cerca il tuo agente
+                </h3>
+                <p class="al-section-desc">Obiettivi e regole: l'agente capisce cosa deve trovare per te.</p>
+
+                <div class="al-grid">
+                  <div class="al-field al-grid-full">
+                    <label>Cosa cerca <span class="opt">descrivi liberamente</span></label>
+                    <textarea id="companyNeeds" placeholder="Es. Subappalti a Milano, lavori sopra 50.000 euro, committenti verificati"></textarea>
+                  </div>
+                  <div class="al-field">
+                    <label>Soglia minima match</label>
+                    <select id="companyMatchThreshold">
+                      <option value="80">80% — bilanciato</option>
+                      <option value="70">70% — più opportunità</option>
+                      <option value="90">90% — solo top match</option>
+                    </select>
+                  </div>
+                  <div class="al-field">
+                    <label>Consenso beta</label>
+                    <select id="companyBetaConsent">
+                      <option value="true">Sì, posso essere contattato</option>
+                      <option value="false">No, solo demo</option>
+                    </select>
+                  </div>
+                  <div class="al-field al-grid-full">
+                    <label>Regole dell'agente <span class="opt">limiti e vincoli</span></label>
+                    <textarea id="companyRules" placeholder="Es. Non condividere prezzi prima della revisione umana. Segnalare solo match sopra 80%."></textarea>
+                  </div>
+                </div>
+
+                <div class="al-privacy">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L4 6v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V6l-8-4z"/>
+                  </svg>
+                  <div>
+                    <strong>Solo il tuo agente vede questi dati.</strong> Gli altri agenti AI sulla rete non possono leggerli. Possono interrogare il tuo agente, che risponde solo alle domande compatibili con le regole che hai definito.
+                  </div>
+                </div>
               </div>
-              <div class="field" style="grid-column: 1 / -1;">
-                <label>Cosa cerca</label>
-                <textarea id="companyNeeds" placeholder="Es. Subappalti a Milano, lavori sopra 50.000 euro, committenti verificati"></textarea>
+
+              <div class="al-footer-actions">
+                <button class="btn secondary" id="loadExample" type="button">Carica esempio subappalto</button>
+                <button class="btn secondary" id="clearCompanies" type="button">Svuota registro</button>
+                <button class="btn" id="saveCompany" type="button">Salva azienda nella beta</button>
               </div>
-              <div class="field">
-                <label>Soglia minima match</label>
-                <select id="companyMatchThreshold">
-                  <option value="80">80%</option>
-                  <option value="70">70%</option>
-                  <option value="90">90%</option>
-                </select>
-              </div>
-              <div class="field">
-                <label>Consenso beta</label>
-                <select id="companyBetaConsent">
-                  <option value="true">Si, posso essere contattato per la beta</option>
-                  <option value="false">No, solo demo</option>
-                </select>
-              </div>
-              <div class="field" style="grid-column: 1 / -1;">
-                <label>Regole dell'agente</label>
-                <textarea id="companyRules" placeholder="Es. Non condividere prezzi prima della revisione umana. Segnalare solo match sopra 80%."></textarea>
-              </div>
-            </div>
-            <div class="actions">
-              <button class="btn" id="saveCompany">Salva azienda nella beta</button>
-              <button class="btn secondary" id="loadExample">Carica esempio subappalto</button>
-              <button class="btn secondary" id="clearCompanies">Svuota registro</button>
+
             </div>
           </div>
 
@@ -3149,32 +3109,35 @@
           </div>
         </div>
       </section>
+
+      <div class="al-modal-bg" id="alExampleModal" role="dialog" aria-labelledby="alModalTitle">
+        <div class="al-modal">
+          <h3 id="alModalTitle">Esempi di missione</h3>
+          <p>Scegli un esempio simile alla tua esigenza per partire.</p>
+
+          <div class="al-ex" data-al-ex="Cerco bulloni M8 zona Vitinia, consegna entro stasera, qualsiasi quantità">
+            <div class="al-ex-tag">STOCK</div>
+            Cerco bulloni M8 zona Vitinia, consegna entro stasera
+          </div>
+          <div class="al-ex" data-al-ex="Ho 3 ore tornio libere venerdì pomeriggio, lavoro pezzi piccoli inox">
+            <div class="al-ex-tag">CAPACITÀ</div>
+            Ho 3 ore tornio libere venerdì pomeriggio
+          </div>
+          <div class="al-ex" data-al-ex="Cerco impresa di pulizie Roma sud, disponibile venerdì sera per locale appena ristrutturato">
+            <div class="al-ex-tag">SERVIZIO</div>
+            Cerco impresa pulizie Roma sud venerdì sera
+          </div>
+          <div class="al-ex" data-al-ex="Trasporto Milano-Roma martedì sera, camion 12m vuoto al ritorno">
+            <div class="al-ex-tag">TRASPORTO</div>
+            Camion vuoto Milano-Roma martedì sera
+          </div>
+
+          <button class="al-modal-close" id="alModalClose">Chiudi</button>
+        </div>
+      </div>
+
+    
     </main>
-    <div class="al-modal-bg" id="alExampleModal" role="dialog" aria-labelledby="alModalTitle">
-  <div class="al-modal">
-    <h3 id="alModalTitle">Esempi di missione</h3>
-    <p>Scegli un esempio simile alla tua esigenza per partire.</p>
-
-    <div class="al-ex" data-al-ex="Cerco bulloni M8 zona Vitinia, consegna entro stasera, qualsiasi quantità">
-      <div class="al-ex-tag">STOCK</div>
-      Cerco bulloni M8 zona Vitinia, consegna entro stasera
-    </div>
-    <div class="al-ex" data-al-ex="Ho 3 ore tornio libere venerdì pomeriggio, lavoro pezzi piccoli inox">
-      <div class="al-ex-tag">CAPACITÀ</div>
-      Ho 3 ore tornio libere venerdì pomeriggio
-    </div>
-    <div class="al-ex" data-al-ex="Cerco impresa di pulizie Roma sud, disponibile venerdì sera per locale appena ristrutturato">
-      <div class="al-ex-tag">SERVIZIO</div>
-      Cerco impresa pulizie Roma sud venerdì sera
-    </div>
-    <div class="al-ex" data-al-ex="Trasporto Milano-Roma martedì sera, camion 12m vuoto al ritorno">
-      <div class="al-ex-tag">TRASPORTO</div>
-      Camion vuoto Milano-Roma martedì sera
-    </div>
-
-    <button class="al-modal-close" id="alModalClose">Chiudi</button>
-  </div>
-</div>
   </div>
 
   <script>
@@ -5323,99 +5286,147 @@
     }
 
     document.getElementById('nextMessage').addEventListener('click', runNextDialogueTurn);
+
+    /* === UI MINIMALISTA · script aggiuntivo === */
+
     // Voice input (Web Speech API)
-  (function () {
-    var micBtn = document.getElementById('quickMicBtn');
-    if (!micBtn) return;
-    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    var recognition = null;
-    var recording = false;
-    var finalText = '';
+    (function () {
+      var micBtn = document.getElementById('quickMicBtn');
+      if (!micBtn) return;
+      var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      var recognition = null;
+      var recording = false;
+      var finalText = '';
 
-    function setup() {
-      if (!SR) return null;
-      var r = new SR();
-      r.lang = 'it-IT';
-      r.continuous = false;
-      r.interimResults = true;
-      r.onstart = function () {
-        var input = document.getElementById('quickMissionPrompt');
-        finalText = input && input.value ? input.value + ' ' : '';
-      };
-      r.onresult = function (e) {
-        var interim = '';
-        for (var i = e.resultIndex; i < e.results.length; i++) {
-          if (e.results[i].isFinal) finalText += e.results[i][0].transcript + ' ';
-          else interim += e.results[i][0].transcript;
-        }
-        var input = document.getElementById('quickMissionPrompt');
-        if (input) input.value = (finalText + interim).trim();
-      };
-      r.onerror = stop;
-      r.onend = stop;
-      return r;
-    }
-
-    function start() {
-      if (!recognition) recognition = setup();
-      if (!recognition) {
-        alert('Il tuo browser non supporta il riconoscimento vocale. Prova con Chrome o Edge.');
-        return;
+      function setup() {
+        if (!SR) return null;
+        var r = new SR();
+        r.lang = 'it-IT';
+        r.continuous = false;
+        r.interimResults = true;
+        r.onstart = function () {
+          var input = document.getElementById('quickMissionPrompt');
+          finalText = input && input.value ? input.value + ' ' : '';
+        };
+        r.onresult = function (e) {
+          var interim = '';
+          for (var i = e.resultIndex; i < e.results.length; i++) {
+            if (e.results[i].isFinal) finalText += e.results[i][0].transcript + ' ';
+            else interim += e.results[i][0].transcript;
+          }
+          var input = document.getElementById('quickMissionPrompt');
+          if (input) input.value = (finalText + interim).trim();
+        };
+        r.onerror = stop;
+        r.onend = stop;
+        return r;
       }
-      try { recognition.start(); recording = true; micBtn.classList.add('recording'); }
-      catch (e) {}
-    }
 
-    function stop() {
-      recording = false;
-      micBtn.classList.remove('recording');
-      if (recognition) { try { recognition.stop(); } catch (e) {} }
-    }
-
-    var newMic = micBtn.cloneNode(true);
-    micBtn.parentNode.replaceChild(newMic, micBtn);
-    newMic.addEventListener('click', function () {
-      recording ? stop() : start();
-    });
-  })();
-
-  // Modal esempi
-  (function () {
-    var modal = document.getElementById('alExampleModal');
-    var link = document.getElementById('quickExampleLink');
-    var closeBtn = document.getElementById('alModalClose');
-    var input = document.getElementById('quickMissionPrompt');
-    if (!modal || !link) return;
-
-    link.addEventListener('click', function (e) {
-      e.preventDefault();
-      modal.classList.add('open');
-    });
-    closeBtn.addEventListener('click', function () { modal.classList.remove('open'); });
-    modal.addEventListener('click', function (e) {
-      if (e.target === modal) modal.classList.remove('open');
-    });
-    document.querySelectorAll('[data-al-ex]').forEach(function (item) {
-      item.addEventListener('click', function () {
-        if (input) {
-          input.value = item.getAttribute('data-al-ex');
-          input.focus();
-          input.dispatchEvent(new Event('input', { bubbles: true }));
+      function start() {
+        if (!recognition) recognition = setup();
+        if (!recognition) {
+          alert('Il tuo browser non supporta il riconoscimento vocale. Prova con Chrome o Edge.');
+          return;
         }
-        modal.classList.remove('open');
-      });
-    });
-  })();
+        try { recognition.start(); recording = true; micBtn.classList.add('recording'); }
+        catch (e) {}
+      }
 
-  // Sync pillole nuove con sistema vecchio
-  document.querySelectorAll('.al-pill[data-quick-mode]').forEach(function (pill) {
-    pill.addEventListener('click', function () {
-      document.querySelectorAll('.al-pill[data-quick-mode]').forEach(function (p) {
-        p.classList.remove('active');
+      function stop() {
+        recording = false;
+        micBtn.classList.remove('recording');
+        if (recognition) { try { recognition.stop(); } catch (e) {} }
+      }
+
+      var newMic = micBtn.cloneNode(true);
+      micBtn.parentNode.replaceChild(newMic, micBtn);
+      newMic.addEventListener('click', function () {
+        recording ? stop() : start();
       });
-      pill.classList.add('active');
+    })();
+
+    // Modal esempi
+    (function () {
+      var modal = document.getElementById('alExampleModal');
+      var link = document.getElementById('quickExampleLink');
+      var closeBtn = document.getElementById('alModalClose');
+      var input = document.getElementById('quickMissionPrompt');
+      if (!modal || !link) return;
+
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        modal.classList.add('open');
+      });
+      if (closeBtn) closeBtn.addEventListener('click', function () { modal.classList.remove('open'); });
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) modal.classList.remove('open');
+      });
+      document.querySelectorAll('[data-al-ex]').forEach(function (item) {
+        item.addEventListener('click', function () {
+          if (input) {
+            input.value = item.getAttribute('data-al-ex');
+            input.focus();
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+          modal.classList.remove('open');
+        });
+      });
+    })();
+
+    // Sync pillole nuove con sistema vecchio
+    document.querySelectorAll('.al-pill[data-quick-mode]').forEach(function (pill) {
+      pill.addEventListener('click', function () {
+        document.querySelectorAll('.al-pill[data-quick-mode]').forEach(function (p) {
+          p.classList.remove('active');
+        });
+        pill.classList.add('active');
+      });
     });
-  });
+
+    // Progress bar profilo agente
+    (function () {
+      var ring = document.getElementById('alProgressRing');
+      var pctEl = document.getElementById('alProgressPct');
+      var msgEl = document.getElementById('alProgressMsg');
+      if (!ring) return;
+
+      var CIRC = 2 * Math.PI * 22;
+      var fieldIds = [
+        'companyName', 'companyEmail', 'companyPhone', 'companyWebsite', 'companyVat',
+        'companySector', 'companyArea', 'companyMode',
+        'companyOffers', 'companyCertifications', 'companyAvailability',
+        'capacityType', 'capacityName', 'capacityQuantity', 'capacityUnit',
+        'capacityWindow', 'capacityArea', 'capacityNotes',
+        'companyNeeds', 'companyMatchThreshold', 'companyRules'
+      ];
+
+      function updateProgress() {
+        var filled = 0;
+        var total = fieldIds.length;
+        fieldIds.forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el && el.value && el.value.trim() !== '') filled++;
+        });
+        var pct = Math.round((filled / total) * 100);
+        pctEl.textContent = pct + '%';
+        ring.style.strokeDashoffset = CIRC - (pct / 100) * CIRC;
+        if (pct < 20) msgEl.textContent = 'Inizia compilando i dati aziendali.';
+        else if (pct < 50) msgEl.textContent = 'Continua: aggiungi settore e modalità agente.';
+        else if (pct < 75) msgEl.textContent = 'Bene. Descrivi cosa offri e cosa cerchi.';
+        else if (pct < 100) msgEl.textContent = 'Quasi pronto. Aggiungi info extra per migliorare i match.';
+        else msgEl.textContent = 'Profilo completo. Il tuo agente è pronto al massimo.';
+      }
+
+      fieldIds.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('input', updateProgress);
+          el.addEventListener('change', updateProgress);
+        }
+      });
+      setTimeout(updateProgress, 500);
+    })();
+
   </script>
 </body>
 </html>
