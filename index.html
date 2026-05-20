@@ -1671,9 +1671,9 @@
                   <button class="btn secondary" id="quickExampleMission" type="button">Carica esempio</button>
                 </div>
 
-                <p class="quick-helper">Suggerimento: scrivi sempre cosa, dove, quando e vincoli minimi.</p>
+                <p class="quick-helper">Suggerimento: indica almeno cosa vuoi fare. Dove, quando e vincoli rendono il risultato piu preciso.</p>
                 <div class="quick-report-summary" id="quickMissionParsed">
-                  Compila sempre 4 elementi: cosa, dove, quando, vincoli.
+                  Minimo richiesto: cosa. Consigliati: dove, quando, vincoli.
                 </div>
 
                 <hr class="quick-home-divider">
@@ -2742,24 +2742,28 @@
         constraints: constraintsMatch ? raw : ''
       };
 
-      const missing = [];
-      if (!details.what) missing.push('cosa');
-      if (!details.where) missing.push('dove');
-      if (!details.when) missing.push('quando');
-      if (!details.constraints) missing.push('vincoli');
+      const missingRequired = [];
+      const missingAdvised = [];
+      if (!details.what) missingRequired.push('cosa');
+      if (!details.where) missingAdvised.push('dove');
+      if (!details.when) missingAdvised.push('quando');
+      if (!details.constraints) missingAdvised.push('vincoli');
 
-      return { details, missing };
+      return { details, missingRequired, missingAdvised };
     }
 
     function renderMissionParsedBox(elementId, parsed) {
       const box = document.getElementById(elementId);
       if (!box) return;
+      const whereLabel = parsed.details.where || 'manca (consigliato)';
+      const whenLabel = parsed.details.when || 'manca (consigliato)';
+      const constraintsLabel = parsed.details.constraints ? 'ok' : 'manca (consigliato)';
       box.innerHTML = `
         <strong>Parser missione</strong>
-        <br>Cosa: ${escapeHtml(parsed.details.what ? 'ok' : 'manca')}
-        <br>Dove: ${escapeHtml(parsed.details.where || 'manca')}
-        <br>Quando: ${escapeHtml(parsed.details.when || 'manca')}
-        <br>Vincoli: ${escapeHtml(parsed.details.constraints ? 'ok' : 'manca')}
+        <br>Cosa: ${escapeHtml(parsed.details.what ? 'ok' : 'manca (richiesto)')}
+        <br>Dove: ${escapeHtml(whereLabel)}
+        <br>Quando: ${escapeHtml(whenLabel)}
+        <br>Vincoli: ${escapeHtml(constraintsLabel)}
       `;
     }
 
@@ -3511,11 +3515,11 @@
         return;
       }
 
-      if (parsed.missing.length) {
-        const miss = parsed.missing.join(', ');
-        document.getElementById('missionResults').innerHTML = `<div class="empty-state">Missione incompleta: manca ${escapeHtml(miss)}. Completa la frase con cosa, dove, quando e vincoli.</div>`;
-        document.getElementById('missionLog').innerHTML = `<div>Parser missione: mancanti ${escapeHtml(miss)}.</div>`;
-        appendMissionBubble('agent', 'AgentLink Mission-01', `Per lavorare in modo affidabile mi servono questi elementi: ${miss}.`);
+      if (parsed.missingRequired.length) {
+        const miss = parsed.missingRequired.join(', ');
+        document.getElementById('missionResults').innerHTML = `<div class="empty-state">Missione incompleta: manca ${escapeHtml(miss)}. Scrivi chiaramente cosa vuoi ottenere.</div>`;
+        document.getElementById('missionLog').innerHTML = `<div>Parser missione: manca ${escapeHtml(miss)}.</div>`;
+        appendMissionBubble('agent', 'AgentLink Mission-01', `Per partire mi serve almeno questo elemento: ${miss}.`);
         return;
       }
 
@@ -3805,20 +3809,23 @@
         return;
       }
 
-      if (parsed.missing.length) {
-        const miss = parsed.missing.join(', ');
+      if (parsed.missingRequired.length) {
+        const miss = parsed.missingRequired.join(', ');
         document.getElementById('quickReportSummary').innerHTML = `<strong>Missione incompleta:</strong> manca ${escapeHtml(miss)}.`;
-        document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="6">Completa cosa, dove, quando e vincoli prima di avviare l agente.</td></tr>';
+        document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="6">Per partire scrivi chiaramente cosa vuoi cercare o offrire.</td></tr>';
         setQuickFeed([
           { type: 'warn', text: `Missione incompleta: manca ${miss}.` },
-          { type: 'muted', text: 'Completa i 4 elementi e poi rilancia la missione.' }
+          { type: 'muted', text: 'Aggiungi almeno cosa e poi rilancia la missione.' }
         ]);
         return;
       }
 
       button.disabled = true;
       button.textContent = 'Agente al lavoro...';
-      quickSetWaiting('<strong>AgentLink sta lavorando:</strong> leggo aziende registrate, memoria asset e requisiti della missione.');
+      const advised = parsed.missingAdvised.length
+        ? ` <br><strong>Nota:</strong> missione valida, ma senza ${escapeHtml(parsed.missingAdvised.join(', '))} il risultato puo essere meno preciso.`
+        : '';
+      quickSetWaiting(`<strong>AgentLink sta lavorando:</strong> leggo aziende registrate, memoria asset e requisiti della missione.${advised}`);
 
       try {
         const companies = await fetchCompanies();
