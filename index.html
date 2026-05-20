@@ -834,8 +834,8 @@
 
     .quick-mission-layout {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
+      grid-template-columns: minmax(0, 1.18fr) minmax(360px, .82fr);
+      gap: 20px;
       align-items: start;
     }
 
@@ -920,11 +920,11 @@
       border: 1px solid rgba(148, 163, 184, .28);
       background: rgba(16, 34, 56, .58);
       color: #b9c8da;
-      padding: 12px 18px;
-      font-size: 29px;
+      padding: 14px 22px;
+      font-size: 33px;
       font-weight: 850;
       cursor: pointer;
-      min-width: 220px;
+      min-width: 270px;
       text-align: left;
     }
 
@@ -935,11 +935,17 @@
     }
 
     .quick-run {
-      width: 100%;
-      font-size: clamp(34px, 3.2vw, 58px);
-      min-height: 92px;
+      width: min(100%, 520px);
+      font-size: clamp(30px, 2.5vw, 44px);
+      min-height: 74px;
       justify-content: center;
       letter-spacing: .01em;
+      margin-inline: auto;
+    }
+
+    .quick-home-actions {
+      justify-content: center;
+      align-items: center;
     }
 
     .quick-helper {
@@ -1709,7 +1715,7 @@
                   <button class="quick-mode-btn" type="button" data-quick-mode="offer">📦 Cosa offri</button>
                 </div>
 
-                <div class="actions">
+                <div class="actions quick-home-actions">
                   <button class="btn quick-run" id="runQuickMission" type="button">Avvia agente</button>
                   <button class="btn secondary" id="quickExampleMission" type="button">Carica esempio</button>
                 </div>
