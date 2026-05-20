@@ -360,6 +360,48 @@
 
     .inline-note.show { display: block; }
 
+    .auth-box {
+      border: 1px solid rgba(72, 215, 207, .2);
+      background: rgba(7, 17, 31, .5);
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .auth-box .actions {
+      margin-top: 0;
+    }
+
+    .auth-actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      width: 100%;
+    }
+
+    .auth-actions .btn {
+      width: 100%;
+      min-height: 42px;
+      padding: 10px 10px;
+      font-size: 13px;
+      text-align: center;
+      justify-content: center;
+      box-shadow: none;
+    }
+
+    .auth-status-ok {
+      border-color: rgba(53, 207, 135, .24);
+      background: rgba(53, 207, 135, .1);
+      color: #c8fbe2;
+    }
+
+    .auth-status-warn {
+      border-color: rgba(243, 168, 79, .25);
+      background: rgba(243, 168, 79, .1);
+      color: #ffebcc;
+    }
+
     .quick-agent-box {
       border: 1px solid rgba(72, 215, 207, .22);
       background: rgba(7, 17, 31, .5);
@@ -1603,6 +1645,7 @@
       .quick-report-table { min-width: 900px; }
       .scenario-flow { grid-template-columns: 1fr; }
       .video-orbit { grid-template-columns: 1fr; }
+      .auth-actions { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -2107,10 +2150,23 @@
 
           <aside class="panel">
             <span class="label">Accesso</span>
-            <h2>Accesso beta</h2>
-            <p class="lead">Accesso semplificato: in questa fase il team AgentLink abilita l'account operativo dopo la registrazione azienda.</p>
-            <div class="actions">
-              <button class="btn secondary" id="createBetaAccount" type="button">Richiedi accesso operativo</button>
+            <h2>Accesso obbligatorio</h2>
+            <p class="lead">Per usare missioni, salvataggi e matching nella beta devi registrarti e accedere con email e password.</p>
+            <div class="auth-box">
+              <div class="field">
+                <label>Email account</label>
+                <input id="accountEmail" type="email" placeholder="Es. nome@azienda.it">
+              </div>
+              <div class="field">
+                <label>Password account</label>
+                <input id="accountPassword" type="password" placeholder="Minimo 8 caratteri">
+              </div>
+              <div class="actions auth-actions">
+                <button class="btn secondary" id="createBetaAccount" type="button">Registrati</button>
+                <button class="btn secondary" id="loginBetaAccount" type="button">Accedi</button>
+                <button class="btn secondary" id="logoutBetaAccount" type="button">Esci</button>
+              </div>
+              <div class="inline-note" id="authSessionStatus"></div>
             </div>
             <div class="inline-note" id="betaSignupMessage"></div>
 
@@ -2118,7 +2174,7 @@
 
             <span class="label">Directory aziende</span>
             <h2>Aziende registrate</h2>
-            <p class="lead">Le aziende registrate vengono salvate nel database beta AgentLink. La fase successiva aggiungera login, verifica aziendale e agenti AI reali.</p>
+            <p class="lead">Le aziende registrate vengono salvate nel database beta AgentLink con sessione utente attiva.</p>
             <div class="registry-list" id="companyList"></div>
           </aside>
         </div>
@@ -2532,7 +2588,98 @@
     const dialogueLogEndpoint = `${SUPABASE_URL}/rest/v1/dialogue_log`;
     const handoffLogEndpoint = `${SUPABASE_URL}/rest/v1/handoff_log`;
     const authSignupEndpoint = `${SUPABASE_URL}/auth/v1/signup`;
+    const authLoginEndpoint = `${SUPABASE_URL}/auth/v1/token?grant_type=password`;
     const useSupabase = SUPABASE_PUBLISHABLE_KEY && !SUPABASE_PUBLISHABLE_KEY.includes('INSERISCI_');
+    const authStorageKey = 'agentlink-beta-session';
+    let authSession = loadAuthSession();
+
+    function loadAuthSession() {
+      try {
+        const raw = localStorage.getItem(authStorageKey);
+        return raw ? JSON.parse(raw) : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function saveAuthSession(session) {
+      if (!session) return;
+      authSession = {
+        access_token: session.access_token || '',
+        refresh_token: session.refresh_token || '',
+        expires_at: session.expires_at || null,
+        user: session.user || {}
+      };
+      localStorage.setItem(authStorageKey, JSON.stringify(authSession));
+      updateAuthUi();
+    }
+
+    function clearAuthSession() {
+      authSession = null;
+      localStorage.removeItem(authStorageKey);
+      updateAuthUi();
+    }
+
+    function isAuthenticated() {
+      if (!authSession?.access_token) return false;
+      if (!authSession.expires_at) return true;
+      return Date.now() < Number(authSession.expires_at) - 60000;
+    }
+
+    function supabaseHeaders({ json = false, prefer = '', useSession = false } = {}) {
+      const token = useSession && isAuthenticated() ? authSession.access_token : SUPABASE_PUBLISHABLE_KEY;
+      const headers = {
+        apikey: SUPABASE_PUBLISHABLE_KEY,
+        Authorization: `Bearer ${token}`
+      };
+      if (json) headers['Content-Type'] = 'application/json';
+      if (prefer) headers.Prefer = prefer;
+      return headers;
+    }
+
+    function setInlineMessage(id, text, status = 'warn') {
+      const node = document.getElementById(id);
+      if (!node) return;
+      if (!text) {
+        node.className = 'inline-note';
+        node.textContent = '';
+        return;
+      }
+      node.className = `inline-note show ${status === 'ok' ? 'auth-status-ok' : 'auth-status-warn'}`;
+      node.textContent = text;
+    }
+
+    function updateAuthUi() {
+      const emailField = document.getElementById('accountEmail');
+      const passField = document.getElementById('accountPassword');
+      const logoutButton = document.getElementById('logoutBetaAccount');
+      if (authSession?.expires_at && Date.now() >= Number(authSession.expires_at) - 60000) {
+        authSession = null;
+        localStorage.removeItem(authStorageKey);
+      }
+
+      if (isAuthenticated()) {
+        const email = authSession?.user?.email || emailField?.value || '';
+        if (emailField && email) emailField.value = email;
+        if (companyFields.email && !companyFields.email.value && email) companyFields.email.value = email;
+        if (passField) passField.value = '';
+        if (logoutButton) logoutButton.style.display = 'inline-flex';
+        setInlineMessage('authSessionStatus', `Sessione attiva: ${email || 'utente beta'}`, 'ok');
+      } else {
+        if (logoutButton) logoutButton.style.display = 'none';
+        setInlineMessage('authSessionStatus', 'Sessione non attiva: registrati o accedi prima di usare le funzioni operative.', 'warn');
+      }
+    }
+
+    function requireAuthenticated(actionLabel) {
+      if (isAuthenticated()) return true;
+      const msg = `Per ${actionLabel} devi prima registrarti e accedere nell'area "Accesso obbligatorio".`;
+      setInlineMessage('betaSignupMessage', msg, 'warn');
+      showScreen('register');
+      document.getElementById('accountEmail')?.focus();
+      alert(msg);
+      return false;
+    }
 
     const demoCompanyRows = [
       ['Acciai Lombarda SpA', 'acciailombarda.it', 'Acciaio e metalli', 'Milano, Lombardia', 'Offre servizi/prodotti', 'Acciaio inox 316L e 304, lamiere, barre tonde, coil, taglio a misura e certificati colata.', 'Cerca buyer industriali in Italia ed Europa per forniture ricorrenti di acciaio inox.', 'ISO 9001, ISO 14001, EN 10204 3.1', 'Stock dichiarato: 180 ton 316L, 240 ton 304, lead time 18-25 giorni.', 80],
@@ -2591,10 +2738,7 @@
       if (!useSupabase) return getLocalCompanies();
 
       const response = await fetch(`${companiesEndpoint}?select=*&order=created_at.desc`, {
-        headers: {
-          apikey: SUPABASE_PUBLISHABLE_KEY,
-          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`
-        }
+        headers: supabaseHeaders({ useSession: true })
       });
 
       if (!response.ok) throw new Error('Impossibile leggere il database aziende.');
@@ -2612,12 +2756,7 @@
 
       const response = await fetch(`${companiesEndpoint}?select=*`, {
         method: 'POST',
-        headers: {
-          apikey: SUPABASE_PUBLISHABLE_KEY,
-          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
-          'Content-Type': 'application/json',
-          Prefer: 'return=representation'
-        },
+        headers: supabaseHeaders({ json: true, prefer: 'return=representation', useSession: true }),
         body: JSON.stringify(company)
       });
 
@@ -2646,10 +2785,7 @@
       if (!useSupabase) return getLocalCompanyAssets();
 
       const response = await fetch(`${companyAssetsEndpoint}?select=*&order=created_at.desc`, {
-        headers: {
-          apikey: SUPABASE_PUBLISHABLE_KEY,
-          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`
-        }
+        headers: supabaseHeaders({ useSession: true })
       });
 
       if (!response.ok) throw new Error('Impossibile leggere la memoria asset aziende.');
@@ -2681,12 +2817,7 @@
 
       const response = await fetch(endpoint, {
         method: 'POST',
-        headers: {
-          apikey: SUPABASE_PUBLISHABLE_KEY,
-          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
-          'Content-Type': 'application/json',
-          Prefer: 'return=minimal'
-        },
+        headers: supabaseHeaders({ json: true, prefer: 'return=minimal', useSession: true }),
         body: JSON.stringify(payload)
       });
 
@@ -2894,12 +3025,7 @@
 
       const response = await fetch(companyAssetsEndpoint, {
         method: 'POST',
-        headers: {
-          apikey: SUPABASE_PUBLISHABLE_KEY,
-          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
-          'Content-Type': 'application/json',
-          Prefer: 'return=representation'
-        },
+        headers: supabaseHeaders({ json: true, prefer: 'return=representation', useSession: true }),
         body: JSON.stringify(prepared)
       });
 
@@ -3120,12 +3246,7 @@
 
       const response = await fetch(companiesEndpoint, {
         method: 'POST',
-        headers: {
-          apikey: SUPABASE_PUBLISHABLE_KEY,
-          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
-          'Content-Type': 'application/json',
-          Prefer: 'return=minimal'
-        },
+        headers: supabaseHeaders({ json: true, prefer: 'return=minimal', useSession: true }),
         body: JSON.stringify(companies)
       });
 
@@ -3136,6 +3257,7 @@
     }
 
     async function seedDemoNetwork() {
+      if (!requireAuthenticated('caricare la rete demo')) return;
       const button = document.getElementById('seedDemoNetwork');
       const originalText = button.textContent;
 
@@ -3172,33 +3294,32 @@
     async function createBetaAccount() {
       const emailField = document.getElementById('accountEmail');
       const passwordField = document.getElementById('accountPassword');
-      const email = emailField ? emailField.value.trim() : String(companyFields.email?.value || '').trim();
+      const email = emailField ? emailField.value.trim() : '';
       const password = passwordField ? passwordField.value : '';
-      const message = document.getElementById('betaSignupMessage');
-      message.className = 'inline-note show';
 
       if (!email) {
-        message.textContent = 'Inserisci almeno l email referente nei dati aziendali per richiedere l accesso operativo.';
-        return;
-      }
-
-      if (!passwordField) {
-        message.textContent = `Richiesta inviata. Accesso operativo in valutazione per ${email}.`;
+        setInlineMessage('betaSignupMessage', 'Inserisci una email per registrarti.', 'warn');
         return;
       }
 
       if (!password || password.length < 8) {
-        message.textContent = 'La password deve avere almeno 8 caratteri.';
+        setInlineMessage('betaSignupMessage', 'La password deve avere almeno 8 caratteri.', 'warn');
         return;
       }
 
       if (!useSupabase) {
-        message.textContent = 'Modalita locale: account simulato creato per la demo.';
-        companyFields.email.value = email;
+        saveAuthSession({
+          access_token: `local-session-${Date.now()}`,
+          refresh_token: '',
+          expires_at: Date.now() + 7 * 24 * 60 * 60 * 1000,
+          user: { email }
+        });
+        if (companyFields.email) companyFields.email.value = email;
+        setInlineMessage('betaSignupMessage', 'Account demo locale creato e accesso attivo.', 'ok');
         return;
       }
 
-      message.textContent = 'Creazione accesso beta in corso...';
+      setInlineMessage('betaSignupMessage', 'Registrazione in corso...', 'warn');
 
       try {
         const response = await fetch(authSignupEndpoint, {
@@ -3215,13 +3336,81 @@
           throw new Error(data.msg || data.message || data.error_description || 'Registrazione email non riuscita.');
         }
 
-        companyFields.email.value = email;
-        message.textContent = data.user?.confirmed_at
-          ? 'Accesso beta creato. Ora puoi completare il profilo aziendale.'
-          : 'Accesso beta creato. Se Supabase richiede conferma, controlla la casella email prima del login.';
+        const sessionData = data.session || data;
+        if (sessionData?.access_token) {
+          saveAuthSession({
+            access_token: sessionData.access_token,
+            refresh_token: sessionData.refresh_token || '',
+            expires_at: Date.now() + Number(sessionData.expires_in || 3600) * 1000,
+            user: sessionData.user || data.user || { email }
+          });
+          setInlineMessage('betaSignupMessage', 'Registrazione completata. Sessione attiva.', 'ok');
+        } else {
+          setInlineMessage('betaSignupMessage', 'Registrazione completata. Se richiesto, conferma email e poi premi "Accedi".', 'ok');
+        }
+
+        if (companyFields.email && !companyFields.email.value) companyFields.email.value = email;
       } catch (error) {
-        message.textContent = `Errore registrazione email: ${error.message}`;
+        setInlineMessage('betaSignupMessage', `Errore registrazione: ${error.message}`, 'warn');
       }
+    }
+
+    async function loginBetaAccount() {
+      const emailField = document.getElementById('accountEmail');
+      const passwordField = document.getElementById('accountPassword');
+      const email = emailField ? emailField.value.trim() : '';
+      const password = passwordField ? passwordField.value : '';
+
+      if (!email || !password) {
+        setInlineMessage('betaSignupMessage', 'Inserisci email e password per accedere.', 'warn');
+        return;
+      }
+
+      if (!useSupabase) {
+        saveAuthSession({
+          access_token: `local-session-${Date.now()}`,
+          refresh_token: '',
+          expires_at: Date.now() + 7 * 24 * 60 * 60 * 1000,
+          user: { email }
+        });
+        if (companyFields.email && !companyFields.email.value) companyFields.email.value = email;
+        setInlineMessage('betaSignupMessage', 'Accesso demo locale attivo.', 'ok');
+        return;
+      }
+
+      setInlineMessage('betaSignupMessage', 'Accesso in corso...', 'warn');
+
+      try {
+        const response = await fetch(authLoginEndpoint, {
+          method: 'POST',
+          headers: {
+            apikey: SUPABASE_PUBLISHABLE_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+        if (!response.ok || !data.access_token) {
+          throw new Error(data.error_description || data.msg || data.message || 'Login non riuscito.');
+        }
+
+        saveAuthSession({
+          access_token: data.access_token,
+          refresh_token: data.refresh_token || '',
+          expires_at: Date.now() + Number(data.expires_in || 3600) * 1000,
+          user: data.user || { email }
+        });
+        if (companyFields.email && !companyFields.email.value) companyFields.email.value = email;
+        setInlineMessage('betaSignupMessage', 'Accesso effettuato con successo.', 'ok');
+      } catch (error) {
+        setInlineMessage('betaSignupMessage', `Errore login: ${error.message}`, 'warn');
+      }
+    }
+
+    function logoutBetaAccount() {
+      clearAuthSession();
+      setInlineMessage('betaSignupMessage', 'Sessione chiusa.', 'ok');
     }
 
     function getLocalCompanies() {
@@ -3501,6 +3690,7 @@
     }
 
     async function runMissionAgent() {
+      if (!requireAuthenticated('avviare il tuo agente')) return;
       const mission = document.getElementById('missionPrompt').value.trim();
       const sourceMode = document.querySelector('input[name="missionSource"]:checked')?.value || 'internal';
       const button = document.getElementById('runMissionAgent');
@@ -3794,6 +3984,7 @@
     }
 
     async function runQuickMission() {
+      if (!requireAuthenticated('avviare una missione dalla Home')) return;
       const profile = document.getElementById('quickCompanyProfile').value.trim();
       const mission = document.getElementById('quickMissionPrompt').value.trim();
       const mode = getQuickMode();
@@ -4025,6 +4216,7 @@
     }
 
     document.getElementById('saveCompany').addEventListener('click', async () => {
+      if (!requireAuthenticated('salvare la tua azienda nella beta')) return;
       const company = currentCompanyFromFields();
       if (!company.name || !company.area) {
         alert('Inserisci almeno ragione sociale e area operativa.');
@@ -4136,11 +4328,18 @@
       field.addEventListener('input', () => renderAssetPreview());
       field.addEventListener('change', () => renderAssetPreview());
     });
+    companyFields.email.addEventListener('input', () => {
+      const accountEmail = document.getElementById('accountEmail');
+      if (!accountEmail || isAuthenticated()) return;
+      accountEmail.value = companyFields.email.value.trim();
+    });
     Object.values(capacityFields).forEach(field => {
       field.addEventListener('input', () => renderAssetPreview());
       field.addEventListener('change', () => renderAssetPreview());
     });
     document.getElementById('createBetaAccount').addEventListener('click', createBetaAccount);
+    document.getElementById('loginBetaAccount').addEventListener('click', loginBetaAccount);
+    document.getElementById('logoutBetaAccount').addEventListener('click', logoutBetaAccount);
     document.getElementById('refreshAdmin').addEventListener('click', renderAdminCompanies);
     document.getElementById('seedDemoNetwork').addEventListener('click', seedDemoNetwork);
     document.getElementById('reloadMatchCompanies').addEventListener('click', populateMatchSelectors);
@@ -4174,6 +4373,7 @@
     document.getElementById('startGuidedDemo').addEventListener('click', () => runGuidedDemo(1));
     document.getElementById('guidedNextStep').addEventListener('click', () => runGuidedDemo(guidedDemoStep + 1));
     document.getElementById('resetGuidedDemo').addEventListener('click', resetGuidedDemo);
+    updateAuthUi();
     setQuickMode('search');
     setQuickFeed([]);
     renderMissionParsedBox('quickMissionParsed', parseMissionDetails(document.getElementById('quickMissionPrompt').value.trim()));
