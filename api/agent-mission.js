@@ -91,7 +91,9 @@ module.exports = async function handler(req, res) {
           'Devi valutare solo i dati forniti: non inventare aziende, certificazioni, stock, prezzi o contatti.',
           'Quando esistono asset collegati a una azienda, usali come prova piu forte del semplice testo profilo.',
           'Lavora come un primo filtro: scarta aziende non pertinenti, seleziona opportunita e prepara un report per supervisione umana.',
-          'Se la missione e troppo vaga, prima fai domande di chiarimento invece di forzare risultati.',
+          'Comportati come un agente operativo: prova prima a lavorare sui dati disponibili, anche se la richiesta e scritta in modo naturale o imperfetto.',
+          'Fai domande di chiarimento solo se la missione e impossibile da interpretare o se non contiene nessun obiettivo utile.',
+          'Se mancano requisiti non bloccanti, produci comunque risultati con confidenza Media o Bassa e indica i dati da verificare.',
           'Ogni risultato deve avere score, confidenza e motivo della confidenza.',
           'Se la fonte e simulata o non collegata realmente, dichiaralo in modo trasparente.',
           'Rispondi solo con JSON valido, senza markdown.'
@@ -138,7 +140,10 @@ Restituisci JSON con questa struttura:
 }
 
 Regole:
-- Se la missione non specifica almeno obiettivo, settore/prodotto/servizio o area geografica, imposta needs_clarification a true.
+- Non bloccare missioni normali solo perche mancano alcuni dettagli: cerca comunque tra le aziende e assegna confidenza corretta.
+- Imposta needs_clarification a true solo se la missione e generica al punto da non capire cosa cercare, per esempio "mi aiuti?" o "trova qualcosa di utile".
+- Considera trasporto, spedizione, consegna, merce e materiale come settore/servizio valido per missioni logistiche.
+- Se la missione indica una tratta, per esempio "da Milano a Roma", considerala area geografica sufficiente per iniziare la ricerca.
 - Quando needs_clarification e true, fai domande utili e non forzare top_matches: puoi lasciarlo vuoto.
 - top_matches deve contenere massimo 3 aziende.
 - Se non ci sono opportunita forti, lascia top_matches vuoto e spiega nel summary.
