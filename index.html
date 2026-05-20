@@ -236,6 +236,12 @@
       box-shadow: 0 20px 60px rgba(0, 0, 0, .14);
     }
 
+    .panel-divider {
+      border: 0;
+      border-top: 1px solid rgba(148, 163, 184, .16);
+      margin: 22px 0;
+    }
+
     .span-3 { grid-column: span 3; }
     .span-4 { grid-column: span 4; }
     .span-5 { grid-column: span 5; }
@@ -1629,24 +1635,7 @@
             </div>
             <div class="form-grid">
               <div class="form-section">
-                <h3>1. Accesso referente</h3>
-                <p>Crea l'accesso email della persona che gestira il profilo aziendale nella beta.</p>
-              </div>
-              <div class="field">
-                <label>Email account</label>
-                <input id="accountEmail" type="email" placeholder="Es. referente@azienda.it">
-              </div>
-              <div class="field">
-                <label>Password account</label>
-                <input id="accountPassword" type="password" placeholder="Minimo 8 caratteri">
-              </div>
-              <div class="field" style="grid-column: 1 / -1;">
-                <button class="btn secondary" id="createBetaAccount" type="button">Crea accesso beta via email</button>
-                <div class="inline-note" id="betaSignupMessage"></div>
-              </div>
-
-              <div class="form-section">
-                <h3>2. Dati aziendali</h3>
+                <h3>1. Dati aziendali</h3>
                 <p>Identita, referente e informazioni minime per rendere il profilo credibile nella piattaforma.</p>
               </div>
               <div class="field">
@@ -1671,7 +1660,7 @@
               </div>
 
               <div class="form-section">
-                <h3>3. Profilo operativo</h3>
+                <h3>2. Profilo operativo</h3>
                 <p>Settore, area geografica e modalita con cui l'agente deve rappresentare l'azienda.</p>
               </div>
               <div class="field">
@@ -1699,7 +1688,7 @@
               </div>
 
               <div class="form-section">
-                <h3>4. Offerta aziendale</h3>
+                <h3>3. Offerta aziendale</h3>
                 <p>Quello che l'azienda puo proporre al mercato: servizi, prodotti, certificazioni e capacita disponibili.</p>
               </div>
               <div class="field" style="grid-column: 1 / -1;">
@@ -1716,7 +1705,7 @@
               </div>
 
               <div class="form-section">
-                <h3>5. Cosa cerca l'agente</h3>
+                <h3>4. Cosa cerca l'agente</h3>
                 <p>Obiettivi e criteri con cui l'agente deve cercare opportunita, fornitori, clienti o subappalti.</p>
               </div>
               <div class="field" style="grid-column: 1 / -1;">
@@ -1751,7 +1740,25 @@
           </div>
 
           <aside class="panel">
-            <span class="label">Directory locale</span>
+            <span class="label">Accesso</span>
+            <h2>Accesso beta</h2>
+            <p class="lead">Crea l'accesso email per gestire il profilo aziendale nella beta.</p>
+            <div class="field">
+              <label>Email account</label>
+              <input id="accountEmail" type="email" placeholder="Es. referente@azienda.it">
+            </div>
+            <div class="field">
+              <label>Password account</label>
+              <input id="accountPassword" type="password" placeholder="Minimo 8 caratteri">
+            </div>
+            <div class="actions">
+              <button class="btn secondary" id="createBetaAccount" type="button">Crea accesso beta via email</button>
+            </div>
+            <div class="inline-note" id="betaSignupMessage"></div>
+
+            <hr class="panel-divider">
+
+            <span class="label">Directory aziende</span>
             <h2>Aziende registrate</h2>
             <p class="lead">Le aziende registrate vengono salvate nel database beta AgentLink. La fase successiva aggiungera login, verifica aziendale e agenti AI reali.</p>
             <div class="registry-list" id="companyList"></div>
