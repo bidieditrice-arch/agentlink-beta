@@ -160,6 +160,44 @@
 
     .topbar > div { min-width: 0; }
 
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .top-auth-state {
+      border: 1px solid rgba(148, 163, 184, .2);
+      background: rgba(16, 34, 56, .62);
+      color: var(--muted);
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .top-auth-state.ok {
+      border-color: rgba(53, 207, 135, .28);
+      color: #c8fbe2;
+      background: rgba(53, 207, 135, .12);
+    }
+
+    .top-access-btn {
+      border: 1px solid rgba(72, 215, 207, .38);
+      background: rgba(72, 215, 207, .14);
+      color: #dffefa;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .top-access-btn:hover {
+      background: rgba(72, 215, 207, .22);
+    }
+
     h1 {
       font-size: clamp(28px, 4vw, 46px);
       line-height: 1.02;
@@ -834,8 +872,8 @@
 
     .quick-mission-layout {
       display: grid;
-      grid-template-columns: minmax(0, 1.18fr) minmax(360px, .82fr);
-      gap: 20px;
+      grid-template-columns: 1fr;
+      gap: 18px;
       align-items: start;
     }
 
@@ -878,7 +916,7 @@
       display: grid;
       grid-template-columns: 78px 1fr;
       align-items: stretch;
-      min-height: 146px;
+      min-height: 178px;
     }
 
     .quick-mic {
@@ -895,9 +933,9 @@
       border: 0;
       background: transparent;
       color: var(--text);
-      min-height: 146px;
+      min-height: 178px;
       padding: 20px 22px;
-      font-size: clamp(30px, 3vw, 44px);
+      font-size: clamp(34px, 3.4vw, 52px);
       line-height: 1.12;
       letter-spacing: 0;
       resize: vertical;
@@ -920,11 +958,11 @@
       border: 1px solid rgba(148, 163, 184, .28);
       background: rgba(16, 34, 56, .58);
       color: #b9c8da;
-      padding: 14px 22px;
-      font-size: 33px;
+      padding: 16px 26px;
+      font-size: clamp(24px, 2.3vw, 34px);
       font-weight: 850;
       cursor: pointer;
-      min-width: 270px;
+      min-width: 300px;
       text-align: left;
     }
 
@@ -935,17 +973,11 @@
     }
 
     .quick-run {
-      width: min(100%, 520px);
-      font-size: clamp(30px, 2.5vw, 44px);
-      min-height: 74px;
+      width: 100%;
+      font-size: clamp(34px, 3.2vw, 56px);
+      min-height: 90px;
       justify-content: center;
       letter-spacing: .01em;
-      margin-inline: auto;
-    }
-
-    .quick-home-actions {
-      justify-content: center;
-      align-items: center;
     }
 
     .quick-helper {
@@ -1608,6 +1640,10 @@
       .grid { grid-template-columns: minmax(0, 1fr); }
       main { padding: 18px; }
       .topbar { align-items: flex-start; flex-direction: column; }
+      .topbar-right {
+        width: 100%;
+        justify-content: flex-start;
+      }
       .quick-agent-head, .quick-agent-input { grid-template-columns: 1fr; flex-direction: column; }
       .nav {
         display: flex;
@@ -1692,7 +1728,11 @@
           <h1>AgentLink: capacita disponibili B2B in tempo reale</h1>
           <p class="lead">Ogni azienda carica stock, slot servizio, ore libere e aree coperte. L'agente trasforma richieste naturali in match operativi, con supervisione umana finale.</p>
         </div>
-        <div class="status-pill"><span class="dot"></span> Demo interattiva</div>
+        <div class="topbar-right">
+          <button class="top-access-btn" id="topAccessBtn" type="button" data-screen="register">Registrati / Accedi</button>
+          <span class="top-auth-state" id="topAuthState">Sessione non attiva</span>
+          <div class="status-pill"><span class="dot"></span> Demo interattiva</div>
+        </div>
       </div>
 
       <section class="screen active" id="quickmission">
@@ -2659,6 +2699,8 @@
       const emailField = document.getElementById('accountEmail');
       const passField = document.getElementById('accountPassword');
       const logoutButton = document.getElementById('logoutBetaAccount');
+      const topAuthState = document.getElementById('topAuthState');
+      const topAccessBtn = document.getElementById('topAccessBtn');
       if (authSession?.expires_at && Date.now() >= Number(authSession.expires_at) - 60000) {
         authSession = null;
         localStorage.removeItem(authStorageKey);
@@ -2671,9 +2713,19 @@
         if (passField) passField.value = '';
         if (logoutButton) logoutButton.style.display = 'inline-flex';
         setInlineMessage('authSessionStatus', `Sessione attiva: ${email || 'utente beta'}`, 'ok');
+        if (topAuthState) {
+          topAuthState.className = 'top-auth-state ok';
+          topAuthState.textContent = email ? `Connesso: ${email}` : 'Sessione attiva';
+        }
+        if (topAccessBtn) topAccessBtn.textContent = 'Gestisci account';
       } else {
         if (logoutButton) logoutButton.style.display = 'none';
         setInlineMessage('authSessionStatus', 'Sessione non attiva: registrati o accedi prima di usare le funzioni operative.', 'warn');
+        if (topAuthState) {
+          topAuthState.className = 'top-auth-state';
+          topAuthState.textContent = 'Sessione non attiva';
+        }
+        if (topAccessBtn) topAccessBtn.textContent = 'Registrati / Accedi';
       }
     }
 
