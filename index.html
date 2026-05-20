@@ -832,7 +832,7 @@
 
     .mission-console {
       display: grid;
-      grid-template-columns: 1.05fr .95fr;
+      grid-template-columns: .92fr 1.08fr;
       gap: 18px;
       align-items: start;
       margin-top: 18px;
@@ -940,14 +940,14 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
-      margin-top: 18px;
+      margin-top: 14px;
     }
 
     .mission-stat {
       border: 1px solid rgba(148, 163, 184, .16);
       background: rgba(7, 17, 31, .46);
       padding: 14px;
-      min-height: 112px;
+      min-height: 90px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -970,6 +970,19 @@
       display: grid;
       gap: 14px;
       margin-top: 18px;
+    }
+
+    .mission-report-panel {
+      min-height: 520px;
+      align-self: stretch;
+    }
+
+    .mission-report-panel .agent-head {
+      margin-bottom: 12px;
+    }
+
+    .mission-report-panel .lead {
+      font-size: 14px;
     }
 
     .opportunity-card {
@@ -1800,6 +1813,10 @@
                   <label>Missione per l'agente</label>
                   <textarea id="missionPrompt">Trova subappaltatori elettrici in Lombardia per un appalto fuori regione, con disponibilita entro 30 giorni, documentazione chiara e importo lavori sopra 50.000 euro.</textarea>
                 </div>
+                <div class="actions" style="margin-top: 0;">
+                  <button class="btn" id="runMissionAgent">Avvia agente</button>
+                  <button class="btn secondary" id="refreshMissionData">Aggiorna database aziende</button>
+                </div>
                 <div class="field">
                   <label>Dove deve cercare</label>
                   <div class="source-grid">
@@ -1831,41 +1848,29 @@
                   <button class="preset-btn" data-mission="Trova partner logistici refrigerati per prodotti alimentari con consegne GDO nel Centro-Nord.">Logistica refrigerata</button>
                   <button class="preset-btn" data-mission="Trova fornitori packaging alimentare certificato MOCA per volumi sopra 100.000 pezzi al mese.">Packaging alimentare</button>
                 </div>
-                <div class="actions">
-                  <button class="btn" id="runMissionAgent">Avvia agente</button>
-                  <button class="btn secondary" id="refreshMissionData">Aggiorna database aziende</button>
-                </div>
               </div>
 
-              <aside class="agent-card">
+              <aside class="agent-card mission-report-panel">
                 <div class="agent-head">
                   <div>
-                    <h3>AgentLink Mission-01</h3>
-                    <p>Analizza il database, seleziona opportunita e prepara il report umano.</p>
+                    <h3>Risultati dell'agente</h3>
+                    <p>Qui compaiono lavoro, fonti, score, rischi e opportunita trovate.</p>
                   </div>
                   <div class="avatar">AI</div>
                 </div>
-                <div class="rule"><span class="check">OK</span> Legge solo aziende registrate</div>
-                <div class="rule"><span class="check">OK</span> Scarta match deboli</div>
-                <div class="rule"><span class="check">OK</span> Non inventa dati mancanti</div>
-                <div class="rule"><span class="check">OK</span> Propone prossime azioni</div>
+                <div class="mission-board">
+                  <div class="mission-stat"><span>Aziende analizzate</span><strong id="missionAnalyzed">--</strong></div>
+                  <div class="mission-stat"><span>Scartate</span><strong id="missionDiscarded">--</strong></div>
+                  <div class="mission-stat"><span>Compatibili</span><strong id="missionCompatible">--</strong></div>
+                  <div class="mission-stat"><span>Opportunita Top</span><strong id="missionQualified">--</strong></div>
+                </div>
+                <div class="agent-log" id="missionLog">
+                  <div>Agente in attesa. Scrivi una missione e premi "Avvia agente".</div>
+                </div>
+                <div class="mission-results" id="missionResults">
+                  <div class="empty-state">Nessun report generato.</div>
+                </div>
               </aside>
-            </div>
-          </div>
-
-          <div class="panel span-12">
-            <span class="label">Lavoro dell'agente</span>
-            <div class="mission-board">
-              <div class="mission-stat"><span>Aziende analizzate</span><strong id="missionAnalyzed">--</strong></div>
-              <div class="mission-stat"><span>Scartate</span><strong id="missionDiscarded">--</strong></div>
-              <div class="mission-stat"><span>Compatibili</span><strong id="missionCompatible">--</strong></div>
-              <div class="mission-stat"><span>Opportunita Top</span><strong id="missionQualified">--</strong></div>
-            </div>
-            <div class="agent-log" id="missionLog">
-              <div>Agente in attesa. Scrivi una missione e premi "Avvia agente".</div>
-            </div>
-            <div class="mission-results" id="missionResults">
-              <div class="empty-state">Nessun report generato.</div>
             </div>
           </div>
         </div>
@@ -3248,6 +3253,11 @@
       const chat = document.getElementById('chatLog');
       const match = window.agentlinkLastMatch;
       messageIndex = 0;
+      dialogueHistory = [];
+      dialogueTurnIndex = 0;
+      const nextButton = document.getElementById('nextMessage');
+      nextButton.textContent = 'Genera prossimo turno AI';
+      nextButton.style.display = '';
 
       if (!match) {
         followUps = defaultFollowUps();
@@ -3272,15 +3282,11 @@
         </div>
         <div class="message system">
           <strong>AgentLink Matcher</strong>
-          <p>Match preliminare ${escapeHtml(score)}%. Prima di passare all'umano servono conferme su documenti, disponibilita e prossimi passi.</p>
+          <p>Match preliminare ${escapeHtml(score)}%. Avvio dialogo AI: gli agenti chiariranno documenti, disponibilita e prossimi passi usando i dati reali registrati.</p>
         </div>
       `;
 
-      followUps = [
-        [`Buyer Agent - ${buyer.name}`, `Puoi confermare documenti, disponibilita operativa e tempi reali rispetto a questa richiesta: ${buyerNeed}`],
-        [`Seller Agent - ${seller.name}`, `Confermo questi elementi disponibili: ${sellerProof}. Il referente umano dovra validare condizioni economiche e documenti finali.`],
-        ['AgentLink Matcher', `Match aggiornato a ${score}%. Hand-off consigliato solo dopo verifica umana dei punti mancanti e consenso al primo contatto.`]
-      ];
+      runNextDialogueTurn();
     }
 
     function readableList(items, fallback) {
@@ -3311,17 +3317,77 @@
 
     let followUps = defaultFollowUps();
     let messageIndex = 0;
+    let dialogueHistory = [];
+    let dialogueTurnIndex = 0;
 
-    document.getElementById('nextMessage').addEventListener('click', () => {
+    function appendDialogueMessage(author, text, type = '') {
       const chat = document.getElementById('chatLog');
-      const [author, text] = followUps[messageIndex % followUps.length];
       const message = document.createElement('div');
-      message.className = 'message' + (author.includes('Seller') ? ' seller' : '') + (author.includes('Matcher') ? ' system' : '');
+      message.className = 'message' + (type === 'seller' ? ' seller' : '') + (type === 'matcher' ? ' system' : '');
       message.innerHTML = `<strong>${author}</strong><p>${text}</p>`;
       chat.appendChild(message);
       chat.scrollTop = chat.scrollHeight;
-      messageIndex += 1;
-    });
+    }
+
+    function dialogueSpeakerName(payload, match) {
+      if (payload.speaker_name) return payload.speaker_name;
+      if (payload.speaker_type === 'seller') return `Seller Agent - ${match.seller.name}`;
+      if (payload.speaker_type === 'matcher') return 'AgentLink Matcher';
+      return `Buyer Agent - ${match.buyer.name}`;
+    }
+
+    async function runNextDialogueTurn() {
+      const match = window.agentlinkLastMatch;
+      const button = document.getElementById('nextMessage');
+
+      if (!match) {
+        const [author, text] = followUps[messageIndex % followUps.length];
+        appendDialogueMessage(author, text, author.includes('Seller') ? 'seller' : author.includes('Matcher') ? 'matcher' : '');
+        messageIndex += 1;
+        return;
+      }
+
+      button.disabled = true;
+      const originalText = button.textContent;
+      button.textContent = 'Agenti al lavoro...';
+
+      try {
+        const response = await fetch('/api/dialogue', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            buyer: match.buyer,
+            seller: match.seller,
+            manualResult: match.result,
+            history: dialogueHistory,
+            turnIndex: dialogueTurnIndex
+          })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Dialogo AI non riuscito.');
+
+        const author = dialogueSpeakerName(data, match);
+        const type = data.speaker_type === 'seller' ? 'seller' : data.speaker_type === 'matcher' ? 'matcher' : '';
+        appendDialogueMessage(author, data.message || 'Messaggio generato, ma senza contenuto utile.', type);
+        dialogueHistory.push({ speaker: author, type: data.speaker_type || 'buyer', message: data.message || '' });
+        dialogueTurnIndex += 1;
+
+        if (data.handoff_ready || dialogueTurnIndex >= 4) {
+          button.style.display = 'none';
+          appendDialogueMessage('AgentLink', data.status_note || 'Dialogo completato. Hand-off umano consigliato.', 'matcher');
+        } else {
+          button.textContent = 'Genera prossimo turno AI';
+        }
+      } catch (error) {
+        appendDialogueMessage('Errore dialogo AI', error.message, 'matcher');
+        button.textContent = originalText;
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    document.getElementById('nextMessage').addEventListener('click', runNextDialogueTurn);
   </script>
 </body>
 </html>
