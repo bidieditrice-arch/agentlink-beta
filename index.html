@@ -876,6 +876,24 @@
       border: 1px solid rgba(148, 163, 184, .18);
     }
 
+    .screen-quickmission .topbar {
+      display: none;
+    }
+
+    .screen-quickmission #quickmission .panel {
+      border: 0;
+      box-shadow: none;
+      background: transparent;
+      padding: 0;
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    .screen-quickmission #quickmission .quick-mission-form {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
     .quick-mission-layout {
       display: grid;
       grid-template-columns: 1fr;
@@ -899,7 +917,7 @@
 
     .quick-home-headline {
       margin: 0;
-      font-size: clamp(40px, 5.3vw, 82px);
+      font-size: clamp(40px, 4.6vw, 64px);
       line-height: 1.02;
       letter-spacing: 0;
     }
@@ -911,29 +929,33 @@
     .quick-home-subtitle {
       margin: 0;
       color: #a9b8ca;
-      font-size: clamp(14px, 1.4vw, 30px);
+      font-size: clamp(14px, 1.3vw, 32px);
       line-height: 1.42;
-      max-width: 760px;
+      max-width: 640px;
     }
 
     .quick-home-input {
       border: 1px solid rgba(72, 215, 207, .48);
       background: rgba(7, 17, 31, .62);
-      display: grid;
-      grid-template-columns: 62px 1fr;
-      align-items: stretch;
+      position: relative;
       min-height: 92px;
       border-radius: 12px;
     }
 
     .quick-mic {
       border: 0;
-      border-right: 1px solid rgba(72, 215, 207, .35);
-      background: transparent;
-      color: var(--teal);
-      font-size: 26px;
+      background: linear-gradient(135deg, rgba(72, 215, 207, .85), rgba(53, 207, 135, .88));
+      color: #052433;
+      font-size: 20px;
       cursor: pointer;
-      min-height: 100%;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
     }
 
     .quick-home-input textarea {
@@ -941,8 +963,8 @@
       background: transparent;
       color: var(--text);
       min-height: 92px;
-      padding: 18px 18px;
-      font-size: clamp(18px, 1.8vw, 30px);
+      padding: 20px 18px 20px 66px;
+      font-size: clamp(16px, 1.3vw, 28px);
       line-height: 1.35;
       letter-spacing: 0;
       resize: vertical;
@@ -982,7 +1004,7 @@
 
     .quick-run {
       width: 100%;
-      font-size: 38px;
+      font-size: 40px;
       min-height: 68px;
       justify-content: center;
       letter-spacing: .02em;
@@ -994,6 +1016,16 @@
       font-size: 13px;
       line-height: 1.45;
       margin: 0;
+    }
+
+    .quick-helper a {
+      color: var(--teal-3);
+      text-decoration: none;
+    }
+
+    .quick-helper a:hover {
+      color: var(--teal);
+      text-decoration: underline;
     }
 
     .quick-home-divider {
@@ -1013,12 +1045,27 @@
       gap: 12px;
     }
 
+    .quick-home-feed-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
     .quick-feed h3 {
       margin: 0;
       color: #91a6c1;
       font-size: 12px;
       letter-spacing: .2em;
       text-transform: uppercase;
+    }
+
+    .quick-feed-count {
+      color: #6f84a0;
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 700;
     }
 
     .quick-feed-list {
@@ -1031,14 +1078,21 @@
 
     .quick-feed-list li {
       display: grid;
-      grid-template-columns: 14px minmax(0, 1fr);
+      grid-template-columns: 14px minmax(0, 1fr) minmax(0, 180px);
       gap: 10px;
-      align-items: start;
+      align-items: center;
       color: #dce7f3;
       line-height: 1.42;
-      font-size: 15px;
+      font-size: 13px;
       border-bottom: 1px solid rgba(148, 163, 184, .1);
-      padding-bottom: 8px;
+      padding: 8px 0;
+    }
+
+    .quick-feed-status {
+      color: #8ea2bc;
+      font-size: 13px;
+      text-align: right;
+      white-space: nowrap;
     }
 
     .quick-feed-dot {
@@ -1723,12 +1777,6 @@
         <button data-screen="register"><span class="ico">◌</span><span>Profilo agente</span></button>
         <button data-screen="admin"><span class="ico">◫</span><span>Stock & calendario</span></button>
         <button data-screen="configure"><span class="ico">⚙</span><span>Impostazioni</span></button>
-        <button data-screen="overview"><span class="ico">▦</span><span>Dashboard</span></button>
-        <button data-screen="scenario"><span class="ico">◎</span><span>Demo guidata</span></button>
-        <button data-screen="matchlab"><span class="ico">✣</span><span>Match lab</span></button>
-        <button data-screen="matching"><span class="ico">↹</span><span>Matching A2A</span></button>
-        <button data-screen="dialogue"><span class="ico">☰</span><span>Dialogo agenti</span></button>
-        <button data-screen="handoff"><span class="ico">✓</span><span>Hand-off umano</span></button>
       </nav>
 
       <div class="sidebar-card">
@@ -1772,10 +1820,10 @@
 
                 <div class="actions quick-home-actions">
                   <button class="btn quick-run" id="runQuickMission" type="button">Avvia agente</button>
-                  <button class="btn secondary" id="quickExampleMission" type="button">Carica esempio</button>
+                  <button class="btn secondary quick-compat-hidden" id="quickExampleMission" type="button">Carica esempio</button>
                 </div>
 
-                <p class="quick-helper">Non sai cosa scrivere? <strong>Prova un esempio -></strong></p>
+                <p class="quick-helper">Non sai cosa scrivere? <a href="#" id="quickExampleLink"><strong>Prova un esempio -></strong></a></p>
                 <div class="quick-report-summary quick-compat-hidden" id="quickMissionParsed">
                   Minimo richiesto: cosa. Consigliati: dove, quando, vincoli.
                 </div>
@@ -1783,9 +1831,14 @@
                 <hr class="quick-home-divider">
 
                 <div class="quick-feed">
-                  <h3>Agenti al lavoro</h3>
+                  <div class="quick-home-feed-label">
+                    <h3>Agenti al lavoro</h3>
+                    <span class="quick-feed-count" id="quickFeedCount">3 attive</span>
+                  </div>
                   <ul class="quick-feed-list" id="quickFeedList">
-                    <li><span class="quick-feed-dot muted"></span><span>In attesa della prima missione.</span></li>
+                    <li><span class="quick-feed-dot"></span><span>Ricerca bulloni M8 zona Vitinia</span><span class="quick-feed-status">In trattativa con 3 ferramenta</span></li>
+                    <li><span class="quick-feed-dot"></span><span>Capacita venerdi libero, team pulizie</span><span class="quick-feed-status">Scansione richieste in corso</span></li>
+                    <li><span class="quick-feed-dot warn"></span><span>Sourcing inox 316L EN 10204</span><span class="quick-feed-status">Match qualificato — review umana</span></li>
                   </ul>
                 </div>
               </div>
@@ -3907,17 +3960,21 @@
 
     function setQuickFeed(items) {
       const list = document.getElementById('quickFeedList');
+      const countNode = document.getElementById('quickFeedCount');
       if (!list) return;
       if (!items?.length) {
-        list.innerHTML = '<li><span class="quick-feed-dot muted"></span><span>In attesa della prima missione.</span></li>';
+        list.innerHTML = '<li><span class="quick-feed-dot muted"></span><span>In attesa della prima missione.</span><span class="quick-feed-status">--</span></li>';
+        if (countNode) countNode.textContent = '0 attive';
         return;
       }
       list.innerHTML = items.map(item => `
         <li>
           <span class="quick-feed-dot ${escapeHtml(item.type || '')}"></span>
           <span>${escapeHtml(item.text || '')}</span>
+          <span class="quick-feed-status">${escapeHtml(item.status || 'In lavorazione')}</span>
         </li>
       `).join('');
+      if (countNode) countNode.textContent = `${items.length} attive`;
     }
 
     function quickProfileFallback() {
@@ -4425,6 +4482,10 @@
     document.getElementById('refreshMissionData').addEventListener('click', refreshMissionData);
     document.getElementById('runQuickMission').addEventListener('click', runQuickMission);
     document.getElementById('quickExampleMission').addEventListener('click', quickUseExampleMission);
+    document.getElementById('quickExampleLink').addEventListener('click', event => {
+      event.preventDefault();
+      quickUseExampleMission();
+    });
     document.getElementById('quickReportRows').addEventListener('click', handleQuickReportAction);
     document.querySelectorAll('[data-quick-mode]').forEach(button => {
       button.addEventListener('click', () => setQuickMode(button.dataset.quickMode));
@@ -4452,7 +4513,11 @@
     showScreen(document.querySelector('.screen.active')?.id || 'quickmission');
     updateAuthUi();
     setQuickMode('search');
-    setQuickFeed([]);
+    setQuickFeed([
+      { type: '', text: 'Ricerca bulloni M8 zona Vitinia', status: 'In trattativa con 3 ferramenta' },
+      { type: '', text: 'Capacita venerdi libero, team pulizie', status: 'Scansione richieste in corso' },
+      { type: 'warn', text: 'Sourcing inox 316L EN 10204', status: 'Match qualificato — review umana' }
+    ]);
     renderMissionParsedBox('quickMissionParsed', parseMissionDetails(document.getElementById('quickMissionPrompt').value.trim()));
     renderMissionParsedBox('missionParsed', parseMissionDetails(document.getElementById('missionPrompt').value.trim()));
     let guidedDemoStep = 0;
