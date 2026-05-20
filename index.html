@@ -395,6 +395,52 @@
       line-height: 1.45;
     }
 
+    .asset-preview {
+      border: 1px solid rgba(148, 163, 184, .18);
+      background: rgba(12, 26, 43, .72);
+      padding: 14px;
+      display: none;
+      gap: 10px;
+    }
+
+    .asset-preview.show { display: grid; }
+
+    .asset-preview h4 {
+      margin: 0;
+      color: var(--teal);
+      font-size: 15px;
+    }
+
+    .asset-preview p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .asset-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .asset-chip {
+      border: 1px solid rgba(72, 215, 207, .18);
+      background: rgba(72, 215, 207, .06);
+      padding: 10px;
+      min-width: 0;
+    }
+
+    .asset-chip strong {
+      display: block;
+      color: #dffefa;
+      margin-bottom: 4px;
+    }
+
+    .asset-chip small {
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
     .file-chip {
       display: inline-flex;
       align-items: center;
@@ -1558,6 +1604,11 @@
                 </div>
               </div>
               <div id="registerFileList"></div>
+              <div class="asset-preview" id="assetPreview">
+                <h4>Memoria che verra salvata per l'agente</h4>
+                <p>Qui vedi servizi, stock, cataloghi, certificazioni e file che l'agente potra usare nelle missioni.</p>
+                <div class="asset-preview-grid" id="assetPreviewGrid"></div>
+              </div>
               <div class="actions" style="margin-top: 0;">
                 <button class="btn secondary" id="fillFastExample" type="button">Esempio rapido PMI</button>
                 <button class="btn secondary" id="clearRegisterAgent" type="button">Pulisci conversazione</button>
@@ -2094,6 +2145,7 @@
     const SUPABASE_URL = 'https://yyucwvuwmpaltpurwinx.supabase.co';
     const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_LGE6-ZJXnAV60mMs_p15gQ_j2pKHTZR';
     const companiesEndpoint = `${SUPABASE_URL}/rest/v1/companies`;
+    const companyAssetsEndpoint = `${SUPABASE_URL}/rest/v1/company_assets`;
     const authSignupEndpoint = `${SUPABASE_URL}/auth/v1/signup`;
     const useSupabase = SUPABASE_PUBLISHABLE_KEY && !SUPABASE_PUBLISHABLE_KEY.includes('INSERISCI_');
 
@@ -2167,18 +2219,19 @@
     async function saveCompany(company) {
       if (!useSupabase) {
         const companies = getLocalCompanies();
-        companies.unshift({ ...company, created_at: new Date().toISOString() });
+        const localCompany = { ...company, id: Date.now(), created_at: new Date().toISOString() };
+        companies.unshift(localCompany);
         localStorage.setItem('agentlink-demo-companies', JSON.stringify(companies));
-        return;
+        return localCompany;
       }
 
-      const response = await fetch(companiesEndpoint, {
+      const response = await fetch(`${companiesEndpoint}?select=*`, {
         method: 'POST',
         headers: {
           apikey: SUPABASE_PUBLISHABLE_KEY,
           Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
           'Content-Type': 'application/json',
-          Prefer: 'return=minimal'
+          Prefer: 'return=representation'
         },
         body: JSON.stringify(company)
       });
@@ -2187,10 +2240,165 @@
         const details = await response.text();
         throw new Error(details || 'Impossibile salvare azienda nel database.');
       }
+
+      const rows = await response.json();
+      return rows[0];
     }
 
     let registerAgentFileText = '';
     let registerAgentFiles = [];
+    let registerAgentFileContents = {};
+
+    function getLocalCompanyAssets() {
+      try {
+        return JSON.parse(localStorage.getItem('agentlink-demo-company-assets')) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    async function fetchCompanyAssets() {
+      if (!useSupabase) return getLocalCompanyAssets();
+
+      const response = await fetch(`${companyAssetsEndpoint}?select=*&order=created_at.desc`, {
+        headers: {
+          apikey: SUPABASE_PUBLISHABLE_KEY,
+          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`
+        }
+      });
+
+      if (!response.ok) throw new Error('Impossibile leggere la memoria asset aziende.');
+      return response.json();
+    }
+
+    function currentCompanyFromFields() {
+      const company = Object.fromEntries(Object.entries(companyFields).map(([key, field]) => [key, field.value.trim()]));
+      company.match_threshold = Number(company.match_threshold || 80);
+      company.beta_consent = company.beta_consent === 'true';
+      return company;
+    }
+
+    function shortName(value, fallback) {
+      const text = String(value || '').replace(/\s+/g, ' ').trim();
+      if (!text) return fallback;
+      return text.length > 64 ? `${text.slice(0, 61)}...` : text;
+    }
+
+    function buildCompanyAssets(company, companyId = null) {
+      const base = {
+        company_id: companyId,
+        category: company.sector || '',
+        area: company.area || '',
+        availability: company.availability || '',
+        certifications: company.certifications || '',
+        visibility: 'agent_visible',
+        agent_rules: company.rules || ''
+      };
+      const assets = [];
+
+      if (company.offers) {
+        assets.push({
+          ...base,
+          asset_type: /stock|magazzino|ton|pezzi|disponibil/i.test(company.offers) ? 'stock_o_offerta' : 'servizio_o_prodotto',
+          name: shortName(company.offers, 'Offerta aziendale'),
+          description: company.offers
+        });
+      }
+
+      if (company.needs) {
+        assets.push({
+          ...base,
+          asset_type: 'ricerca_attiva',
+          name: 'Cosa deve cercare l agente',
+          description: company.needs
+        });
+      }
+
+      if (company.certifications) {
+        assets.push({
+          ...base,
+          asset_type: 'certificazione',
+          name: 'Certificazioni aziendali',
+          description: company.certifications
+        });
+      }
+
+      if (company.availability) {
+        assets.push({
+          ...base,
+          asset_type: 'capacita_operativa',
+          name: 'Disponibilita e capacita',
+          description: company.availability
+        });
+      }
+
+      Object.entries(registerAgentFileContents).forEach(([filename, text]) => {
+        assets.push({
+          ...base,
+          asset_type: 'file_caricato',
+          name: filename,
+          description: text ? text.slice(0, 4000) : 'File registrato nella beta. Lettura completa da collegare nello step documenti.',
+          source_filename: filename
+        });
+      });
+
+      return assets.filter(asset => asset.name && asset.description);
+    }
+
+    function renderAssetPreview(assets = buildCompanyAssets(currentCompanyFromFields())) {
+      const box = document.getElementById('assetPreview');
+      const grid = document.getElementById('assetPreviewGrid');
+      if (!box || !grid) return;
+
+      if (!assets.length) {
+        box.classList.remove('show');
+        grid.innerHTML = '';
+        return;
+      }
+
+      box.classList.add('show');
+      grid.innerHTML = assets.slice(0, 8).map(asset => `
+        <div class="asset-chip">
+          <strong>${escapeHtml(asset.asset_type.replaceAll('_', ' '))}</strong>
+          <small>${escapeHtml(asset.name)}${asset.area ? ` - ${escapeHtml(asset.area)}` : ''}</small>
+        </div>
+      `).join('');
+    }
+
+    async function saveCompanyAssets(companyId, assets) {
+      if (!assets.length) return [];
+
+      const prepared = assets.map(asset => ({ ...asset, company_id: companyId }));
+
+      if (!useSupabase) {
+        const current = getLocalCompanyAssets();
+        const localAssets = prepared.map((asset, index) => ({
+          ...asset,
+          id: `${companyId}-${Date.now()}-${index}`,
+          created_at: new Date().toISOString()
+        }));
+        localStorage.setItem('agentlink-demo-company-assets', JSON.stringify([...localAssets, ...current]));
+        return localAssets;
+      }
+
+      const response = await fetch(companyAssetsEndpoint, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_PUBLISHABLE_KEY,
+          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=representation'
+        },
+        body: JSON.stringify(prepared)
+      });
+
+      if (!response.ok) {
+        const details = await response.text();
+        throw new Error(details || 'Azienda salvata, ma non sono riuscito a salvare la memoria asset.');
+      }
+
+      return response.json();
+    }
 
     function appendRegisterBubble(type, title, text) {
       const chat = document.getElementById('registerAgentChat');
@@ -2310,6 +2518,7 @@
       if (suggestion.rules) companyFields.rules.value = suggestion.rules;
       companyFields.match_threshold.value = companyFields.match_threshold.value || '80';
       companyFields.beta_consent.value = 'true';
+      renderAssetPreview();
     }
 
     function summarizeRegisterSuggestion(suggestion) {
@@ -2327,13 +2536,18 @@
       document.getElementById('registerFileList').innerHTML = registerAgentFiles.map(name => `<span class="file-chip">${escapeHtml(name)}</span>`).join(' ');
 
       if (!/\.(txt|csv|tsv|json)$/i.test(file.name)) {
+        registerAgentFileContents[file.name] = '';
         appendRegisterBubble('agent', 'AgentLink Onboarding', `Ho agganciato il file "${file.name}". Nella beta lo registro come allegato; la lettura completa di PDF/Excel sara collegata nello step documenti.`);
+        renderAssetPreview();
         return;
       }
 
       const text = await file.text();
-      registerAgentFileText += `\nFile ${file.name}:\n${text.slice(0, 5000)}`;
+      const clippedText = text.slice(0, 5000);
+      registerAgentFileContents[file.name] = clippedText;
+      registerAgentFileText += `\nFile ${file.name}:\n${clippedText}`;
       appendRegisterBubble('agent', 'AgentLink Onboarding', `Ho letto il file "${file.name}" e usero le informazioni per compilare servizi, stock o catalogo.`);
+      renderAssetPreview();
     }
 
     function buildDemoCompany(row, index) {
@@ -2800,17 +3014,23 @@
       try {
         const companies = await fetchCompanies();
         if (!companies.length) throw new Error('Nessuna azienda registrata nel database.');
+        let assets = [];
+        try {
+          assets = await fetchCompanyAssets();
+        } catch (assetError) {
+          assets = [];
+        }
 
         document.getElementById('missionAnalyzed').textContent = companies.length;
         document.getElementById('missionDiscarded').textContent = '--';
         document.getElementById('missionCompatible').textContent = '--';
         document.getElementById('missionQualified').textContent = '--';
-        document.getElementById('missionLog').innerHTML = `<div>${companies.length} aziende caricate. L agente sta valutando compatibilita, dati mancanti e prossima azione.</div>`;
+        document.getElementById('missionLog').innerHTML = `<div>${companies.length} aziende caricate.</div><div>${assets.length} asset operativi letti: servizi, stock, cataloghi, certificazioni o file.</div><div>L agente sta valutando compatibilita, dati mancanti e prossima azione.</div>`;
 
         const response = await fetch('/api/agent-mission', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ mission, companies, sourceMode })
+          body: JSON.stringify({ mission, companies, assets, sourceMode })
         });
 
         const data = await response.json();
@@ -2867,21 +3087,26 @@
     }
 
     document.getElementById('saveCompany').addEventListener('click', async () => {
-      const company = Object.fromEntries(Object.entries(companyFields).map(([key, field]) => [key, field.value.trim()]));
-      company.match_threshold = Number(company.match_threshold || 80);
-      company.beta_consent = company.beta_consent === 'true';
+      const company = currentCompanyFromFields();
       if (!company.name || !company.area) {
         alert('Inserisci almeno ragione sociale e area operativa.');
         return;
       }
       try {
-        await saveCompany(company);
+        const savedCompany = await saveCompany(company);
+        const assets = buildCompanyAssets(company, savedCompany?.id);
+        await saveCompanyAssets(savedCompany?.id, assets);
         Object.values(companyFields).forEach(field => {
           if (field.tagName !== 'SELECT') field.value = '';
         });
+        registerAgentFileText = '';
+        registerAgentFiles = [];
+        registerAgentFileContents = {};
+        document.getElementById('registerFileList').innerHTML = '';
+        renderAssetPreview([]);
         await renderCompanies();
         await renderAdminCompanies();
-        alert('Azienda salvata nel registro AgentLink.');
+        alert(`Azienda salvata nel registro AgentLink. Memoria agente creata: ${assets.length} asset.`);
       } catch (error) {
         alert(`Errore salvataggio: ${error.message}`);
       }
@@ -2948,9 +3173,15 @@
     document.getElementById('clearRegisterAgent').addEventListener('click', () => {
       registerAgentFileText = '';
       registerAgentFiles = [];
+      registerAgentFileContents = {};
       document.getElementById('registerFileList').innerHTML = '';
       document.getElementById('registerAgentPrompt').value = '';
       document.getElementById('registerAgentChat').innerHTML = '<div class="mission-bubble agent"><strong>AgentLink Onboarding</strong>Dimmi cosa fa la tua azienda. Puoi anche caricare un file TXT o CSV con stock, servizi o catalogo: nella beta lo uso per aiutarti a compilare il profilo.</div>';
+      renderAssetPreview([]);
+    });
+    Object.values(companyFields).forEach(field => {
+      field.addEventListener('input', () => renderAssetPreview());
+      field.addEventListener('change', () => renderAssetPreview());
     });
     document.getElementById('createBetaAccount').addEventListener('click', createBetaAccount);
     document.getElementById('refreshAdmin').addEventListener('click', renderAdminCompanies);
