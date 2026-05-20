@@ -354,6 +354,59 @@
 
     .inline-note.show { display: block; }
 
+    .quick-agent-box {
+      border: 1px solid rgba(72, 215, 207, .22);
+      background: rgba(7, 17, 31, .5);
+      padding: 18px;
+      margin-bottom: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .quick-agent-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .quick-agent-head h3 {
+      margin: 0 0 6px;
+      font-size: 24px;
+    }
+
+    .quick-agent-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      max-width: 720px;
+    }
+
+    .quick-agent-input {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .quick-agent-input textarea {
+      min-height: 116px;
+      font-size: 17px;
+      line-height: 1.45;
+    }
+
+    .file-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(148, 163, 184, .22);
+      background: rgba(16, 34, 56, .72);
+      color: #dce7f3;
+      padding: 9px 10px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
     .actions {
       display: flex;
       gap: 12px;
@@ -1194,6 +1247,7 @@
       .grid { grid-template-columns: minmax(0, 1fr); }
       main { padding: 18px; }
       .topbar { align-items: flex-start; flex-direction: column; }
+      .quick-agent-head, .quick-agent-input { grid-template-columns: 1fr; flex-direction: column; }
       .nav {
         display: flex;
         flex-wrap: wrap;
@@ -1477,7 +1531,38 @@
         <div class="workspace">
           <div class="panel">
             <span class="label">Onboarding aziende</span>
-            <h2>Registra una nuova azienda nella directory AgentLink</h2>
+            <h2>Configura il tuo agente parlando, non compilando</h2>
+            <div class="quick-agent-box">
+              <div class="quick-agent-head">
+                <div>
+                  <h3>Raccontami la tua azienda</h3>
+                  <p>Scrivi come parleresti a un collaboratore: cosa vendi, che servizi offri, cosa hai a stock, dove lavori e cosa vuoi cercare. L'agente compila sotto i dati strutturati.</p>
+                </div>
+                <span class="status-pill"><span class="dot"></span> Onboarding veloce</span>
+              </div>
+              <div class="mission-chat" id="registerAgentChat">
+                <div class="mission-bubble agent">
+                  <strong>AgentLink Onboarding</strong>
+                  Dimmi cosa fa la tua azienda. Puoi anche caricare un file TXT o CSV con stock, servizi o catalogo: nella beta lo uso per aiutarti a compilare il profilo.
+                </div>
+              </div>
+              <div class="quick-agent-input">
+                <div class="field">
+                  <label>Messaggio per l'agente</label>
+                  <textarea id="registerAgentPrompt" placeholder="Es. Siamo un'impresa elettrica a Milano, abbiamo 2 squadre disponibili da giugno, cerchiamo subappalti sopra 50.000 euro. Non comunicare prezzi senza approvazione."></textarea>
+                </div>
+                <div class="actions" style="margin-top: 0;">
+                  <label class="btn secondary" for="registerAgentFile">+ File</label>
+                  <input id="registerAgentFile" type="file" accept=".txt,.csv,.tsv,.json,.pdf,.xlsx,.xls" style="display:none">
+                  <button class="btn" id="askRegisterAgent" type="button">Parla con l'agente</button>
+                </div>
+              </div>
+              <div id="registerFileList"></div>
+              <div class="actions" style="margin-top: 0;">
+                <button class="btn secondary" id="fillFastExample" type="button">Esempio rapido PMI</button>
+                <button class="btn secondary" id="clearRegisterAgent" type="button">Pulisci conversazione</button>
+              </div>
+            </div>
             <div class="form-grid">
               <div class="form-section">
                 <h3>1. Accesso referente</h3>
@@ -2104,6 +2189,153 @@
       }
     }
 
+    let registerAgentFileText = '';
+    let registerAgentFiles = [];
+
+    function appendRegisterBubble(type, title, text) {
+      const chat = document.getElementById('registerAgentChat');
+      const bubble = document.createElement('div');
+      bubble.className = `mission-bubble ${type}`;
+      bubble.innerHTML = `<strong>${escapeHtml(title)}</strong>${escapeHtml(text)}`;
+      chat.appendChild(bubble);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function detectSector(text) {
+      const value = text.toLowerCase();
+      if (/edil|subappalt|cantiere|impiant|elettric/.test(value)) return 'Subappalti ed edilizia';
+      if (/acciaio|inox|metall|fornit|stock|magazzino|prodotto|commercial/.test(value)) return 'Sourcing industriale';
+      if (/trasport|logistic|spedizion|refrigerat|pallet/.test(value)) return 'Logistica e trasporti';
+      if (/serviz|consulenz|crm|software|facility|manutenzion/.test(value)) return 'Servizi B2B';
+      return 'Manifattura';
+    }
+
+    function detectArea(text) {
+      const areas = ['Milano', 'Roma', 'Torino', 'Bologna', 'Verona', 'Brescia', 'Bergamo', 'Firenze', 'Napoli', 'Bari', 'Lombardia', 'Lazio', 'Veneto', 'Piemonte', 'Toscana', 'Emilia-Romagna', 'Campania', 'Puglia', 'Sicilia', 'Nord Italia', 'Centro Italia', 'Sud Italia', 'Europa'];
+      return areas.find(area => text.toLowerCase().includes(area.toLowerCase())) || '';
+    }
+
+    function extractCompanyName(text) {
+      const match = text.match(/(?:siamo|azienda|ditta|impresa)\s+([A-ZÀ-Ùa-zà-ù0-9 '&.-]{3,60})/i);
+      if (!match) return '';
+      return match[1]
+        .replace(/[,.;:].*$/, '')
+        .replace(/\b(che|e|con|a|di|da|offre|offriamo|vende|vendiamo)\b.*$/i, '')
+        .trim();
+    }
+
+    function extractEmail(text) {
+      const match = text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
+      return match ? match[0] : '';
+    }
+
+    function extractWebsite(text) {
+      const match = text.match(/https?:\/\/[^\s,;]+|www\.[^\s,;]+/i);
+      return match ? (match[0].startsWith('http') ? match[0] : `https://${match[0]}`) : '';
+    }
+
+    function extractPhone(text) {
+      const match = text.match(/(?:\+39\s?)?(?:\d[\s.-]?){8,12}/);
+      return match ? match[0].trim() : '';
+    }
+
+    function inferMode(text) {
+      const value = text.toLowerCase();
+      const offers = /offriamo|vendiamo|abbiamo|disponibil|stock|servizi|produciamo/.test(value);
+      const needs = /cerchiamo|cerca|serve|bisogno|fornitor|client|subappalt|partner|opportun/.test(value);
+      if (offers && needs) return 'Buyer e seller';
+      if (needs) return 'Cerca fornitori o subappaltatori';
+      if (offers) return 'Offre servizi/prodotti';
+      return 'Cerca opportunita commerciali';
+    }
+
+    function inferCertifications(text) {
+      const found = [];
+      ['ISO 9001', 'ISO 14001', 'ISO 45001', 'EN 10204', 'DURC', 'SOA', 'DM 37/08', 'HACCP', 'BRC', 'IFS', 'MOCA'].forEach(cert => {
+        if (text.toLowerCase().includes(cert.toLowerCase())) found.push(cert);
+      });
+      return found.join(', ');
+    }
+
+    function buildRegisterSuggestion(rawText) {
+      const text = `${rawText}\n${registerAgentFileText}`.trim();
+      const lower = text.toLowerCase();
+      const offersParts = [];
+      const needsParts = [];
+
+      if (/offriamo|vendiamo|produciamo|abbiamo|stock|disponibil|servizi/.test(lower)) {
+        offersParts.push(rawText.trim());
+      }
+      if (/cerchiamo|cerca|serve|bisogno|vorremmo|clienti|fornitori|subappalt|partner|opportunita/.test(lower)) {
+        needsParts.push(rawText.trim());
+      }
+      if (registerAgentFileText) {
+        offersParts.push(`Dati caricati da file: ${registerAgentFiles.join(', ')}. Contenuto sintetico: ${registerAgentFileText.slice(0, 900)}`);
+      }
+
+      const rules = [];
+      if (/non comunicare|non condividere|prezzo|prezzi|budget|approvazione|umano/i.test(text)) {
+        rules.push('Non comunicare prezzi, budget o condizioni sensibili senza approvazione umana.');
+      }
+      rules.push('Segnalare solo opportunita con dati chiari e compatibilita sopra soglia.');
+
+      return {
+        name: extractCompanyName(text),
+        email: extractEmail(text),
+        website: extractWebsite(text),
+        phone: extractPhone(text),
+        sector: detectSector(text),
+        area: detectArea(text),
+        mode: inferMode(text),
+        offers: offersParts.join('\n') || 'Da completare: servizi, prodotti, stock o capacita disponibili.',
+        needs: needsParts.join('\n') || 'Da completare: clienti, fornitori, subappalti o partner da cercare.',
+        certifications: inferCertifications(text),
+        availability: (text.match(/(?:entro|da|disponibil[ei]|lead time|consegna|squadre|tonnellate|ton|pezzi)[^.\n]{0,90}/i) || [''])[0],
+        rules: rules.join(' ')
+      };
+    }
+
+    function applyRegisterSuggestion(suggestion) {
+      if (suggestion.name && !companyFields.name.value) companyFields.name.value = suggestion.name;
+      if (suggestion.email && !companyFields.email.value) companyFields.email.value = suggestion.email;
+      if (suggestion.website && !companyFields.website.value) companyFields.website.value = suggestion.website;
+      if (suggestion.phone && !companyFields.phone.value) companyFields.phone.value = suggestion.phone;
+      if (suggestion.sector) companyFields.sector.value = suggestion.sector;
+      if (suggestion.area && !companyFields.area.value) companyFields.area.value = suggestion.area;
+      if (suggestion.mode) companyFields.mode.value = suggestion.mode;
+      if (suggestion.offers) companyFields.offers.value = suggestion.offers;
+      if (suggestion.needs) companyFields.needs.value = suggestion.needs;
+      if (suggestion.certifications) companyFields.certifications.value = suggestion.certifications;
+      if (suggestion.availability) companyFields.availability.value = suggestion.availability;
+      if (suggestion.rules) companyFields.rules.value = suggestion.rules;
+      companyFields.match_threshold.value = companyFields.match_threshold.value || '80';
+      companyFields.beta_consent.value = 'true';
+    }
+
+    function summarizeRegisterSuggestion(suggestion) {
+      return [
+        `Ho preparato il profilo agente.`,
+        `Settore: ${suggestion.sector || 'da confermare'}.`,
+        `Area: ${suggestion.area || 'da indicare'}.`,
+        `Modalita: ${suggestion.mode || 'da confermare'}.`,
+        `Ho compilato cosa offre, cosa cerca e le regole principali. Controlla i campi sotto e poi salva l azienda.`
+      ].join(' ');
+    }
+
+    async function readRegisterAgentFile(file) {
+      registerAgentFiles.push(file.name);
+      document.getElementById('registerFileList').innerHTML = registerAgentFiles.map(name => `<span class="file-chip">${escapeHtml(name)}</span>`).join(' ');
+
+      if (!/\.(txt|csv|tsv|json)$/i.test(file.name)) {
+        appendRegisterBubble('agent', 'AgentLink Onboarding', `Ho agganciato il file "${file.name}". Nella beta lo registro come allegato; la lettura completa di PDF/Excel sara collegata nello step documenti.`);
+        return;
+      }
+
+      const text = await file.text();
+      registerAgentFileText += `\nFile ${file.name}:\n${text.slice(0, 5000)}`;
+      appendRegisterBubble('agent', 'AgentLink Onboarding', `Ho letto il file "${file.name}" e usero le informazioni per compilare servizi, stock o catalogo.`);
+    }
+
     function buildDemoCompany(row, index) {
       const [name, host, sector, area, mode, offers, needs, certifications, availability, threshold] = row;
       const number = String(index + 1).padStart(2, '0');
@@ -2687,6 +2919,39 @@
     renderCompanies();
     renderAdminCompanies();
     populateMatchSelectors();
+    document.getElementById('askRegisterAgent').addEventListener('click', () => {
+      const prompt = document.getElementById('registerAgentPrompt').value.trim();
+      if (!prompt && !registerAgentFileText) {
+        alert('Scrivi qualcosa o carica un file per configurare l agente.');
+        return;
+      }
+      if (prompt) appendRegisterBubble('user', 'Tu', prompt);
+      const suggestion = buildRegisterSuggestion(prompt);
+      applyRegisterSuggestion(suggestion);
+      appendRegisterBubble('agent', 'AgentLink Onboarding', summarizeRegisterSuggestion(suggestion));
+      document.getElementById('registerAgentPrompt').value = '';
+    });
+    document.getElementById('registerAgentFile').addEventListener('change', async event => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      try {
+        await readRegisterAgentFile(file);
+      } catch (error) {
+        appendRegisterBubble('agent', 'AgentLink Onboarding', `Non sono riuscito a leggere il file: ${error.message}`);
+      } finally {
+        event.target.value = '';
+      }
+    });
+    document.getElementById('fillFastExample').addEventListener('click', () => {
+      document.getElementById('registerAgentPrompt').value = 'Siamo TecnoImpianti Milano Srl, impresa elettrica a Milano. Offriamo impianti elettrici civili e industriali, quadri elettrici e manutenzione. Abbiamo 2 squadre disponibili entro 30 giorni. Cerchiamo subappalti in Lombardia sopra 50.000 euro con committenti verificati. Certificazioni DURC, ISO 9001 e DM 37/08. Non comunicare prezzi senza approvazione umana.';
+    });
+    document.getElementById('clearRegisterAgent').addEventListener('click', () => {
+      registerAgentFileText = '';
+      registerAgentFiles = [];
+      document.getElementById('registerFileList').innerHTML = '';
+      document.getElementById('registerAgentPrompt').value = '';
+      document.getElementById('registerAgentChat').innerHTML = '<div class="mission-bubble agent"><strong>AgentLink Onboarding</strong>Dimmi cosa fa la tua azienda. Puoi anche caricare un file TXT o CSV con stock, servizi o catalogo: nella beta lo uso per aiutarti a compilare il profilo.</div>';
+    });
     document.getElementById('createBetaAccount').addEventListener('click', createBetaAccount);
     document.getElementById('refreshAdmin').addEventListener('click', renderAdminCompanies);
     document.getElementById('seedDemoNetwork').addEventListener('click', seedDemoNetwork);
