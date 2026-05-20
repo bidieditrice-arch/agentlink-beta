@@ -792,7 +792,7 @@
 
     .quick-mission-layout {
       display: grid;
-      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      grid-template-columns: 1fr;
       gap: 18px;
       align-items: start;
     }
@@ -802,10 +802,165 @@
       gap: 14px;
     }
 
-    .quick-mission-form textarea {
-      min-height: 170px;
-      font-size: 18px;
+    .quick-home-eyebrow {
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .quick-home-headline {
+      margin: 0;
+      font-size: clamp(40px, 7vw, 84px);
+      line-height: .98;
+      letter-spacing: 0;
+    }
+
+    .quick-home-headline .accent {
+      color: var(--teal);
+    }
+
+    .quick-home-subtitle {
+      margin: 0;
+      color: #a9b8ca;
+      font-size: clamp(18px, 2.3vw, 36px);
+      line-height: 1.25;
+      max-width: 980px;
+    }
+
+    .quick-home-input {
+      border: 1px solid rgba(72, 215, 207, .55);
+      background: rgba(7, 17, 31, .62);
+      display: grid;
+      grid-template-columns: 78px 1fr;
+      align-items: stretch;
+      min-height: 146px;
+    }
+
+    .quick-mic {
+      border: 0;
+      border-right: 1px solid rgba(72, 215, 207, .35);
+      background: transparent;
+      color: var(--teal);
+      font-size: 32px;
+      cursor: pointer;
+      min-height: 100%;
+    }
+
+    .quick-home-input textarea {
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      min-height: 146px;
+      padding: 20px 22px;
+      font-size: clamp(30px, 3vw, 44px);
+      line-height: 1.12;
+      letter-spacing: 0;
+      resize: vertical;
+    }
+
+    .quick-home-input textarea::placeholder {
+      color: #98a9bf;
+      font-style: italic;
+      opacity: .9;
+    }
+
+    .quick-mode-toggle {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .quick-mode-btn {
+      border: 1px solid rgba(148, 163, 184, .28);
+      background: rgba(16, 34, 56, .58);
+      color: #b9c8da;
+      padding: 12px 18px;
+      font-size: 29px;
+      font-weight: 850;
+      cursor: pointer;
+      min-width: 220px;
+      text-align: left;
+    }
+
+    .quick-mode-btn.active {
+      border-color: rgba(72, 215, 207, .58);
+      background: linear-gradient(135deg, rgba(72, 215, 207, .28), rgba(53, 207, 135, .19));
+      color: #e9fffb;
+    }
+
+    .quick-run {
+      width: 100%;
+      font-size: clamp(34px, 3.2vw, 58px);
+      min-height: 92px;
+      justify-content: center;
+      letter-spacing: .01em;
+    }
+
+    .quick-helper {
+      color: #9cb0c7;
+      font-size: 15px;
       line-height: 1.45;
+      margin: 0;
+    }
+
+    .quick-home-divider {
+      border: 0;
+      border-top: 1px solid rgba(148, 163, 184, .2);
+      margin: 6px 0 0;
+    }
+
+    .quick-feed {
+      border: 1px solid rgba(148, 163, 184, .16);
+      background: rgba(7, 17, 31, .4);
+      padding: 14px 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .quick-feed h3 {
+      margin: 0;
+      color: #a7b9d2;
+      font-size: 14px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    .quick-feed-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .quick-feed-list li {
+      display: grid;
+      grid-template-columns: 14px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      color: #dce7f3;
+      line-height: 1.4;
+      font-size: 16px;
+    }
+
+    .quick-feed-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      margin-top: 3px;
+      background: var(--teal);
+    }
+
+    .quick-feed-dot.warn {
+      background: var(--gold);
+    }
+
+    .quick-feed-dot.muted {
+      background: #7b8ea7;
     }
 
     .quick-report {
@@ -822,7 +977,7 @@
     }
 
     .quick-report-table {
-      min-width: 920px;
+      min-width: 1040px;
     }
 
     .quick-report-table td {
@@ -918,7 +1073,7 @@
 
     .mission-console {
       display: grid;
-      grid-template-columns: .92fr 1.08fr;
+      grid-template-columns: .88fr 1.12fr;
       gap: 18px;
       align-items: start;
       margin-top: 18px;
@@ -1010,6 +1165,15 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+    }
+
+    .mission-actions {
+      justify-content: flex-start;
+      margin-top: 4px;
+    }
+
+    .mission-results {
+      min-height: 220px;
     }
 
     .preset-btn {
@@ -1377,6 +1541,10 @@
       .guided-demo { grid-template-columns: 1fr; }
       .video-demo { grid-template-columns: 1fr; }
       .match-builder, .match-result { grid-template-columns: 1fr; }
+      .quick-home-headline { font-size: clamp(36px, 8vw, 62px); }
+      .quick-home-input textarea { font-size: clamp(24px, 4vw, 34px); }
+      .quick-mode-btn { font-size: 24px; min-width: 180px; }
+      .quick-run { font-size: clamp(28px, 4vw, 42px); }
       .matcher { margin: 0 auto; }
       .matcher::before, .matcher::after { display: none; }
     }
@@ -1414,6 +1582,20 @@
       .form-grid { grid-template-columns: 1fr; }
       .score, .op-row { grid-template-columns: 1fr; }
       .mission-console, .mission-board, .source-grid, .quick-mission-layout { grid-template-columns: 1fr; }
+      .quick-home-input { grid-template-columns: 56px 1fr; min-height: 112px; }
+      .quick-home-input textarea {
+        min-height: 112px;
+        font-size: clamp(21px, 6vw, 28px);
+        padding: 14px;
+      }
+      .quick-mic { font-size: 24px; }
+      .quick-mode-btn {
+        min-width: 0;
+        width: 100%;
+        font-size: 18px;
+        padding: 10px 12px;
+      }
+      .quick-run { min-height: 68px; font-size: clamp(24px, 7vw, 36px); }
       .logo-strip { flex-direction: column; align-items: flex-start; }
       .verified { margin-left: 0; }
       .company-row header { flex-direction: column; }
@@ -1436,7 +1618,7 @@
       </div>
 
       <nav class="nav" aria-label="Demo AgentLink">
-        <button class="active" data-screen="quickmission"><span class="ico">01</span><span>Missione rapida</span></button>
+        <button class="active" data-screen="quickmission"><span class="ico">01</span><span>Home</span></button>
         <button data-screen="overview"><span class="ico">02</span><span>Dashboard</span></button>
         <button data-screen="register"><span class="ico">03</span><span>Registro aziende</span></button>
         <button data-screen="scenario"><span class="ico">04</span><span>Demo guidata</span></button>
@@ -1458,8 +1640,8 @@
     <main>
       <div class="topbar">
         <div>
-          <h1>La demo di AgentLink per il B2B industriale</h1>
-          <p class="lead">Un'azienda configura il proprio agente. L'agente cerca, parla con altri agenti aziendali, valuta il match e porta all'umano solo opportunita qualificate.</p>
+          <h1>AgentLink: capacita disponibili B2B in tempo reale</h1>
+          <p class="lead">Ogni azienda carica stock, slot servizio, ore libere e aree coperte. L'agente trasforma richieste naturali in match operativi, con supervisione umana finale.</p>
         </div>
         <div class="status-pill"><span class="dot"></span> Demo interattiva</div>
       </div>
@@ -1467,43 +1649,61 @@
       <section class="screen active" id="quickmission">
         <div class="grid">
           <div class="panel span-12">
-            <span class="label">Missione rapida</span>
-            <h2>Dai una missione commerciale al tuo agente</h2>
-            <p class="lead">Scrivi come parleresti a un collaboratore. L'agente legge le aziende registrate, usa la memoria asset e restituisce un report d'azione.</p>
+            <p class="quick-home-eyebrow">Cosa cerchi · Cosa offri</p>
+            <h2 class="quick-home-headline">Una richiesta.<br><span class="accent">Un agente al lavoro.</span></h2>
+            <p class="quick-home-subtitle">Scrivi in modo naturale. AgentLink cerca disponibilita reali e ti porta solo opportunita azionabili.</p>
 
             <div class="quick-mission-layout">
               <div class="quick-mission-form">
-                <div class="field">
-                  <label>La tua azienda</label>
-                  <textarea id="quickCompanyProfile" placeholder="Es. Siamo un'officina meccanica di Bergamo. Compriamo acciaio certificato EN 10204, lavoriamo per clienti industriali e cerchiamo fornitori affidabili nel Nord Italia."></textarea>
+                <textarea id="quickCompanyProfile" style="display:none"></textarea>
+                <div class="quick-home-input">
+                  <button class="quick-mic" id="quickMicBtn" type="button" aria-label="Messaggio vocale">🎤</button>
+                  <textarea id="quickMissionPrompt" placeholder='Es. Bullone M8 zona Vitinia, consegna entro stasera oppure "3 ore tornio libere venerdi pomeriggio".'></textarea>
                 </div>
-                <div class="field">
-                  <label>Missione dell'agente</label>
-                  <textarea id="quickMissionPrompt" placeholder="Es. Trova fornitori di acciaio inox 316L per 60 tonnellate, consegna Nord Italia, certificazione EN 10204."></textarea>
+
+                <div class="quick-mode-toggle" aria-label="Tipo missione">
+                  <button class="quick-mode-btn active" type="button" data-quick-mode="search">🔎 Cosa cerchi</button>
+                  <button class="quick-mode-btn" type="button" data-quick-mode="offer">📦 Cosa offri</button>
                 </div>
+
                 <div class="actions">
-                  <button class="btn" id="runQuickMission" type="button">Avvia il mio agente</button>
-                  <button class="btn secondary" id="quickExampleMission" type="button">Esempio fornitore</button>
+                  <button class="btn quick-run" id="runQuickMission" type="button">Avvia agente</button>
+                  <button class="btn secondary" id="quickExampleMission" type="button">Carica esempio</button>
+                </div>
+
+                <p class="quick-helper">Suggerimento: scrivi sempre cosa, dove, quando e vincoli minimi.</p>
+                <div class="quick-report-summary" id="quickMissionParsed">
+                  Compila sempre 4 elementi: cosa, dove, quando, vincoli.
+                </div>
+
+                <hr class="quick-home-divider">
+
+                <div class="quick-feed">
+                  <h3>Agenti al lavoro</h3>
+                  <ul class="quick-feed-list" id="quickFeedList">
+                    <li><span class="quick-feed-dot muted"></span><span>In attesa della prima missione.</span></li>
+                  </ul>
                 </div>
               </div>
 
               <div class="quick-report">
                 <div class="quick-report-summary" id="quickReportSummary">
-                  Agente in attesa. Inserisci azienda e missione, poi avvia la ricerca.
+                  Report d'azione: appena avvii la missione qui trovi aziende, disponibilita, rischi e prossimi passi.
                 </div>
                 <div class="table-wrap">
                   <table class="admin-table quick-report-table">
                     <thead>
                       <tr>
                         <th>Azienda trovata</th>
+                        <th>Disponibile da</th>
+                        <th>Area</th>
+                        <th>Quantita / ore</th>
                         <th>Contatto</th>
-                        <th>Perche e valida</th>
-                        <th>Rischi / dati mancanti</th>
-                        <th>Prossima azione</th>
+                        <th>Azione operativa</th>
                       </tr>
                     </thead>
                     <tbody id="quickReportRows">
-                      <tr><td colspan="5">Nessuna missione avviata.</td></tr>
+                      <tr><td colspan="6">Nessuna missione avviata.</td></tr>
                     </tbody>
                   </table>
                 </div>
@@ -1835,6 +2035,40 @@
                 <label>Disponibilita</label>
                 <input id="companyAvailability" placeholder="Es. entro 30 giorni, 2 squadre disponibili">
               </div>
+              <div class="field">
+                <label>Tipo disponibilita</label>
+                <select id="capacityType">
+                  <option>Stock prodotto</option>
+                  <option>Slot servizio</option>
+                  <option>Ore uomo disponibili</option>
+                  <option>Ore macchina disponibili</option>
+                  <option>Capacita logistica</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Nome capacita</label>
+                <input id="capacityName" placeholder="Es. Bullone M8 zincato, squadra pulizie serale">
+              </div>
+              <div class="field">
+                <label>Quantita o ore</label>
+                <input id="capacityQuantity" placeholder="Es. 200 pezzi, 18 ore, 2 squadre">
+              </div>
+              <div class="field">
+                <label>Unita</label>
+                <input id="capacityUnit" placeholder="Es. pezzi, ore, squadre, pallet">
+              </div>
+              <div class="field">
+                <label>Finestra temporale</label>
+                <input id="capacityWindow" placeholder="Es. da venerdi 14:00 a venerdi 23:00">
+              </div>
+              <div class="field">
+                <label>Zona coperta</label>
+                <input id="capacityArea" placeholder="Es. Roma sud, Vitinia, Milano ovest">
+              </div>
+              <div class="field" style="grid-column: 1 / -1;">
+                <label>Note operative capacita</label>
+                <textarea id="capacityNotes" placeholder="Es. uscita urgente in 4 ore, minimo ordine 50 pezzi, solo clienti verificati."></textarea>
+              </div>
 
               <div class="form-section">
                 <h3>4. Cosa cerca l'agente</h3>
@@ -1874,17 +2108,9 @@
           <aside class="panel">
             <span class="label">Accesso</span>
             <h2>Accesso beta</h2>
-            <p class="lead">Crea l'accesso email per gestire il profilo aziendale nella beta.</p>
-            <div class="field">
-              <label>Email account</label>
-              <input id="accountEmail" type="email" placeholder="Es. referente@azienda.it">
-            </div>
-            <div class="field">
-              <label>Password account</label>
-              <input id="accountPassword" type="password" placeholder="Minimo 8 caratteri">
-            </div>
+            <p class="lead">Accesso semplificato: in questa fase il team AgentLink abilita l'account operativo dopo la registrazione azienda.</p>
             <div class="actions">
-              <button class="btn secondary" id="createBetaAccount" type="button">Crea accesso beta via email</button>
+              <button class="btn secondary" id="createBetaAccount" type="button">Richiedi accesso operativo</button>
             </div>
             <div class="inline-note" id="betaSignupMessage"></div>
 
@@ -1952,9 +2178,8 @@
                   <label>Missione per l'agente</label>
                   <textarea id="missionPrompt">Trova subappaltatori elettrici in Lombardia per un appalto fuori regione, con disponibilita entro 30 giorni, documentazione chiara e importo lavori sopra 50.000 euro.</textarea>
                 </div>
-                <div class="actions" style="margin-top: 0;">
-                  <button class="btn" id="runMissionAgent">Avvia agente</button>
-                  <button class="btn secondary" id="refreshMissionData">Aggiorna database aziende</button>
+                <div class="quick-report-summary" id="missionParsed">
+                  Compila missione con 4 elementi: cosa, dove, quando, vincoli.
                 </div>
                 <div class="field">
                   <label>Dove deve cercare</label>
@@ -1982,18 +2207,22 @@
                   </div>
                 </div>
                 <div class="mission-presets">
-                  <button class="preset-btn" data-mission="Trova fornitori europei di acciaio inox 316L con certificazione EN 10204, stock disponibile e consegna in Nord Italia.">Acciaio inox 316L</button>
-                  <button class="preset-btn" data-mission="Trova subappaltatori elettrici in Lombardia per un appalto fuori regione, con disponibilita entro 30 giorni e documentazione chiara.">Subappalti elettrici</button>
-                  <button class="preset-btn" data-mission="Trova partner logistici refrigerati per prodotti alimentari con consegne GDO nel Centro-Nord.">Logistica refrigerata</button>
-                  <button class="preset-btn" data-mission="Trova fornitori packaging alimentare certificato MOCA per volumi sopra 100.000 pezzi al mese.">Packaging alimentare</button>
+                  <button class="preset-btn" data-mission="Trova fornitori europei di acciaio inox 316L in Nord Italia entro 10 giorni, con certificazione EN 10204 e stock minimo 60 tonnellate.">Acciaio inox 316L</button>
+                  <button class="preset-btn" data-mission="Trova subappaltatori elettrici in Lombardia disponibili da lunedi prossimo, con documentazione DURC regolare e lavori sopra 50.000 euro.">Subappalti elettrici</button>
+                  <button class="preset-btn" data-mission="Trova partner logistici refrigerati nel Centro-Nord da mercoledi, con ATP valido e consegna GDO entro 24 ore.">Logistica refrigerata</button>
+                  <button class="preset-btn" data-mission="Trova fornitori packaging alimentare in Emilia-Romagna entro 15 giorni, certificato MOCA, volumi sopra 100.000 pezzi/mese e budget sostenibile.">Packaging alimentare</button>
+                </div>
+                <div class="actions mission-actions">
+                  <button class="btn" id="runMissionAgent">Avvia agente</button>
+                  <button class="btn secondary" id="refreshMissionData">Aggiorna database aziende</button>
                 </div>
               </div>
 
               <aside class="agent-card mission-report-panel">
                 <div class="agent-head">
                   <div>
-                    <h3>Risultati dell'agente</h3>
-                    <p>Qui compaiono lavoro, fonti, score, rischi e opportunita trovate.</p>
+                    <h3>Risultati di ricerca</h3>
+                    <p>Qui vedi solo output operativo: aziende trovate, rischi e prossime azioni.</p>
                   </div>
                   <div class="avatar">AI</div>
                 </div>
@@ -2237,8 +2466,8 @@
               <p>AgentLink non chiude il deal. Porta al responsabile una conversazione gia filtrata, con rischi, documenti e prossimi passi.</p>
             </div>
             <div class="actions">
-              <button class="btn">Approva contatto umano</button>
-              <button class="btn secondary">Richiedi altri 3 match</button>
+              <button class="btn" id="handoffApproveAction" type="button">Approva contatto umano</button>
+              <button class="btn secondary" id="handoffRequestMore" type="button">Richiedi altri 3 match</button>
             </div>
           </div>
         </div>
@@ -2285,11 +2514,23 @@
       beta_consent: document.getElementById('companyBetaConsent'),
       rules: document.getElementById('companyRules')
     };
+    const capacityFields = {
+      type: document.getElementById('capacityType'),
+      name: document.getElementById('capacityName'),
+      quantity: document.getElementById('capacityQuantity'),
+      unit: document.getElementById('capacityUnit'),
+      window: document.getElementById('capacityWindow'),
+      area: document.getElementById('capacityArea'),
+      notes: document.getElementById('capacityNotes')
+    };
     const companyList = document.getElementById('companyList');
     const SUPABASE_URL = 'https://yyucwvuwmpaltpurwinx.supabase.co';
     const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_LGE6-ZJXnAV60mMs_p15gQ_j2pKHTZR';
     const companiesEndpoint = `${SUPABASE_URL}/rest/v1/companies`;
     const companyAssetsEndpoint = `${SUPABASE_URL}/rest/v1/company_assets`;
+    const missionLogEndpoint = `${SUPABASE_URL}/rest/v1/mission_log`;
+    const dialogueLogEndpoint = `${SUPABASE_URL}/rest/v1/dialogue_log`;
+    const handoffLogEndpoint = `${SUPABASE_URL}/rest/v1/handoff_log`;
     const authSignupEndpoint = `${SUPABASE_URL}/auth/v1/signup`;
     const useSupabase = SUPABASE_PUBLISHABLE_KEY && !SUPABASE_PUBLISHABLE_KEY.includes('INSERISCI_');
 
@@ -2415,11 +2656,111 @@
       return response.json();
     }
 
+    function toNumericId(value) {
+      const id = Number(value);
+      return Number.isFinite(id) ? id : null;
+    }
+
+    function detectMissionIntent(text) {
+      const value = String(text || '').toLowerCase();
+      if (/fornitor|acquist|compra|approvvigion|stock|materiale|subappalt/.test(value)) return 'ricerca_fornitore';
+      if (/cliente|vend|distribut|commercial|prospez|offerta/.test(value)) return 'sviluppo_clienti';
+      if (/trasport|logistic|spedizion/.test(value)) return 'ricerca_logistica';
+      return 'generico_b2b';
+    }
+
+    async function saveOperationalLog(endpoint, payload, localKey) {
+      if (!payload || typeof payload !== 'object') return;
+
+      if (!useSupabase) {
+        const current = JSON.parse(localStorage.getItem(localKey) || '[]');
+        current.unshift({ ...payload, created_at: new Date().toISOString() });
+        localStorage.setItem(localKey, JSON.stringify(current.slice(0, 500)));
+        return;
+      }
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_PUBLISHABLE_KEY,
+          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const details = await response.text();
+        throw new Error(details || 'Errore salvataggio log operativo.');
+      }
+    }
+
+    async function trackMissionLog(payload) {
+      try {
+        await saveOperationalLog(missionLogEndpoint, payload, 'agentlink-demo-mission-log');
+      } catch (error) {
+      }
+    }
+
+    async function trackDialogueLog(payload) {
+      try {
+        await saveOperationalLog(dialogueLogEndpoint, payload, 'agentlink-demo-dialogue-log');
+      } catch (error) {
+      }
+    }
+
+    async function trackHandoffLog(payload) {
+      try {
+        await saveOperationalLog(handoffLogEndpoint, payload, 'agentlink-demo-handoff-log');
+      } catch (error) {
+      }
+    }
+
     function currentCompanyFromFields() {
       const company = Object.fromEntries(Object.entries(companyFields).map(([key, field]) => [key, field.value.trim()]));
       company.match_threshold = Number(company.match_threshold || 80);
       company.beta_consent = company.beta_consent === 'true';
       return company;
+    }
+
+    function currentCapacityFromFields() {
+      return Object.fromEntries(Object.entries(capacityFields).map(([key, field]) => [key, String(field?.value || '').trim()]));
+    }
+
+    function parseMissionDetails(text) {
+      const raw = String(text || '').trim();
+      const whereMatch = raw.match(/\b(a|in|zona|su)\s+([a-zA-Z0-9 ,.-]{2,})/i);
+      const whenMatch = raw.match(/\b(oggi|domani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|entro\s+\d+\s*(ore|giorni|settimane)|da\s+[a-zA-Z0-9 :.-]+\s+a\s+[a-zA-Z0-9 :.-]+)\b/i);
+      const constraintsMatch = raw.match(/\b(certific|budget|massimo|minimo|soglia|entro|urgente|verificat|iso|d urc|durc|en\s*10204|tempo|scadenza)\b/i);
+      const whatSignals = /\b(trova|cerca|acquista|compra|vendi|fornit|subappalt|trasport|pulizi|logistic|stock|ricamb|servizio|impiant)\b/i.test(raw);
+
+      const details = {
+        what: whatSignals ? raw : '',
+        where: whereMatch ? whereMatch[2].trim() : detectArea(raw),
+        when: whenMatch ? whenMatch[0].trim() : '',
+        constraints: constraintsMatch ? raw : ''
+      };
+
+      const missing = [];
+      if (!details.what) missing.push('cosa');
+      if (!details.where) missing.push('dove');
+      if (!details.when) missing.push('quando');
+      if (!details.constraints) missing.push('vincoli');
+
+      return { details, missing };
+    }
+
+    function renderMissionParsedBox(elementId, parsed) {
+      const box = document.getElementById(elementId);
+      if (!box) return;
+      box.innerHTML = `
+        <strong>Parser missione</strong>
+        <br>Cosa: ${escapeHtml(parsed.details.what ? 'ok' : 'manca')}
+        <br>Dove: ${escapeHtml(parsed.details.where || 'manca')}
+        <br>Quando: ${escapeHtml(parsed.details.when || 'manca')}
+        <br>Vincoli: ${escapeHtml(parsed.details.constraints ? 'ok' : 'manca')}
+      `;
     }
 
     function shortName(value, fallback) {
@@ -2429,6 +2770,7 @@
     }
 
     function buildCompanyAssets(company, companyId = null) {
+      const capacity = currentCapacityFromFields();
       const base = {
         company_id: companyId,
         category: company.sector || '',
@@ -2473,6 +2815,27 @@
           asset_type: 'capacita_operativa',
           name: 'Disponibilita e capacita',
           description: company.availability
+        });
+      }
+
+      if (capacity.name || capacity.quantity || capacity.window || capacity.notes) {
+        assets.push({
+          ...base,
+          asset_type: 'disponibilita_operativa',
+          name: shortName(capacity.name || capacity.type || 'Disponibilita operativa', 'Disponibilita operativa'),
+          description: [
+            `Tipo: ${capacity.type || 'n/d'}`,
+            `Quantita/ore: ${capacity.quantity || 'n/d'}`,
+            `Unita: ${capacity.unit || 'n/d'}`,
+            `Finestra: ${capacity.window || 'n/d'}`,
+            `Area coperta: ${capacity.area || company.area || 'n/d'}`,
+            `Note: ${capacity.notes || 'n/d'}`
+          ].join(' | '),
+          quantity: capacity.quantity || '',
+          unit: capacity.unit || '',
+          area: capacity.area || company.area || '',
+          availability: capacity.window || company.availability || '',
+          source_filename: ''
         });
       }
 
@@ -2607,6 +2970,32 @@
         if (text.toLowerCase().includes(cert.toLowerCase())) found.push(cert);
       });
       return found.join(', ');
+    }
+
+    function inferCapacityFromText(text) {
+      const raw = String(text || '');
+      const lower = raw.toLowerCase();
+      const type = /stock|magazzino|pezzi|ton|pallet/.test(lower)
+        ? 'Stock prodotto'
+        : /squadre|turni|slot|orari|venerdi|sabato|domenica/.test(lower)
+          ? 'Slot servizio'
+          : /ore macchina|impianto|linea/.test(lower)
+            ? 'Ore macchina disponibili'
+            : 'Ore uomo disponibili';
+
+      const quantity = (raw.match(/(\d+[.,]?\d*)\s*(pezzi|tonnellate|ton|ore|squadre|pallet|kg|mq|km)/i) || [null, '', '']).slice(1).join(' ').trim();
+      const window = (raw.match(/\b(oggi|domani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|entro\s+\d+\s*(ore|giorni|settimane)|da\s+[a-zA-Z0-9 :.-]+\s+a\s+[a-zA-Z0-9 :.-]+)\b/i) || [''])[0];
+      const area = detectArea(raw) || '';
+
+      return {
+        type,
+        name: shortName(raw, 'Disponibilita operativa'),
+        quantity: quantity || '',
+        unit: quantity.split(' ')[1] || '',
+        window: window || '',
+        area,
+        notes: shortName(raw, 'Dettagli operativi')
+      };
     }
 
     function buildRegisterSuggestion(rawText) {
@@ -2777,17 +3166,24 @@
     }
 
     async function createBetaAccount() {
-      const email = document.getElementById('accountEmail').value.trim();
-      const password = document.getElementById('accountPassword').value;
+      const emailField = document.getElementById('accountEmail');
+      const passwordField = document.getElementById('accountPassword');
+      const email = emailField ? emailField.value.trim() : String(companyFields.email?.value || '').trim();
+      const password = passwordField ? passwordField.value : '';
       const message = document.getElementById('betaSignupMessage');
       message.className = 'inline-note show';
 
-      if (!email || !password) {
-        message.textContent = 'Inserisci email e password per creare l accesso beta.';
+      if (!email) {
+        message.textContent = 'Inserisci almeno l email referente nei dati aziendali per richiedere l accesso operativo.';
         return;
       }
 
-      if (password.length < 8) {
+      if (!passwordField) {
+        message.textContent = `Richiesta inviata. Accesso operativo in valutazione per ${email}.`;
+        return;
+      }
+
+      if (!password || password.length < 8) {
         message.textContent = 'La password deve avere almeno 8 caratteri.';
         return;
       }
@@ -3105,9 +3501,21 @@
       const sourceMode = document.querySelector('input[name="missionSource"]:checked')?.value || 'internal';
       const button = document.getElementById('runMissionAgent');
       const originalText = button.textContent;
+      const startedAt = Date.now();
+      let analyzedCount = 0;
+      const parsed = parseMissionDetails(mission);
+      renderMissionParsedBox('missionParsed', parsed);
 
       if (!mission) {
         alert('Scrivi una missione per l agente.');
+        return;
+      }
+
+      if (parsed.missing.length) {
+        const miss = parsed.missing.join(', ');
+        document.getElementById('missionResults').innerHTML = `<div class="empty-state">Missione incompleta: manca ${escapeHtml(miss)}. Completa la frase con cosa, dove, quando e vincoli.</div>`;
+        document.getElementById('missionLog').innerHTML = `<div>Parser missione: mancanti ${escapeHtml(miss)}.</div>`;
+        appendMissionBubble('agent', 'AgentLink Mission-01', `Per lavorare in modo affidabile mi servono questi elementi: ${miss}.`);
         return;
       }
 
@@ -3121,6 +3529,7 @@
       try {
         const companies = await fetchCompanies();
         if (!companies.length) throw new Error('Nessuna azienda registrata nel database.');
+        analyzedCount = companies.length;
         let assets = [];
         try {
           assets = await fetchCompanyAssets();
@@ -3137,14 +3546,55 @@
         const response = await fetch('/api/agent-mission', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ mission, companies, assets, sourceMode })
+          body: JSON.stringify({
+            mission: `Missione operativa:\n${mission}\n\nCampi parser:\n- Cosa: ${parsed.details.what}\n- Dove: ${parsed.details.where}\n- Quando: ${parsed.details.when}\n- Vincoli: ${parsed.details.constraints}`,
+            companies,
+            assets,
+            sourceMode
+          })
         });
 
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Missione agente non riuscita.');
         renderMissionReport(data);
+        await trackMissionLog({
+          source_screen: 'mission_console',
+          mission_text: mission,
+          mission_sector: detectSector(mission),
+          mission_area: detectArea(mission) || null,
+          mission_intent: detectMissionIntent(mission),
+          source_mode: sourceMode,
+          needs_clarification: Boolean(data.needs_clarification),
+          outcome: data.needs_clarification ? 'clarification' : (data.top_matches || []).length ? 'success' : 'no_match',
+          summary: data.summary || '',
+          confidence_score: Number(data.confidence_score || 0) || null,
+          analyzed_count: Number(data.analyzed_count || analyzedCount || 0),
+          discarded_count: Number(data.discarded_count || 0),
+          compatible_count: Number(data.compatible_count || 0),
+          qualified_count: Number(data.qualified_count || 0),
+          duration_ms: Date.now() - startedAt,
+          error_message: null
+        });
       } catch (error) {
         document.getElementById('missionResults').innerHTML = `<div class="insight"><strong>Errore agente:</strong> ${escapeHtml(error.message)}</div>`;
+        await trackMissionLog({
+          source_screen: 'mission_console',
+          mission_text: mission,
+          mission_sector: detectSector(mission),
+          mission_area: detectArea(mission) || null,
+          mission_intent: detectMissionIntent(mission),
+          source_mode: sourceMode,
+          needs_clarification: false,
+          outcome: 'error',
+          summary: 'Missione non completata per errore tecnico.',
+          confidence_score: null,
+          analyzed_count: analyzedCount,
+          discarded_count: null,
+          compatible_count: null,
+          qualified_count: null,
+          duration_ms: Date.now() - startedAt,
+          error_message: String(error.message || '').slice(0, 500)
+        });
       } finally {
         button.disabled = false;
         button.textContent = originalText;
@@ -3165,9 +3615,52 @@
     }
 
     let quickMissionContext = null;
+    let quickMissionMode = 'search';
 
-    function quickBuyerFromProfile(profile, mission) {
+    function getQuickMode() {
+      return quickMissionMode === 'offer' ? 'offer' : 'search';
+    }
+
+    function setQuickMode(mode) {
+      quickMissionMode = mode === 'offer' ? 'offer' : 'search';
+      document.querySelectorAll('[data-quick-mode]').forEach(button => {
+        button.classList.toggle('active', button.dataset.quickMode === quickMissionMode);
+      });
+      const prompt = document.getElementById('quickMissionPrompt');
+      if (!prompt) return;
+      if (quickMissionMode === 'offer') {
+        prompt.placeholder = 'Es. Offro 3 squadre pulizie disponibili venerdi 18-23 in Roma sud, certificazione ISO 9001, risposta entro 30 minuti.';
+      } else {
+        prompt.placeholder = 'Es. Cerco bullone M8 zona Vitinia, consegna entro stasera, solo fornitori con disponibilita immediata.';
+      }
+    }
+
+    function setQuickFeed(items) {
+      const list = document.getElementById('quickFeedList');
+      if (!list) return;
+      if (!items?.length) {
+        list.innerHTML = '<li><span class="quick-feed-dot muted"></span><span>In attesa della prima missione.</span></li>';
+        return;
+      }
+      list.innerHTML = items.map(item => `
+        <li>
+          <span class="quick-feed-dot ${escapeHtml(item.type || '')}"></span>
+          <span>${escapeHtml(item.text || '')}</span>
+        </li>
+      `).join('');
+    }
+
+    function quickProfileFallback() {
+      const first = (window.agentlinkCompanies || [])[0];
+      if (first) {
+        return `${first.name} - settore ${first.sector || 'n/d'} - area ${first.area || 'n/d'}. Offre: ${first.offers || 'n/d'}. Cerca: ${first.needs || 'n/d'}.`;
+      }
+      return 'PMI italiana che usa AgentLink per gestire missioni operative giornaliere.';
+    }
+
+    function quickBuyerFromProfile(profile, mission, mode = 'search') {
       const combined = `${profile}\n${mission}`;
+      const isOffer = mode === 'offer';
       return {
         id: 'quick-buyer',
         name: 'La tua azienda',
@@ -3177,9 +3670,9 @@
         vat: '',
         sector: detectSector(combined),
         area: detectArea(combined) || 'Area da verificare',
-        mode: 'Cerca fornitori o partner',
-        offers: profile,
-        needs: mission,
+        mode: isOffer ? 'Offre servizi/prodotti' : 'Cerca fornitori o partner',
+        offers: isOffer ? mission : profile,
+        needs: isOffer ? 'Cerca clienti o partner interessati alla disponibilita proposta.' : mission,
         certifications: inferCertifications(combined),
         availability: '',
         rules: 'Non condividere budget, prezzo target o dati sensibili senza revisione umana.',
@@ -3201,10 +3694,15 @@
 
     function quickSetWaiting(message) {
       document.getElementById('quickReportSummary').innerHTML = message;
-      document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="5">Agente al lavoro sul database...</td></tr>';
+      document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="6">Agente al lavoro sul database...</td></tr>';
       const draft = document.getElementById('quickEmailDraft');
       draft.style.display = 'none';
       draft.innerHTML = '';
+      setQuickFeed([
+        { type: '', text: 'Missione ricevuta: analizzo aziende registrate e disponibilita operative.' },
+        { type: '', text: 'Valuto area, tempi e vincoli prima di proporre contatti.' },
+        { type: 'muted', text: 'Appena finisco trovi report completo qui sotto.' }
+      ]);
     }
 
     function quickRenderActionReport(report, companies, buyer) {
@@ -3223,9 +3721,13 @@
 
       if (report.needs_clarification) {
         const questions = report.clarifying_questions || [];
+        setQuickFeed([
+          { type: 'warn', text: 'Missione incompleta: servono dettagli prima di partire.' },
+          { type: 'muted', text: questions[0] || 'Aggiungi cosa, dove, quando e vincoli.' }
+        ]);
         document.getElementById('quickReportRows').innerHTML = `
           <tr>
-            <td colspan="5">
+            <td colspan="6">
               <strong>L agente deve chiarire la missione.</strong><br>
               ${questions.map(question => `Domanda: ${escapeHtml(question)}`).join('<br>')}
             </td>
@@ -3235,30 +3737,47 @@
       }
 
       if (!matches.length) {
+        setQuickFeed([
+          { type: 'warn', text: 'Nessun match forte nel database attuale.' },
+          { type: 'muted', text: 'Prossimo step: amplia area, tempo o vincoli della missione.' }
+        ]);
         document.getElementById('quickReportRows').innerHTML = `
-          <tr><td colspan="5">${escapeHtml(report.summary || 'Nessuna azienda utile trovata nel database attuale.')}</td></tr>
+          <tr><td colspan="6">${escapeHtml(report.summary || 'Nessuna azienda utile trovata nel database attuale.')}</td></tr>
         `;
         return;
       }
+
+      const feedItems = matches.slice(0, 3).map((item, idx) => ({
+        type: idx === 2 ? 'warn' : '',
+        text: `${item.match.company_name || 'Azienda'} - ${item.match.next_action || 'Pronta per contatto operativo'}`
+      }));
+      setQuickFeed(feedItems);
 
       document.getElementById('quickReportRows').innerHTML = matches.map((item, index) => {
         const match = item.match;
         const company = item.company;
         const risks = (match.risks || []).join(' | ') || 'Da confermare con contatto umano';
-        const strengths = (match.strengths || []).join(' | ');
+        const strengths = (match.strengths || []).join(' | ') || match.reason || 'Compatibilita da verificare';
+        const availability = company?.availability || match.next_action || 'Da confermare';
+        const area = company?.area || 'Area da confermare';
+        const quantity = /(\d+[.,]?\d*\s*(ton|pezzi|ore|squadre|pallet|kg|mq|km))/i.exec(`${company?.offers || ''} ${company?.availability || ''}`);
+        const quantityText = quantity ? quantity[1] : 'Da confermare';
+        const nextAction = [match.next_action, risks].filter(Boolean).join(' | ');
         return `
           <tr>
             <td>
               <strong class="quick-company-name">${escapeHtml(match.company_name || company?.name || 'Azienda')}</strong>
-              ${escapeHtml(company?.sector || '')}<br>
-              ${escapeHtml(company?.area || '')}
+              ${escapeHtml(company?.sector || '')}
               <span class="quick-score">${escapeHtml(match.score || '--')}%</span>
             </td>
+            <td>${escapeHtml(availability)}</td>
+            <td>${escapeHtml(area)}</td>
+            <td>${escapeHtml(quantityText)}</td>
             <td>${escapeHtml(quickContact(company))}</td>
-            <td>${escapeHtml(match.reason || strengths || 'Compatibile con la missione indicata.')}</td>
-            <td>${escapeHtml(risks)}<br><small>${escapeHtml(match.confidence || 'Media')} - ${escapeHtml(match.confidence_reason || 'Valutazione da validare.')}</small></td>
             <td>
-              <div>${escapeHtml(match.next_action || 'Preparare revisione umana.')}</div>
+              <div><strong>Perche:</strong> ${escapeHtml(strengths)}</div>
+              <div><strong>Azione:</strong> ${escapeHtml(nextAction || 'Preparare revisione umana.')}</div>
+              <small>${escapeHtml(match.confidence || 'Media')} - ${escapeHtml(match.confidence_reason || 'Valutazione da validare.')}</small>
               <div class="quick-action-buttons">
                 <button class="mini-action" type="button" data-quick-dialogue="${index}">Avvia dialogo</button>
                 <button class="mini-action secondary" type="button" data-quick-email="${index}">Prepara email</button>
@@ -3273,11 +3792,27 @@
     async function runQuickMission() {
       const profile = document.getElementById('quickCompanyProfile').value.trim();
       const mission = document.getElementById('quickMissionPrompt').value.trim();
+      const mode = getQuickMode();
       const button = document.getElementById('runQuickMission');
       const originalText = button.textContent;
+      const startedAt = Date.now();
+      let analyzedCount = 0;
+      const parsed = parseMissionDetails(mission);
+      renderMissionParsedBox('quickMissionParsed', parsed);
 
-      if (!profile || !mission) {
-        alert('Scrivi almeno la tua azienda e la missione dell agente.');
+      if (!mission) {
+        alert('Scrivi la missione dell agente.');
+        return;
+      }
+
+      if (parsed.missing.length) {
+        const miss = parsed.missing.join(', ');
+        document.getElementById('quickReportSummary').innerHTML = `<strong>Missione incompleta:</strong> manca ${escapeHtml(miss)}.`;
+        document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="6">Completa cosa, dove, quando e vincoli prima di avviare l agente.</td></tr>';
+        setQuickFeed([
+          { type: 'warn', text: `Missione incompleta: manca ${miss}.` },
+          { type: 'muted', text: 'Completa i 4 elementi e poi rilancia la missione.' }
+        ]);
         return;
       }
 
@@ -3288,6 +3823,7 @@
       try {
         const companies = await fetchCompanies();
         if (!companies.length) throw new Error('Nessuna azienda registrata nel database.');
+        analyzedCount = companies.length;
 
         let assets = [];
         try {
@@ -3296,12 +3832,13 @@
           assets = [];
         }
 
-        const buyer = quickBuyerFromProfile(profile, mission);
+        const effectiveProfile = profile || quickProfileFallback();
+        const buyer = quickBuyerFromProfile(effectiveProfile, mission, mode);
         const response = await fetch('/api/agent-mission', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            mission: `Profilo azienda utente:\n${profile}\n\nMissione dell agente:\n${mission}`,
+            mission: `Tipo missione: ${mode === 'offer' ? 'cosa offri' : 'cosa cerchi'}\n\nProfilo azienda utente:\n${effectiveProfile}\n\nMissione dell agente:\n${mission}\n\nCampi parser:\n- Cosa: ${parsed.details.what}\n- Dove: ${parsed.details.where}\n- Quando: ${parsed.details.when}\n- Vincoli: ${parsed.details.constraints}`,
             companies,
             assets,
             sourceMode: 'internal'
@@ -3311,9 +3848,49 @@
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Missione rapida non riuscita.');
         quickRenderActionReport(data, companies, buyer);
+        await trackMissionLog({
+          source_screen: 'quickmission',
+          mission_text: mission,
+          mission_sector: detectSector(`${effectiveProfile}\n${mission}`),
+          mission_area: detectArea(`${effectiveProfile}\n${mission}`) || null,
+          mission_intent: detectMissionIntent(mission),
+          source_mode: 'internal',
+          needs_clarification: Boolean(data.needs_clarification),
+          outcome: data.needs_clarification ? 'clarification' : (data.top_matches || []).length ? 'success' : 'no_match',
+          summary: data.summary || '',
+          confidence_score: Number(data.confidence_score || 0) || null,
+          analyzed_count: Number(data.analyzed_count || analyzedCount || 0),
+          discarded_count: Number(data.discarded_count || 0),
+          compatible_count: Number(data.compatible_count || 0),
+          qualified_count: Number(data.qualified_count || 0),
+          duration_ms: Date.now() - startedAt,
+          error_message: null
+        });
       } catch (error) {
         document.getElementById('quickReportSummary').innerHTML = `<strong>Errore agente:</strong> ${escapeHtml(error.message)}`;
-        document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="5">Correggi il problema e riprova.</td></tr>';
+        document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="6">Correggi il problema e riprova.</td></tr>';
+        setQuickFeed([
+          { type: 'warn', text: 'Errore tecnico durante la missione.' },
+          { type: 'muted', text: 'Controlla dati e connessione, poi riprova.' }
+        ]);
+        await trackMissionLog({
+          source_screen: 'quickmission',
+          mission_text: mission,
+          mission_sector: detectSector(`${profile || ''}\n${mission}`),
+          mission_area: detectArea(`${profile || ''}\n${mission}`) || null,
+          mission_intent: detectMissionIntent(mission),
+          source_mode: 'internal',
+          needs_clarification: false,
+          outcome: 'error',
+          summary: 'Missione non completata per errore tecnico.',
+          confidence_score: null,
+          analyzed_count: analyzedCount,
+          discarded_count: null,
+          compatible_count: null,
+          qualified_count: null,
+          duration_ms: Date.now() - startedAt,
+          error_message: String(error.message || '').slice(0, 500)
+        });
       } finally {
         button.disabled = false;
         button.textContent = originalText;
@@ -3321,8 +3898,12 @@
     }
 
     function quickUseExampleMission() {
-      document.getElementById('quickCompanyProfile').value = 'Siamo un impresa di Roma che gestisce appalti fuori regione. Cerchiamo partner affidabili per lavori industriali e forniture tecniche, con documentazione chiara e disponibilita rapida.';
-      document.getElementById('quickMissionPrompt').value = 'Trova aziende in Lombardia che possano fare subappalti elettrici o supporto operativo per un appalto a Milano, importo sopra 50.000 euro, disponibilita entro 30 giorni.';
+      const mode = getQuickMode();
+      document.getElementById('quickCompanyProfile').value = 'Siamo una PMI operativa con richieste giornaliere tra Roma e Milano. Lavoriamo solo con aziende verificabili e disponibilita concreta.';
+      document.getElementById('quickMissionPrompt').value = mode === 'offer'
+        ? 'Offro 2 squadre impianti elettrici disponibili da lunedi in Lombardia, interventi civili e industriali, ticket minimo 40.000 euro, documentazione completa.'
+        : 'Cerco subappaltatore elettrico in Lombardia disponibile da lunedi, documentazione DURC regolare, ticket lavori sopra 50.000 euro.';
+      renderMissionParsedBox('quickMissionParsed', parseMissionDetails(document.getElementById('quickMissionPrompt').value));
     }
 
     function quickStartDialogue(index) {
@@ -3397,6 +3978,16 @@
       if (handoff) quickPrepareHandoff(Number(handoff.dataset.quickHandoff));
     }
 
+    async function handleHandoffApprove() {
+      await trackHandoffDecision('approved', 'Referente ha approvato il contatto umano.');
+      alert('Contatto approvato. Decisione registrata nel log hand-off.');
+    }
+
+    async function handleHandoffRequestMore() {
+      await trackHandoffDecision('request_more', 'Referente ha richiesto altri match.');
+      alert('Richiesta registrata. L agente puo preparare nuovi match.');
+    }
+
     async function renderAdminCompanies() {
       const rows = document.getElementById('adminCompanyRows');
       const count = document.getElementById('adminCount');
@@ -3439,6 +4030,10 @@
         Object.values(companyFields).forEach(field => {
           if (field.tagName !== 'SELECT') field.value = '';
         });
+        Object.values(capacityFields).forEach(field => {
+          if (field.tagName === 'SELECT') field.selectedIndex = 0;
+          else field.value = '';
+        });
         registerAgentFileText = '';
         registerAgentFiles = [];
         registerAgentFileContents = {};
@@ -3465,6 +4060,13 @@
       companyFields.needs.value = 'Cerca appalti e subappalti in Lombardia con committenti verificati, importo sopra 50.000 euro.';
       companyFields.certifications.value = 'DURC regolare, ISO 9001, abilitazioni impianti DM 37/08';
       companyFields.availability.value = '2 squadre disponibili entro 30 giorni';
+      capacityFields.type.value = 'Slot servizio';
+      capacityFields.name.value = 'Squadra impianti elettrici civili e industriali';
+      capacityFields.quantity.value = '2';
+      capacityFields.unit.value = 'squadre';
+      capacityFields.window.value = 'Da lunedi prossimo, fascia 08:00-18:00';
+      capacityFields.area.value = 'Milano, Monza, Bergamo';
+      capacityFields.notes.value = 'Interventi anche in urgenza con preavviso minimo 24 ore.';
       companyFields.match_threshold.value = '80';
       companyFields.beta_consent.value = 'true';
       companyFields.rules.value = 'Segnalare solo opportunita con documentazione chiara. Non condividere prezzi prima della revisione umana.';
@@ -3516,10 +4118,18 @@
       registerAgentFileContents = {};
       document.getElementById('registerFileList').innerHTML = '';
       document.getElementById('registerAgentPrompt').value = '';
+      Object.values(capacityFields).forEach(field => {
+        if (field.tagName === 'SELECT') field.selectedIndex = 0;
+        else field.value = '';
+      });
       document.getElementById('registerAgentChat').innerHTML = '<div class="mission-bubble agent"><strong>AgentLink Onboarding</strong>Dimmi cosa fa la tua azienda. Puoi anche caricare un file TXT o CSV con stock, servizi o catalogo: nella beta lo uso per aiutarti a compilare il profilo.</div>';
       renderAssetPreview([]);
     });
     Object.values(companyFields).forEach(field => {
+      field.addEventListener('input', () => renderAssetPreview());
+      field.addEventListener('change', () => renderAssetPreview());
+    });
+    Object.values(capacityFields).forEach(field => {
       field.addEventListener('input', () => renderAssetPreview());
       field.addEventListener('change', () => renderAssetPreview());
     });
@@ -3534,14 +4144,33 @@
     document.getElementById('runQuickMission').addEventListener('click', runQuickMission);
     document.getElementById('quickExampleMission').addEventListener('click', quickUseExampleMission);
     document.getElementById('quickReportRows').addEventListener('click', handleQuickReportAction);
+    document.querySelectorAll('[data-quick-mode]').forEach(button => {
+      button.addEventListener('click', () => setQuickMode(button.dataset.quickMode));
+    });
+    document.getElementById('quickMicBtn').addEventListener('click', () => {
+      alert('Registrazione vocale in arrivo: per ora scrivi la richiesta nel campo missione.');
+    });
+    document.getElementById('handoffApproveAction').addEventListener('click', handleHandoffApprove);
+    document.getElementById('handoffRequestMore').addEventListener('click', handleHandoffRequestMore);
+    document.getElementById('quickMissionPrompt').addEventListener('input', () => {
+      renderMissionParsedBox('quickMissionParsed', parseMissionDetails(document.getElementById('quickMissionPrompt').value.trim()));
+    });
+    document.getElementById('missionPrompt').addEventListener('input', () => {
+      renderMissionParsedBox('missionParsed', parseMissionDetails(document.getElementById('missionPrompt').value.trim()));
+    });
     document.querySelectorAll('[data-mission]').forEach(button => {
       button.addEventListener('click', () => {
         document.getElementById('missionPrompt').value = button.dataset.mission;
+        renderMissionParsedBox('missionParsed', parseMissionDetails(button.dataset.mission || ''));
       });
     });
     document.getElementById('startGuidedDemo').addEventListener('click', () => runGuidedDemo(1));
     document.getElementById('guidedNextStep').addEventListener('click', () => runGuidedDemo(guidedDemoStep + 1));
     document.getElementById('resetGuidedDemo').addEventListener('click', resetGuidedDemo);
+    setQuickMode('search');
+    setQuickFeed([]);
+    renderMissionParsedBox('quickMissionParsed', parseMissionDetails(document.getElementById('quickMissionPrompt').value.trim()));
+    renderMissionParsedBox('missionParsed', parseMissionDetails(document.getElementById('missionPrompt').value.trim()));
     let guidedDemoStep = 0;
 
     const guidedDemoSteps = [
@@ -3668,6 +4297,33 @@
       return items && items.length ? items.join(' ') : fallback;
     }
 
+    let handoffOpenedAt = null;
+    let handoffSessionToken = '';
+
+    function currentHandoffPayload(decision, reason, decisionTimeMs = null) {
+      const match = window.agentlinkLastMatch;
+      if (!match) return null;
+      const result = match.result || {};
+      return {
+        buyer_company_id: toNumericId(match.buyer?.id),
+        buyer_name: match.buyer?.name || 'Buyer non definito',
+        seller_company_id: toNumericId(match.seller?.id),
+        seller_name: match.seller?.name || 'Seller non definito',
+        match_score: Number(result.score || 0) || null,
+        decision,
+        decision_reason: reason || '',
+        source_screen: 'handoff',
+        decision_time_ms: decisionTimeMs,
+        notes: `Soglia buyer: ${match.buyer?.match_threshold || 80}%`
+      };
+    }
+
+    async function trackHandoffDecision(decision, reason) {
+      const payload = currentHandoffPayload(decision, reason, handoffOpenedAt ? Date.now() - handoffOpenedAt : null);
+      if (!payload) return;
+      await trackHandoffLog(payload);
+    }
+
     function prepareHumanHandoff() {
       const match = window.agentlinkLastMatch;
       if (!match) return;
@@ -3688,6 +4344,13 @@
       document.getElementById('handoffRequest').textContent = buyer.needs || buyer.rules || 'Richiesta da completare.';
       document.getElementById('handoffStrengths').textContent = readableList(result.strengths, seller.offers || 'Nessun punto forte automatico rilevato.');
       document.getElementById('handoffRisks').textContent = readableList([...result.risks, ...result.missing], 'Nessun rischio evidente, ma serve comunque revisione umana.');
+
+      const token = `${buyer.id || buyer.name}|${seller.id || seller.name}|${score}`;
+      if (token !== handoffSessionToken) {
+        handoffSessionToken = token;
+        handoffOpenedAt = Date.now();
+        trackHandoffDecision('opened', 'Scheda hand-off aperta dal referente.');
+      }
     }
 
     let followUps = defaultFollowUps();
@@ -3746,6 +4409,22 @@
         const type = data.speaker_type === 'seller' ? 'seller' : data.speaker_type === 'matcher' ? 'matcher' : '';
         appendDialogueMessage(author, data.message || 'Messaggio generato, ma senza contenuto utile.', type);
         dialogueHistory.push({ speaker: author, type: data.speaker_type || 'buyer', message: data.message || '' });
+
+        await trackDialogueLog({
+          buyer_company_id: toNumericId(match.buyer?.id),
+          buyer_name: match.buyer?.name || 'Buyer non definito',
+          seller_company_id: toNumericId(match.seller?.id),
+          seller_name: match.seller?.name || 'Seller non definito',
+          match_score: Number(match.result?.score || 0) || null,
+          turn_index: dialogueTurnIndex,
+          speaker_type: data.speaker_type || 'buyer',
+          speaker_name: author,
+          message: String(data.message || '').slice(0, 1200),
+          status_note: String(data.status_note || '').slice(0, 200),
+          handoff_ready: Boolean(data.handoff_ready),
+          source_screen: 'dialogue'
+        });
+
         dialogueTurnIndex += 1;
 
         if (data.handoff_ready || dialogueTurnIndex >= 4) {
