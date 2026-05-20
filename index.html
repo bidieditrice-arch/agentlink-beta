@@ -43,15 +43,15 @@
 
     .app {
       display: grid;
-      grid-template-columns: 280px minmax(0, 1fr);
+      grid-template-columns: 170px minmax(0, 1fr);
       min-height: 100vh;
     }
 
     .sidebar {
-      padding: 22px;
-      border-right: 1px solid rgba(148, 163, 184, .18);
-      background: rgba(7, 17, 31, .8);
-      backdrop-filter: blur(16px);
+      padding: 16px 10px;
+      border-right: 1px solid rgba(148, 163, 184, .14);
+      background: rgba(7, 17, 31, .92);
+      backdrop-filter: blur(8px);
       position: sticky;
       top: 0;
       height: 100vh;
@@ -59,26 +59,27 @@
 
     .brand {
       display: flex;
-      gap: 12px;
+      gap: 8px;
       align-items: center;
-      margin-bottom: 28px;
+      margin-bottom: 18px;
+      padding-left: 2px;
     }
 
     .brand-mark {
-      width: 44px;
-      height: 44px;
+      width: 30px;
+      height: 30px;
       border: 1px solid rgba(72, 215, 207, .42);
       display: grid;
       place-items: center;
       background: linear-gradient(135deg, rgba(72, 215, 207, .15), rgba(40, 116, 255, .08));
-      box-shadow: 0 18px 44px rgba(0, 0, 0, .28);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .2);
     }
 
     .brand-mark span {
-      width: 24px;
-      height: 12px;
-      border-top: 4px solid var(--teal);
-      border-bottom: 4px solid var(--blue);
+      width: 18px;
+      height: 8px;
+      border-top: 2px solid var(--teal);
+      border-bottom: 2px solid var(--blue);
       display: block;
       position: relative;
     }
@@ -87,23 +88,23 @@
     .brand-mark span::after {
       content: "";
       position: absolute;
-      top: -8px;
-      width: 12px;
-      height: 12px;
+      top: -5px;
+      width: 8px;
+      height: 8px;
       border-radius: 999px;
       background: var(--green);
     }
 
-    .brand-mark span::before { left: -6px; }
-    .brand-mark span::after { right: -6px; background: var(--gold); }
+    .brand-mark span::before { left: -4px; }
+    .brand-mark span::after { right: -4px; background: var(--gold); }
 
-    .brand strong { font-size: 20px; letter-spacing: 0; }
-    .brand small { display: block; color: var(--muted); margin-top: 2px; }
+    .brand strong { font-size: 18px; letter-spacing: 0; line-height: 1; }
+    .brand small { display: block; color: var(--muted); margin-top: 2px; font-size: 9px; letter-spacing: .08em; }
 
     .nav {
       display: grid;
-      gap: 8px;
-      margin: 26px 0;
+      gap: 4px;
+      margin: 14px 0;
     }
 
     .nav button {
@@ -111,51 +112,52 @@
       border: 1px solid transparent;
       color: var(--muted);
       background: transparent;
-      padding: 13px 12px;
+      padding: 10px 9px;
       text-align: left;
       cursor: pointer;
       display: grid;
-      grid-template-columns: 26px 1fr;
-      gap: 10px;
+      grid-template-columns: 18px 1fr;
+      gap: 8px;
       align-items: center;
-      min-height: 48px;
+      min-height: 38px;
+      font-size: 14px;
     }
 
     .nav button:hover,
     .nav button.active {
       color: var(--text);
-      border-color: rgba(72, 215, 207, .22);
-      background: rgba(16, 34, 56, .75);
+      border-color: rgba(148, 163, 184, .18);
+      background: rgba(148, 163, 184, .12);
     }
 
     .ico {
-      width: 24px;
-      height: 24px;
-      border: 1px solid rgba(148, 163, 184, .28);
+      width: 16px;
+      height: 16px;
+      border: 0;
       display: grid;
       place-items: center;
-      color: var(--teal);
-      font-size: 13px;
-      font-weight: 800;
+      color: #9fb0c8;
+      font-size: 11px;
+      font-weight: 700;
     }
 
     .sidebar-card {
       border: 1px solid rgba(148, 163, 184, .2);
       background: rgba(16, 34, 56, .62);
-      padding: 16px;
+      padding: 10px;
     }
 
-    .sidebar-card strong { display: block; margin-bottom: 10px; }
-    .sidebar-card p { color: var(--muted); line-height: 1.45; margin: 0; font-size: 13px; }
+    .sidebar-card strong { display: block; margin-bottom: 8px; font-size: 10px; letter-spacing: .12em; color: var(--gold); text-transform: uppercase; }
+    .sidebar-card p { color: var(--muted); line-height: 1.45; margin: 0; font-size: 12px; }
 
-    main { padding: 28px; }
+    main { padding: 20px 36px; }
 
     .topbar {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       gap: 18px;
-      margin-bottom: 26px;
+      margin-bottom: 10px;
     }
 
     .topbar > div { min-width: 0; }
@@ -166,6 +168,10 @@
       justify-content: flex-end;
       gap: 10px;
       flex-wrap: wrap;
+    }
+
+    .screen-quickmission .topbar-copy {
+      display: none;
     }
 
     .top-auth-state {
@@ -186,10 +192,10 @@
 
     .top-access-btn {
       border: 1px solid rgba(72, 215, 207, .38);
-      background: rgba(72, 215, 207, .14);
+      background: rgba(72, 215, 207, .1);
       color: #dffefa;
-      padding: 10px 14px;
-      font-size: 13px;
+      padding: 8px 12px;
+      font-size: 12px;
       font-weight: 800;
       cursor: pointer;
     }
@@ -873,7 +879,7 @@
     .quick-mission-layout {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 18px;
+      gap: 14px;
       align-items: start;
     }
 
@@ -893,8 +899,8 @@
 
     .quick-home-headline {
       margin: 0;
-      font-size: clamp(40px, 7vw, 84px);
-      line-height: .98;
+      font-size: clamp(40px, 5.3vw, 82px);
+      line-height: 1.02;
       letter-spacing: 0;
     }
 
@@ -905,18 +911,19 @@
     .quick-home-subtitle {
       margin: 0;
       color: #a9b8ca;
-      font-size: clamp(18px, 2.3vw, 36px);
-      line-height: 1.25;
-      max-width: 980px;
+      font-size: clamp(14px, 1.4vw, 30px);
+      line-height: 1.42;
+      max-width: 760px;
     }
 
     .quick-home-input {
-      border: 1px solid rgba(72, 215, 207, .55);
+      border: 1px solid rgba(72, 215, 207, .48);
       background: rgba(7, 17, 31, .62);
       display: grid;
-      grid-template-columns: 78px 1fr;
+      grid-template-columns: 62px 1fr;
       align-items: stretch;
-      min-height: 178px;
+      min-height: 92px;
+      border-radius: 12px;
     }
 
     .quick-mic {
@@ -924,7 +931,7 @@
       border-right: 1px solid rgba(72, 215, 207, .35);
       background: transparent;
       color: var(--teal);
-      font-size: 32px;
+      font-size: 26px;
       cursor: pointer;
       min-height: 100%;
     }
@@ -933,10 +940,10 @@
       border: 0;
       background: transparent;
       color: var(--text);
-      min-height: 178px;
-      padding: 20px 22px;
-      font-size: clamp(34px, 3.4vw, 52px);
-      line-height: 1.12;
+      min-height: 92px;
+      padding: 18px 18px;
+      font-size: clamp(18px, 1.8vw, 30px);
+      line-height: 1.35;
       letter-spacing: 0;
       resize: vertical;
     }
@@ -944,7 +951,7 @@
     .quick-home-input textarea::placeholder {
       color: #98a9bf;
       font-style: italic;
-      opacity: .9;
+      opacity: .82;
     }
 
     .quick-mode-toggle {
@@ -958,12 +965,13 @@
       border: 1px solid rgba(148, 163, 184, .28);
       background: rgba(16, 34, 56, .58);
       color: #b9c8da;
-      padding: 16px 26px;
-      font-size: clamp(24px, 2.3vw, 34px);
+      padding: 10px 18px;
+      font-size: 14px;
       font-weight: 850;
       cursor: pointer;
-      min-width: 300px;
+      min-width: 112px;
       text-align: left;
+      border-radius: 999px;
     }
 
     .quick-mode-btn.active {
@@ -974,15 +982,16 @@
 
     .quick-run {
       width: 100%;
-      font-size: clamp(34px, 3.2vw, 56px);
-      min-height: 90px;
+      font-size: 38px;
+      min-height: 68px;
       justify-content: center;
-      letter-spacing: .01em;
+      letter-spacing: .02em;
+      text-transform: uppercase;
     }
 
     .quick-helper {
       color: #9cb0c7;
-      font-size: 15px;
+      font-size: 13px;
       line-height: 1.45;
       margin: 0;
     }
@@ -994,17 +1003,20 @@
     }
 
     .quick-feed {
-      border: 1px solid rgba(148, 163, 184, .16);
-      background: rgba(7, 17, 31, .4);
-      padding: 14px 16px;
+      border-top: 1px solid rgba(148, 163, 184, .16);
+      border-left: 0;
+      border-right: 0;
+      border-bottom: 0;
+      background: transparent;
+      padding: 18px 0 0;
       display: grid;
       gap: 12px;
     }
 
     .quick-feed h3 {
       margin: 0;
-      color: #a7b9d2;
-      font-size: 14px;
+      color: #91a6c1;
+      font-size: 12px;
       letter-spacing: .2em;
       text-transform: uppercase;
     }
@@ -1023,8 +1035,10 @@
       gap: 10px;
       align-items: start;
       color: #dce7f3;
-      line-height: 1.4;
-      font-size: 16px;
+      line-height: 1.42;
+      font-size: 15px;
+      border-bottom: 1px solid rgba(148, 163, 184, .1);
+      padding-bottom: 8px;
     }
 
     .quick-feed-dot {
@@ -1043,9 +1057,10 @@
       background: #7b8ea7;
     }
 
-    .quick-report {
-      display: grid;
-      gap: 14px;
+    .quick-report { display: none; }
+
+    .quick-compat-hidden {
+      display: none !important;
     }
 
     .quick-report-summary {
@@ -1703,17 +1718,17 @@
       </div>
 
       <nav class="nav" aria-label="Demo AgentLink">
-        <button class="active" data-screen="quickmission"><span class="ico">01</span><span>Home</span></button>
-        <button data-screen="overview"><span class="ico">02</span><span>Dashboard</span></button>
-        <button data-screen="register"><span class="ico">03</span><span>Registro aziende</span></button>
-        <button data-screen="scenario"><span class="ico">04</span><span>Demo guidata</span></button>
-        <button data-screen="admin"><span class="ico">05</span><span>Admin</span></button>
-        <button data-screen="configure"><span class="ico">06</span><span>Configura agente</span></button>
-        <button data-screen="agent"><span class="ico">07</span><span>Il mio agente</span></button>
-        <button data-screen="matchlab"><span class="ico">08</span><span>Match lab</span></button>
-        <button data-screen="matching"><span class="ico">09</span><span>Matching A2A</span></button>
-        <button data-screen="dialogue"><span class="ico">10</span><span>Dialogo agenti</span></button>
-        <button data-screen="handoff"><span class="ico">11</span><span>Hand-off umano</span></button>
+        <button class="active" data-screen="quickmission"><span class="ico">⌂</span><span>Home</span></button>
+        <button data-screen="agent"><span class="ico">◷</span><span>Le mie missioni</span></button>
+        <button data-screen="register"><span class="ico">◌</span><span>Profilo agente</span></button>
+        <button data-screen="admin"><span class="ico">◫</span><span>Stock & calendario</span></button>
+        <button data-screen="configure"><span class="ico">⚙</span><span>Impostazioni</span></button>
+        <button data-screen="overview"><span class="ico">▦</span><span>Dashboard</span></button>
+        <button data-screen="scenario"><span class="ico">◎</span><span>Demo guidata</span></button>
+        <button data-screen="matchlab"><span class="ico">✣</span><span>Match lab</span></button>
+        <button data-screen="matching"><span class="ico">↹</span><span>Matching A2A</span></button>
+        <button data-screen="dialogue"><span class="ico">☰</span><span>Dialogo agenti</span></button>
+        <button data-screen="handoff"><span class="ico">✓</span><span>Hand-off umano</span></button>
       </nav>
 
       <div class="sidebar-card">
@@ -1724,7 +1739,7 @@
 
     <main>
       <div class="topbar">
-        <div>
+        <div class="topbar-copy">
           <h1>AgentLink: capacita disponibili B2B in tempo reale</h1>
           <p class="lead">Ogni azienda carica stock, slot servizio, ore libere e aree coperte. L'agente trasforma richieste naturali in match operativi, con supervisione umana finale.</p>
         </div>
@@ -1760,8 +1775,8 @@
                   <button class="btn secondary" id="quickExampleMission" type="button">Carica esempio</button>
                 </div>
 
-                <p class="quick-helper">Suggerimento: indica almeno cosa vuoi fare. Dove, quando e vincoli rendono il risultato piu preciso.</p>
-                <div class="quick-report-summary" id="quickMissionParsed">
+                <p class="quick-helper">Non sai cosa scrivere? <strong>Prova un esempio -></strong></p>
+                <div class="quick-report-summary quick-compat-hidden" id="quickMissionParsed">
                   Minimo richiesto: cosa. Consigliati: dove, quando, vincoli.
                 </div>
 
@@ -1775,7 +1790,7 @@
                 </div>
               </div>
 
-              <div class="quick-report">
+              <div class="quick-report quick-compat-hidden">
                 <div class="quick-report-summary" id="quickReportSummary">
                   Report d'azione: appena avvii la missione qui trovi aziende, disponibilita, rischi e prossimi passi.
                 </div>
@@ -2584,6 +2599,9 @@
     function showScreen(id) {
       screens.forEach(screen => screen.classList.toggle('active', screen.id === id));
       navButtons.forEach(button => button.classList.toggle('active', button.dataset.screen === id));
+      const screenClasses = [...document.body.classList].filter(cls => !cls.startsWith('screen-'));
+      document.body.className = screenClasses.join(' ');
+      document.body.classList.add(`screen-${id}`);
       if (id === 'dialogue') prepareAgentDialogue();
       if (id === 'handoff') prepareHumanHandoff();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -4431,6 +4449,7 @@
     document.getElementById('startGuidedDemo').addEventListener('click', () => runGuidedDemo(1));
     document.getElementById('guidedNextStep').addEventListener('click', () => runGuidedDemo(guidedDemoStep + 1));
     document.getElementById('resetGuidedDemo').addEventListener('click', resetGuidedDemo);
+    showScreen(document.querySelector('.screen.active')?.id || 'quickmission');
     updateAuthUi();
     setQuickMode('search');
     setQuickFeed([]);
