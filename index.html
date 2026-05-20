@@ -790,6 +790,86 @@
       border: 1px solid rgba(148, 163, 184, .18);
     }
 
+    .quick-mission-layout {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .quick-mission-form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .quick-mission-form textarea {
+      min-height: 170px;
+      font-size: 18px;
+      line-height: 1.45;
+    }
+
+    .quick-report {
+      display: grid;
+      gap: 14px;
+    }
+
+    .quick-report-summary {
+      border: 1px solid rgba(72, 215, 207, .2);
+      background: rgba(72, 215, 207, .08);
+      padding: 14px;
+      color: #dce7f3;
+      line-height: 1.45;
+    }
+
+    .quick-report-table {
+      min-width: 920px;
+    }
+
+    .quick-report-table td {
+      vertical-align: top;
+    }
+
+    .quick-action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .mini-action {
+      border: 1px solid rgba(72, 215, 207, .28);
+      background: rgba(72, 215, 207, .08);
+      color: #dffefa;
+      padding: 8px 9px;
+      cursor: pointer;
+      font-weight: 850;
+      font-size: 12px;
+    }
+
+    .mini-action.secondary {
+      border-color: rgba(148, 163, 184, .24);
+      background: rgba(7, 17, 31, .5);
+      color: #dce7f3;
+    }
+
+    .quick-score {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 48px;
+      padding: 6px 8px;
+      border: 1px solid rgba(53, 207, 135, .32);
+      background: rgba(53, 207, 135, .11);
+      color: #bff7da;
+      font-weight: 950;
+      margin-top: 7px;
+    }
+
+    .quick-company-name {
+      display: block;
+      margin-bottom: 5px;
+    }
+
     .match-builder {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1333,11 +1413,12 @@
       .sidebar-card { display: none; }
       .form-grid { grid-template-columns: 1fr; }
       .score, .op-row { grid-template-columns: 1fr; }
-      .mission-console, .mission-board, .source-grid { grid-template-columns: 1fr; }
+      .mission-console, .mission-board, .source-grid, .quick-mission-layout { grid-template-columns: 1fr; }
       .logo-strip { flex-direction: column; align-items: flex-start; }
       .verified { margin-left: 0; }
       .company-row header { flex-direction: column; }
       .admin-table { min-width: 820px; }
+      .quick-report-table { min-width: 900px; }
       .scenario-flow { grid-template-columns: 1fr; }
       .video-orbit { grid-template-columns: 1fr; }
     }
@@ -1355,16 +1436,17 @@
       </div>
 
       <nav class="nav" aria-label="Demo AgentLink">
-        <button class="active" data-screen="overview"><span class="ico">01</span><span>Dashboard</span></button>
-        <button data-screen="register"><span class="ico">02</span><span>Registro aziende</span></button>
-        <button data-screen="scenario"><span class="ico">03</span><span>Demo guidata</span></button>
-        <button data-screen="admin"><span class="ico">04</span><span>Admin</span></button>
-        <button data-screen="configure"><span class="ico">05</span><span>Configura agente</span></button>
-        <button data-screen="agent"><span class="ico">06</span><span>Il mio agente</span></button>
-        <button data-screen="matchlab"><span class="ico">07</span><span>Match lab</span></button>
-        <button data-screen="matching"><span class="ico">08</span><span>Matching A2A</span></button>
-        <button data-screen="dialogue"><span class="ico">09</span><span>Dialogo agenti</span></button>
-        <button data-screen="handoff"><span class="ico">10</span><span>Hand-off umano</span></button>
+        <button class="active" data-screen="quickmission"><span class="ico">01</span><span>Missione rapida</span></button>
+        <button data-screen="overview"><span class="ico">02</span><span>Dashboard</span></button>
+        <button data-screen="register"><span class="ico">03</span><span>Registro aziende</span></button>
+        <button data-screen="scenario"><span class="ico">04</span><span>Demo guidata</span></button>
+        <button data-screen="admin"><span class="ico">05</span><span>Admin</span></button>
+        <button data-screen="configure"><span class="ico">06</span><span>Configura agente</span></button>
+        <button data-screen="agent"><span class="ico">07</span><span>Il mio agente</span></button>
+        <button data-screen="matchlab"><span class="ico">08</span><span>Match lab</span></button>
+        <button data-screen="matching"><span class="ico">09</span><span>Matching A2A</span></button>
+        <button data-screen="dialogue"><span class="ico">10</span><span>Dialogo agenti</span></button>
+        <button data-screen="handoff"><span class="ico">11</span><span>Hand-off umano</span></button>
       </nav>
 
       <div class="sidebar-card">
@@ -1382,7 +1464,57 @@
         <div class="status-pill"><span class="dot"></span> Demo interattiva</div>
       </div>
 
-      <section class="screen active" id="overview">
+      <section class="screen active" id="quickmission">
+        <div class="grid">
+          <div class="panel span-12">
+            <span class="label">Missione rapida</span>
+            <h2>Dai una missione commerciale al tuo agente</h2>
+            <p class="lead">Scrivi come parleresti a un collaboratore. L'agente legge le aziende registrate, usa la memoria asset e restituisce un report d'azione.</p>
+
+            <div class="quick-mission-layout">
+              <div class="quick-mission-form">
+                <div class="field">
+                  <label>La tua azienda</label>
+                  <textarea id="quickCompanyProfile" placeholder="Es. Siamo un'officina meccanica di Bergamo. Compriamo acciaio certificato EN 10204, lavoriamo per clienti industriali e cerchiamo fornitori affidabili nel Nord Italia."></textarea>
+                </div>
+                <div class="field">
+                  <label>Missione dell'agente</label>
+                  <textarea id="quickMissionPrompt" placeholder="Es. Trova fornitori di acciaio inox 316L per 60 tonnellate, consegna Nord Italia, certificazione EN 10204."></textarea>
+                </div>
+                <div class="actions">
+                  <button class="btn" id="runQuickMission" type="button">Avvia il mio agente</button>
+                  <button class="btn secondary" id="quickExampleMission" type="button">Esempio fornitore</button>
+                </div>
+              </div>
+
+              <div class="quick-report">
+                <div class="quick-report-summary" id="quickReportSummary">
+                  Agente in attesa. Inserisci azienda e missione, poi avvia la ricerca.
+                </div>
+                <div class="table-wrap">
+                  <table class="admin-table quick-report-table">
+                    <thead>
+                      <tr>
+                        <th>Azienda trovata</th>
+                        <th>Contatto</th>
+                        <th>Perche e valida</th>
+                        <th>Rischi / dati mancanti</th>
+                        <th>Prossima azione</th>
+                      </tr>
+                    </thead>
+                    <tbody id="quickReportRows">
+                      <tr><td colspan="5">Nessuna missione avviata.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="quick-report-summary" id="quickEmailDraft" style="display:none"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="overview">
         <div class="grid">
           <div class="span-12 logo-strip">
             <img src="assets/agentlink-logo.png" alt="AgentLink logo">
@@ -3032,6 +3164,239 @@
       }
     }
 
+    let quickMissionContext = null;
+
+    function quickBuyerFromProfile(profile, mission) {
+      const combined = `${profile}\n${mission}`;
+      return {
+        id: 'quick-buyer',
+        name: 'La tua azienda',
+        email: '',
+        website: '',
+        phone: '',
+        vat: '',
+        sector: detectSector(combined),
+        area: detectArea(combined) || 'Area da verificare',
+        mode: 'Cerca fornitori o partner',
+        offers: profile,
+        needs: mission,
+        certifications: inferCertifications(combined),
+        availability: '',
+        rules: 'Non condividere budget, prezzo target o dati sensibili senza revisione umana.',
+        match_threshold: 80,
+        beta_consent: false
+      };
+    }
+
+    function quickFindCompany(companies, name) {
+      const target = String(name || '').toLowerCase().trim();
+      return companies.find(company => String(company.name || '').toLowerCase().trim() === target) || null;
+    }
+
+    function quickContact(company) {
+      if (!company) return 'Contatto da verificare';
+      const parts = [company.email, company.phone, company.website].filter(Boolean);
+      return parts.length ? parts.join(' | ') : 'Contatto da verificare';
+    }
+
+    function quickSetWaiting(message) {
+      document.getElementById('quickReportSummary').innerHTML = message;
+      document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="5">Agente al lavoro sul database...</td></tr>';
+      const draft = document.getElementById('quickEmailDraft');
+      draft.style.display = 'none';
+      draft.innerHTML = '';
+    }
+
+    function quickRenderActionReport(report, companies, buyer) {
+      const matches = (report.top_matches || []).map(match => ({
+        match,
+        company: quickFindCompany(companies, match.company_name)
+      }));
+
+      quickMissionContext = { report, companies, buyer, matches };
+
+      document.getElementById('quickReportSummary').innerHTML = `
+        <strong>Report agente:</strong> ${escapeHtml(report.summary || 'Missione completata.')}
+        <br><strong>Fonti:</strong> ${escapeHtml((report.sources_used || ['Database AgentLink']).join(' | '))}
+        <br><strong>Garanzia:</strong> ${escapeHtml(report.confidence_note || 'Score basato sui dati disponibili, da confermare con revisione umana.')}
+      `;
+
+      if (report.needs_clarification) {
+        const questions = report.clarifying_questions || [];
+        document.getElementById('quickReportRows').innerHTML = `
+          <tr>
+            <td colspan="5">
+              <strong>L agente deve chiarire la missione.</strong><br>
+              ${questions.map(question => `Domanda: ${escapeHtml(question)}`).join('<br>')}
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      if (!matches.length) {
+        document.getElementById('quickReportRows').innerHTML = `
+          <tr><td colspan="5">${escapeHtml(report.summary || 'Nessuna azienda utile trovata nel database attuale.')}</td></tr>
+        `;
+        return;
+      }
+
+      document.getElementById('quickReportRows').innerHTML = matches.map((item, index) => {
+        const match = item.match;
+        const company = item.company;
+        const risks = (match.risks || []).join(' | ') || 'Da confermare con contatto umano';
+        const strengths = (match.strengths || []).join(' | ');
+        return `
+          <tr>
+            <td>
+              <strong class="quick-company-name">${escapeHtml(match.company_name || company?.name || 'Azienda')}</strong>
+              ${escapeHtml(company?.sector || '')}<br>
+              ${escapeHtml(company?.area || '')}
+              <span class="quick-score">${escapeHtml(match.score || '--')}%</span>
+            </td>
+            <td>${escapeHtml(quickContact(company))}</td>
+            <td>${escapeHtml(match.reason || strengths || 'Compatibile con la missione indicata.')}</td>
+            <td>${escapeHtml(risks)}<br><small>${escapeHtml(match.confidence || 'Media')} - ${escapeHtml(match.confidence_reason || 'Valutazione da validare.')}</small></td>
+            <td>
+              <div>${escapeHtml(match.next_action || 'Preparare revisione umana.')}</div>
+              <div class="quick-action-buttons">
+                <button class="mini-action" type="button" data-quick-dialogue="${index}">Avvia dialogo</button>
+                <button class="mini-action secondary" type="button" data-quick-email="${index}">Prepara email</button>
+                <button class="mini-action secondary" type="button" data-quick-handoff="${index}">Hand-off</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function runQuickMission() {
+      const profile = document.getElementById('quickCompanyProfile').value.trim();
+      const mission = document.getElementById('quickMissionPrompt').value.trim();
+      const button = document.getElementById('runQuickMission');
+      const originalText = button.textContent;
+
+      if (!profile || !mission) {
+        alert('Scrivi almeno la tua azienda e la missione dell agente.');
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = 'Agente al lavoro...';
+      quickSetWaiting('<strong>AgentLink sta lavorando:</strong> leggo aziende registrate, memoria asset e requisiti della missione.');
+
+      try {
+        const companies = await fetchCompanies();
+        if (!companies.length) throw new Error('Nessuna azienda registrata nel database.');
+
+        let assets = [];
+        try {
+          assets = await fetchCompanyAssets();
+        } catch {
+          assets = [];
+        }
+
+        const buyer = quickBuyerFromProfile(profile, mission);
+        const response = await fetch('/api/agent-mission', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            mission: `Profilo azienda utente:\n${profile}\n\nMissione dell agente:\n${mission}`,
+            companies,
+            assets,
+            sourceMode: 'internal'
+          })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Missione rapida non riuscita.');
+        quickRenderActionReport(data, companies, buyer);
+      } catch (error) {
+        document.getElementById('quickReportSummary').innerHTML = `<strong>Errore agente:</strong> ${escapeHtml(error.message)}`;
+        document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="5">Correggi il problema e riprova.</td></tr>';
+      } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+      }
+    }
+
+    function quickUseExampleMission() {
+      document.getElementById('quickCompanyProfile').value = 'Siamo un impresa di Roma che gestisce appalti fuori regione. Cerchiamo partner affidabili per lavori industriali e forniture tecniche, con documentazione chiara e disponibilita rapida.';
+      document.getElementById('quickMissionPrompt').value = 'Trova aziende in Lombardia che possano fare subappalti elettrici o supporto operativo per un appalto a Milano, importo sopra 50.000 euro, disponibilita entro 30 giorni.';
+    }
+
+    function quickStartDialogue(index) {
+      const item = quickMissionContext?.matches?.[index];
+      if (!item?.company) {
+        alert('Per avviare il dialogo serve una azienda registrata con dati completi.');
+        return;
+      }
+
+      const match = item.match;
+      window.agentlinkLastMatch = {
+        buyer: quickMissionContext.buyer,
+        seller: item.company,
+        result: {
+          score: Number(match.score || 0),
+          strengths: match.strengths || [],
+          risks: match.risks || [],
+          missing: []
+        }
+      };
+      showScreen('dialogue');
+    }
+
+    function quickPrepareHandoff(index) {
+      const item = quickMissionContext?.matches?.[index];
+      if (!item?.company) {
+        alert('Per preparare l hand-off serve una azienda registrata con dati completi.');
+        return;
+      }
+
+      const match = item.match;
+      window.agentlinkLastMatch = {
+        buyer: quickMissionContext.buyer,
+        seller: item.company,
+        result: {
+          score: Number(match.score || 0),
+          strengths: match.strengths || [],
+          risks: match.risks || [],
+          missing: []
+        }
+      };
+      showScreen('handoff');
+    }
+
+    function quickPrepareEmail(index) {
+      const item = quickMissionContext?.matches?.[index];
+      if (!item) return;
+
+      const company = item.company;
+      const match = item.match;
+      const draft = document.getElementById('quickEmailDraft');
+      const contactName = company?.name || match.company_name || 'azienda selezionata';
+      const mission = document.getElementById('quickMissionPrompt').value.trim();
+      draft.style.display = '';
+      draft.innerHTML = `
+        <strong>Email pronta per revisione umana</strong><br><br>
+        Oggetto: Possibile collaborazione tramite AgentLink<br><br>
+        Buongiorno ${escapeHtml(contactName)},<br>
+        vi contattiamo per una possibile collaborazione B2B. La nostra richiesta e: ${escapeHtml(mission)}<br><br>
+        AgentLink ha rilevato una compatibilita preliminare del ${escapeHtml(match.score || '--')}% per questo motivo: ${escapeHtml(match.reason || 'dati aziendali compatibili con la missione.')}<br><br>
+        Prima di procedere vorremmo confermare disponibilita, documentazione e tempi operativi.<br><br>
+        Cordiali saluti
+      `;
+    }
+
+    function handleQuickReportAction(event) {
+      const dialogue = event.target.closest('[data-quick-dialogue]');
+      const email = event.target.closest('[data-quick-email]');
+      const handoff = event.target.closest('[data-quick-handoff]');
+      if (dialogue) quickStartDialogue(Number(dialogue.dataset.quickDialogue));
+      if (email) quickPrepareEmail(Number(email.dataset.quickEmail));
+      if (handoff) quickPrepareHandoff(Number(handoff.dataset.quickHandoff));
+    }
+
     async function renderAdminCompanies() {
       const rows = document.getElementById('adminCompanyRows');
       const count = document.getElementById('adminCount');
@@ -3166,6 +3531,9 @@
     document.getElementById('analyzeWithAi').addEventListener('click', analyzeMatchWithAi);
     document.getElementById('runMissionAgent').addEventListener('click', runMissionAgent);
     document.getElementById('refreshMissionData').addEventListener('click', refreshMissionData);
+    document.getElementById('runQuickMission').addEventListener('click', runQuickMission);
+    document.getElementById('quickExampleMission').addEventListener('click', quickUseExampleMission);
+    document.getElementById('quickReportRows').addEventListener('click', handleQuickReportAction);
     document.querySelectorAll('[data-mission]').forEach(button => {
       button.addEventListener('click', () => {
         document.getElementById('missionPrompt').value = button.dataset.mission;
