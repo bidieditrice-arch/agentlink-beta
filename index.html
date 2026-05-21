@@ -4092,6 +4092,8 @@
     const missionLogEndpoint = `${SUPABASE_URL}/rest/v1/mission_log`;
     const dialogueLogEndpoint = `${SUPABASE_URL}/rest/v1/dialogue_log`;
     const handoffLogEndpoint = `${SUPABASE_URL}/rest/v1/handoff_log`;
+    const userStockEndpoint = `${SUPABASE_URL}/rest/v1/user_stock`;
+    const userCalendarEndpoint = `${SUPABASE_URL}/rest/v1/user_calendar_slots`;
     const authSignupEndpoint = `${SUPABASE_URL}/auth/v1/signup`;
     const authLoginEndpoint = `${SUPABASE_URL}/auth/v1/token?grant_type=password`;
     const authRecoverEndpoint = `${SUPABASE_URL}/auth/v1/recover`;
@@ -6414,8 +6416,6 @@
        Quando colleghiamo Supabase, basta sostituire le funzioni save/load.
        ========================================================= */
     (function () {
-      const STORAGE_SLOTS = 'agentlink-calendar-slots';
-      const STORAGE_STOCK = 'agentlink-stock-items';
       const MONTHS = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
       const DAYS_IT = {
         lunedi: 1, martedi: 2, mercoledi: 3, giovedi: 4, venerdi: 5, sabato: 6, domenica: 0
@@ -6426,10 +6426,149 @@
       let parsedPending = null;
       let currentMode = 'auto';
 
-      function loadSlots() { try { return JSON.parse(localStorage.getItem(STORAGE_SLOTS)) || []; } catch { return []; } }
-      function saveSlots(s) { localStorage.setItem(STORAGE_SLOTS, JSON.stringify(s)); }
-      function loadStock() { try { return JSON.parse(localStorage.getItem(STORAGE_STOCK)) || []; } catch { return []; } }
-      function saveStock(s) { localStorage.setItem(STORAGE_STOCK, JSON.stringify(s)); }
+      // Cache in memoria - viene aggiornata dalle chiamate Supabase
+      let cachedSlots = [];
+      let cachedStock = [];
+
+      // === Helper: chi sono e come mi chiamo come azienda? ===
+      function getCurrentUserId() {
+        return (authSession && authSession.user && authSession.user.id) || null;
+      }
+      function getCurrentCompanyName() {
+        const nameEl = document.getElementById('companyName');
+        if (nameEl && nameEl.value.trim()) return nameEl.value.trim();
+        if (authSession && authSession.user && authSession.user.email) return authSession.user.email;
+        return 'Azienda';
+      }
+
+      // === Caricamento da Supabase ===
+      async function loadSlotsFromDb() {
+        if (!isAuthenticated()) { cachedSlots = []; return; }
+        try {
+          const url = `${userCalendarEndpoint}?select=*&user_id=eq.${getCurrentUserId()}&order=created_at.desc`;
+          const res = await fetch(url, { headers: supabaseHeaders({ useSession: true }) });
+          if (!res.ok) { cachedSlots = []; return; }
+          const rows = await res.json();
+          // Normalizzo per il front-end: alias when_text -> when, dates JSONB -> array
+          cachedSlots = rows.map(r => ({
+            id: r.id,
+            dates: Array.isArray(r.dates) ? r.dates : [],
+            what: r.what,
+            when: r.when_text || '',
+            area: r.area || '',
+            notes: r.notes || '',
+            recurrence: r.recurrence || 'none',
+            createdAt: r.created_at,
+          }));
+        } catch (e) {
+          console.error('loadSlotsFromDb error', e);
+          cachedSlots = [];
+        }
+      }
+
+      async function loadStockFromDb() {
+        if (!isAuthenticated()) { cachedStock = []; return; }
+        try {
+          const url = `${userStockEndpoint}?select=*&user_id=eq.${getCurrentUserId()}&order=created_at.desc`;
+          const res = await fetch(url, { headers: supabaseHeaders({ useSession: true }) });
+          if (!res.ok) { cachedStock = []; return; }
+          const rows = await res.json();
+          cachedStock = rows.map(r => ({
+            id: r.id,
+            name: r.name,
+            quantity: r.quantity || '',
+            area: r.area || '',
+            notes: r.notes || '',
+            createdAt: r.created_at,
+          }));
+        } catch (e) {
+          console.error('loadStockFromDb error', e);
+          cachedStock = [];
+        }
+      }
+
+      // === Salvataggio su Supabase ===
+      async function insertSlotDb(slot) {
+        if (!isAuthenticated()) { alert('Devi accedere per salvare disponibilità.'); return null; }
+        try {
+          const body = {
+            user_id: getCurrentUserId(),
+            company_name: getCurrentCompanyName(),
+            what: slot.what || 'Disponibilità',
+            when_text: slot.when || '',
+            area: slot.area || '',
+            notes: slot.notes || '',
+            dates: slot.dates || [],
+            recurrence: slot.recurrence || 'none',
+          };
+          const res = await fetch(userCalendarEndpoint, {
+            method: 'POST',
+            headers: supabaseHeaders({ json: true, prefer: 'return=representation', useSession: true }),
+            body: JSON.stringify(body),
+          });
+          if (!res.ok) {
+            const t = await res.text();
+            console.error('insertSlotDb error', t);
+            return null;
+          }
+          const inserted = await res.json();
+          return Array.isArray(inserted) ? inserted[0] : inserted;
+        } catch (e) {
+          console.error('insertSlotDb exception', e);
+          return null;
+        }
+      }
+
+      async function insertStockDb(item) {
+        if (!isAuthenticated()) { alert('Devi accedere per salvare stock.'); return null; }
+        try {
+          const body = {
+            user_id: getCurrentUserId(),
+            company_name: getCurrentCompanyName(),
+            name: item.name,
+            quantity: item.quantity || '',
+            area: item.area || '',
+            notes: item.notes || '',
+          };
+          const res = await fetch(userStockEndpoint, {
+            method: 'POST',
+            headers: supabaseHeaders({ json: true, prefer: 'return=representation', useSession: true }),
+            body: JSON.stringify(body),
+          });
+          if (!res.ok) return null;
+          const inserted = await res.json();
+          return Array.isArray(inserted) ? inserted[0] : inserted;
+        } catch (e) {
+          console.error('insertStockDb exception', e);
+          return null;
+        }
+      }
+
+      async function deleteSlotDb(id) {
+        if (!isAuthenticated()) return false;
+        try {
+          const res = await fetch(`${userCalendarEndpoint}?id=eq.${encodeURIComponent(id)}`, {
+            method: 'DELETE',
+            headers: supabaseHeaders({ useSession: true }),
+          });
+          return res.ok;
+        } catch (e) { return false; }
+      }
+
+      async function deleteStockDb(id) {
+        if (!isAuthenticated()) return false;
+        try {
+          const res = await fetch(`${userStockEndpoint}?id=eq.${encodeURIComponent(id)}`, {
+            method: 'DELETE',
+            headers: supabaseHeaders({ useSession: true }),
+          });
+          return res.ok;
+        } catch (e) { return false; }
+      }
+
+      // Funzioni "compatibili" con il vecchio codice (sync read dalla cache)
+      function loadSlots() { return cachedSlots; }
+      function loadStock() { return cachedStock; }
 
       function pad(n) { return String(n).padStart(2, '0'); }
       function isoDate(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
@@ -6673,13 +6812,25 @@
         });
       }
 
-      function removeSlotOccurrence(id, iso) {
-        const slots = loadSlots();
-        const slot = slots.find(s => s.id === id);
+      async function removeSlotOccurrence(id, iso) {
+        const slot = cachedSlots.find(s => s.id === id);
         if (!slot) return;
-        slot.dates = (slot.dates || []).filter(d => d !== iso);
-        const next = slot.dates.length ? slots : slots.filter(s => s.id !== id);
-        saveSlots(next);
+        const newDates = (slot.dates || []).filter(d => d !== iso);
+        if (newDates.length === 0) {
+          // Cancella tutto lo slot
+          await deleteSlotDb(id);
+          cachedSlots = cachedSlots.filter(s => s.id !== id);
+        } else {
+          // Aggiorna le date
+          try {
+            await fetch(`${userCalendarEndpoint}?id=eq.${encodeURIComponent(id)}`, {
+              method: 'PATCH',
+              headers: supabaseHeaders({ json: true, useSession: true }),
+              body: JSON.stringify({ dates: newDates }),
+            });
+            slot.dates = newDates;
+          } catch (e) { console.error(e); }
+        }
         renderCalendar();
       }
 
@@ -6702,24 +6853,34 @@
         renderCalendar();
       }
 
-      function saveDetailSlot() {
+      async function saveDetailSlot() {
         if (!selectedDateISO) return;
         const what = document.getElementById('skDetailWhat').value.trim();
         if (!what) {
           alert('Scrivi cosa hai disponibile.');
           return;
         }
-        const slots = loadSlots();
-        slots.push({
-          id: 'slot-' + Date.now(),
+        const newSlot = {
           dates: [selectedDateISO],
           what,
           when: document.getElementById('skDetailWhen').value.trim(),
           area: document.getElementById('skDetailArea').value.trim(),
           notes: document.getElementById('skDetailNotes').value.trim(),
-          createdAt: new Date().toISOString()
-        });
-        saveSlots(slots);
+          recurrence: 'none',
+        };
+        const inserted = await insertSlotDb(newSlot);
+        if (inserted) {
+          cachedSlots.unshift({
+            id: inserted.id,
+            dates: inserted.dates || [],
+            what: inserted.what,
+            when: inserted.when_text || '',
+            area: inserted.area || '',
+            notes: inserted.notes || '',
+            recurrence: inserted.recurrence || 'none',
+            createdAt: inserted.created_at,
+          });
+        }
         closeDetail();
       }
 
@@ -6746,9 +6907,10 @@
           </div>
         `).join('');
         list.querySelectorAll('[data-stock-id]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const items = loadStock().filter(x => x.id !== btn.dataset.stockId);
-            saveStock(items);
+          btn.addEventListener('click', async () => {
+            const id = btn.dataset.stockId;
+            await deleteStockDb(id);
+            cachedStock = cachedStock.filter(x => x.id !== id);
             renderStock();
           });
         });
@@ -6803,41 +6965,54 @@
         parsedPending = parsed;
       }
 
-      function confirmParsed() {
+      async function confirmParsed() {
         if (!parsedPending) return;
         if (parsedPending.type === 'stock') {
-          const items = loadStock();
-          items.unshift({
-            id: 'stock-' + Date.now(),
+          const inserted = await insertStockDb({
             name: parsedPending.name,
             quantity: parsedPending.quantity,
             area: parsedPending.area,
-            notes: '',
-            createdAt: new Date().toISOString()
           });
-          saveStock(items);
-          renderStock();
+          if (inserted) {
+            cachedStock.unshift({
+              id: inserted.id,
+              name: inserted.name,
+              quantity: inserted.quantity || '',
+              area: inserted.area || '',
+              notes: inserted.notes || '',
+              createdAt: inserted.created_at,
+            });
+            renderStock();
+          }
         } else {
           if (!parsedPending.dates || !parsedPending.dates.length) {
             alert('Non ho capito la data. Riprova specificando ad esempio "24 maggio" o "ogni venerdì".');
             return;
           }
           const allIsos = expandRecurrenceDates(parsedPending.dates, parsedPending.recurrence);
-          const slots = loadSlots();
-          slots.push({
-            id: 'slot-' + Date.now(),
+          const inserted = await insertSlotDb({
             dates: allIsos,
             what: parsedPending.what,
             when: parsedPending.when,
             area: parsedPending.area,
-            notes: '',
             recurrence: parsedPending.recurrence,
-            createdAt: new Date().toISOString()
           });
-          saveSlots(slots);
-          renderCalendar();
+          if (inserted) {
+            cachedSlots.unshift({
+              id: inserted.id,
+              dates: inserted.dates || [],
+              what: inserted.what,
+              when: inserted.when_text || '',
+              area: inserted.area || '',
+              notes: inserted.notes || '',
+              recurrence: inserted.recurrence || 'none',
+              createdAt: inserted.created_at,
+            });
+            renderCalendar();
+          }
         }
-        document.getElementById('skQuickInput').value = '';
+        const qi = document.getElementById('skQuickInput');
+        if (qi) qi.value = '';
         document.getElementById('skParsedBox').classList.remove('show');
         parsedPending = null;
       }
@@ -6985,8 +7160,16 @@
       });
 
       // Init
-      renderCalendar();
-      renderStock();
+      async function initStockCalendarPage() {
+        await loadSlotsFromDb();
+        await loadStockFromDb();
+        renderCalendar();
+        renderStock();
+      }
+      // Carica subito + ricarica ad ogni navigazione sulla pagina
+      initStockCalendarPage();
+      // Esponi ricarica per dopo login
+      window.alReloadStockCalendar = initStockCalendarPage;
     })();
 
     /* =========================================================
@@ -7132,7 +7315,7 @@
         detectedCapacity = null;
       }
 
-      function saveCapacityAsFixed(cap, recurrenceCode) {
+      async function saveCapacityAsFixed(cap, recurrenceCode) {
         const offersField = document.getElementById('companyOffers');
         if (offersField) {
           const summary = cap.what +
@@ -7146,22 +7329,44 @@
         const recurrence = recurrenceCode || (cap.weekday !== null ? 'weekly-' + cap.weekday : 'weekly-5');
         const dates = generateRecurrentDates(recurrence, 6);
 
+        // Verifico login
+        if (!isAuthenticated()) {
+          showToast('Devi accedere', 'Per salvare capacità fisse devi prima registrarti o accedere.');
+          closeCapacityModal();
+          return;
+        }
+
+        // Scrivo su Supabase
         try {
-          const STORAGE_SLOTS = 'agentlink-calendar-slots';
-          const slots = JSON.parse(localStorage.getItem(STORAGE_SLOTS) || '[]');
-          slots.push({
-            id: 'slot-cap-' + Date.now(),
-            dates: dates,
+          const body = {
+            user_id: (authSession && authSession.user && authSession.user.id) || null,
+            company_name: (document.getElementById('companyName')?.value || (authSession?.user?.email) || 'Azienda'),
             what: cap.what,
-            when: cap.when || '',
+            when_text: cap.when || '',
             area: cap.area || '',
             notes: 'Capacità fissa salvata dalla Home',
+            dates: dates,
             recurrence: recurrence,
-            createdAt: new Date().toISOString()
+          };
+          const res = await fetch(userCalendarEndpoint, {
+            method: 'POST',
+            headers: supabaseHeaders({ json: true, prefer: 'return=representation', useSession: true }),
+            body: JSON.stringify(body),
           });
-          localStorage.setItem(STORAGE_SLOTS, JSON.stringify(slots));
+          if (!res.ok) {
+            const t = await res.text();
+            console.error('Errore salvataggio capacità:', t);
+            showToast('Errore', 'Non sono riuscito a salvare. Riprova.');
+            return;
+          }
+          // Aggiorno cache se la pagina Stock è già caricata
+          if (typeof window.alReloadStockCalendar === 'function') {
+            window.alReloadStockCalendar();
+          }
         } catch (e) {
           console.error('Errore salvataggio slot:', e);
+          showToast('Errore', 'Connessione fallita. Riprova.');
+          return;
         }
 
         showToast('Capacità salvata', cap.what + ' aggiunta al profilo e al calendario (' + dates.length + ' occorrenze).');
