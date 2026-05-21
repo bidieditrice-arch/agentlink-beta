@@ -2602,6 +2602,187 @@
       .sk-recurrent-wrap { width: 100%; margin-left: 0; margin-top: 6px; }
     }
 
+    /* === SCATOLA NERA - capacity confirmation modal === */
+    .cap-modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1500;
+      padding: 20px;
+    }
+    .cap-modal-bg.open { display: flex; }
+    .cap-modal {
+      background: linear-gradient(180deg, rgba(16, 34, 56, 0.98), rgba(7, 17, 31, 0.98));
+      border: 1px solid rgba(72, 215, 207, 0.4);
+      border-radius: 16px;
+      padding: 28px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+    }
+    .cap-modal-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(72, 215, 207, 0.15);
+      border: 1px solid rgba(72, 215, 207, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--teal);
+      margin-bottom: 14px;
+    }
+    .cap-modal-icon svg { width: 22px; height: 22px; }
+    .cap-modal h3 {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 6px;
+    }
+    .cap-modal p {
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.5;
+      margin: 0 0 18px;
+    }
+    .cap-detected {
+      background: rgba(72, 215, 207, 0.08);
+      border: 1px solid rgba(72, 215, 207, 0.3);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+    }
+    .cap-detected-label {
+      color: var(--teal);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .cap-detected-row {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 10px;
+      font-size: 13px;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+    }
+    .cap-detected-row:last-child { border-bottom: none; }
+    .cap-detected-row span:first-child { color: var(--muted); font-weight: 700; }
+    .cap-detected-row span:last-child { color: var(--text); }
+    .cap-detected-row span:last-child em { color: #6b7d96; font-style: italic; }
+    .cap-modal-question {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      margin: 18px 0 14px;
+      line-height: 1.5;
+    }
+    .cap-modal-actions { display: flex; flex-direction: column; gap: 8px; }
+    .cap-modal-actions button {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.15s;
+    }
+    .cap-btn-fixed {
+      background: linear-gradient(135deg, var(--teal), var(--green));
+      color: #06101b;
+    }
+    .cap-btn-fixed:hover { filter: brightness(1.08); }
+    .cap-btn-once {
+      background: rgba(7, 17, 31, 0.6);
+      border-color: rgba(148, 163, 184, 0.3);
+      color: var(--text);
+    }
+    .cap-btn-once:hover { border-color: var(--teal); }
+    .cap-btn-edit {
+      background: transparent;
+      border-color: rgba(148, 163, 184, 0.2);
+      color: var(--muted);
+    }
+    .cap-btn-edit:hover { color: var(--text); }
+    .cap-btn-arrow { font-size: 18px; opacity: 0.6; }
+
+    .cap-edit-form { display: none; }
+    .cap-edit-form.show { display: block; }
+    .cap-edit-form input,
+    .cap-edit-form select {
+      background: rgba(7, 17, 31, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 10px 12px;
+      width: 100%;
+      font-family: inherit;
+      font-size: 13px;
+      margin-bottom: 8px;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .cap-edit-form input:focus, .cap-edit-form select:focus { border-color: var(--teal); }
+    .cap-edit-form label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+      margin-top: 4px;
+    }
+
+    /* === Toast === */
+    .ag-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: linear-gradient(180deg, rgba(16, 34, 56, 0.98), rgba(7, 17, 31, 0.98));
+      border: 1px solid var(--teal);
+      border-left: 4px solid var(--teal);
+      border-radius: 12px;
+      padding: 14px 20px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+      transform: translateX(120%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 380px;
+    }
+    .ag-toast.show { transform: translateX(0); }
+    .ag-toast-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(72, 215, 207, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--teal);
+      flex-shrink: 0;
+    }
+    .ag-toast-icon svg { width: 16px; height: 16px; }
+    .ag-toast-body { line-height: 1.4; }
+    .ag-toast-title { font-weight: 800; }
+    .ag-toast-msg { color: var(--muted); font-weight: 500; font-size: 12.5px; }
+
   </style>
 </head>
 <body>
@@ -3780,8 +3961,76 @@
         </div>
       </div>
 
-    
+      <!-- SCATOLA NERA - Modal conferma capacità fissa -->
+      <div class="cap-modal-bg" id="capModal" role="dialog" aria-labelledby="capModalTitle">
+        <div class="cap-modal">
+          <div class="cap-modal-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 12l2 2 4-4"/>
+              <circle cx="12" cy="12" r="10"/>
+            </svg>
+          </div>
+          <h3 id="capModalTitle">Capacità rilevata</h3>
+          <p>Sembra una capacità ricorrente. Vuoi salvarla nel profilo del tuo agente?</p>
+
+          <div id="capSummaryView">
+            <div class="cap-detected">
+              <div class="cap-detected-label">Dettagli rilevati</div>
+              <div class="cap-detected-row"><span>Cosa</span><span id="capWhat">—</span></div>
+              <div class="cap-detected-row"><span>Quando</span><span id="capWhen">—</span></div>
+              <div class="cap-detected-row"><span>Dove</span><span id="capArea">—</span></div>
+              <div class="cap-detected-row"><span>Ricorrenza</span><span id="capRecurrence">—</span></div>
+            </div>
+
+            <div class="cap-modal-question" id="capQuestion">Vuoi che lo salvi come capacità fissa nel tuo profilo agentico?</div>
+
+            <div class="cap-modal-actions">
+              <button class="cap-btn-fixed" id="capBtnFixed">
+                Sì, salva come capacità fissa <span class="cap-btn-arrow">→</span>
+              </button>
+              <button class="cap-btn-once" id="capBtnOnce">
+                No, è solo per questa volta <span class="cap-btn-arrow">→</span>
+              </button>
+              <button class="cap-btn-edit" id="capBtnEdit">
+                Modifica prima di salvare
+              </button>
+            </div>
+          </div>
+
+          <div class="cap-edit-form" id="capEditView">
+            <label>Cosa offri</label>
+            <input id="capEditWhat" placeholder="Es. Squadra pulizie">
+
+            <label>Fascia oraria</label>
+            <input id="capEditWhen" placeholder="Es. 14:00-22:00">
+
+            <label>Area / zona</label>
+            <input id="capEditArea" placeholder="Es. Roma Sud">
+
+            <label>Ricorrenza</label>
+            <select id="capEditRecurrence">
+              <option value="weekly-1">Ogni lunedì</option>
+              <option value="weekly-2">Ogni martedì</option>
+              <option value="weekly-3">Ogni mercoledì</option>
+              <option value="weekly-4">Ogni giovedì</option>
+              <option value="weekly-5">Ogni venerdì</option>
+              <option value="weekly-6">Ogni sabato</option>
+              <option value="weekly-0">Ogni domenica</option>
+              <option value="weekly-all">Tutti i giorni feriali</option>
+              <option value="monthly">Una volta al mese</option>
+              <option value="none">Solo per questa volta</option>
+            </select>
+
+            <div class="cap-modal-actions" style="margin-top: 14px;">
+              <button class="cap-btn-fixed" id="capEditSave">Salva con queste modifiche</button>
+              <button class="cap-btn-edit" id="capEditCancel">Torna indietro</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </main>
+
   </div>
 
   <script>
@@ -6740,6 +6989,333 @@
       renderStock();
     })();
 
+    /* =========================================================
+       SCATOLA NERA — Onboarding automatico via "Cosa offri"
+       ========================================================= */
+    (function () {
+      const WEEKDAY_NAMES = {
+        0: 'domenica', 1: 'lunedì', 2: 'martedì', 3: 'mercoledì',
+        4: 'giovedì', 5: 'venerdì', 6: 'sabato'
+      };
+      const WEEKDAY_PARSE = {
+        lunedi: 1, 'lunedì': 1, martedi: 2, 'martedì': 2,
+        mercoledi: 3, 'mercoledì': 3, giovedi: 4, 'giovedì': 4,
+        venerdi: 5, 'venerdì': 5, sabato: 6, domenica: 0
+      };
+
+      let detectedCapacity = null;
+
+      function quickParseOffer(text) {
+        const t = String(text || '').trim();
+        const lower = t.toLowerCase();
+
+        const strongRecurrent = /\b(ogni|tutti\s+i|settimanalmente|tutte\s+le\s+settimane|tutti\s+i\s+giorni|sempre|ricorrente|fissa|abituale)\b/i.test(lower);
+        const strongOnce = /\b(stavolta|solo questa volta|una tantum|eccezional|solo oggi|domani solo|sabato prossimo|martedì prossimo|martedi prossimo|in questi giorni)\b/i.test(lower);
+
+        let weekday = null;
+        for (const [name, dow] of Object.entries(WEEKDAY_PARSE)) {
+          if (new RegExp('\\b' + name + '\\b', 'i').test(lower)) {
+            weekday = dow;
+            break;
+          }
+        }
+
+        const timeMatch = t.match(/\b(\d{1,2}[:.]?\d{0,2}\s*[-–]\s*\d{1,2}[:.]?\d{0,2})\b/) ||
+                          t.match(/\b(mattina|pomeriggio|sera|notte)\b/i) ||
+                          t.match(/\bdalle\s+(\d{1,2}[:.]?\d{0,2})/i);
+
+        const area = extractAreaLocal(t);
+
+        let what = t;
+        if (weekday !== null) {
+          const wname = WEEKDAY_NAMES[weekday];
+          what = what.replace(new RegExp('\\b(ogni|tutti i|tutte le)?\\s*' + wname + '\\b', 'gi'), '');
+        }
+        if (timeMatch) what = what.replace(timeMatch[0], '');
+        if (area) what = what.replace(new RegExp(area, 'i'), '');
+        what = what
+          .replace(/\b(ho|abbiamo|offriamo|disponibil[ei]|libero[ai]?|squadre? di|zona|area|fascia|dalle)\b/gi, ' ')
+          .replace(/\s+/g, ' ')
+          .replace(/^[,.\-\s]+|[,.\-\s]+$/g, '')
+          .trim();
+
+        return {
+          what: what || 'Capacità',
+          when: timeMatch ? timeMatch[0].trim() : '',
+          area: area || '',
+          weekday: weekday,
+          recurrenceConfidence: strongRecurrent ? 'high' : (strongOnce ? 'none' : (weekday !== null ? 'medium' : 'low'))
+        };
+      }
+
+      function extractAreaLocal(t) {
+        const areas = ['Roma sud','Roma nord','Roma est','Roma ovest','Roma centro','Roma','Milano','Torino','Bologna','Firenze','Napoli','Bari','Palermo','Genova','Verona','Padova','Brescia','Bergamo','Vitinia','Eur','Lazio','Lombardia','Veneto','Piemonte','Toscana','Emilia-Romagna','Campania','Sicilia','Puglia'];
+        for (const a of areas) {
+          const re = new RegExp('\\b' + a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+          if (re.test(t)) return a;
+        }
+        const m = t.match(/\bzona\s+([A-Za-z]{3,})/i);
+        if (m) return m[1];
+        return '';
+      }
+
+      async function aiParseOffer(text, localParsed) {
+        try {
+          const response = await fetch('/api/analyze-offer', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text, localParsed }),
+          });
+          if (!response.ok) return null;
+          return await response.json();
+        } catch (e) {
+          return null;
+        }
+      }
+
+      async function decideCapacity(text) {
+        const localParsed = quickParseOffer(text);
+        if (localParsed.recurrenceConfidence === 'high') {
+          return { ...localParsed, isRecurrent: true, source: 'local' };
+        }
+        if (localParsed.recurrenceConfidence === 'none') {
+          return { ...localParsed, isRecurrent: false, source: 'local' };
+        }
+        const aiResult = await aiParseOffer(text, localParsed);
+        if (aiResult && typeof aiResult.is_recurrent === 'boolean') {
+          return {
+            what: aiResult.what || localParsed.what,
+            when: aiResult.when || localParsed.when,
+            area: aiResult.area || localParsed.area,
+            weekday: aiResult.weekday !== undefined ? aiResult.weekday : localParsed.weekday,
+            isRecurrent: aiResult.is_recurrent,
+            recurrenceLabel: aiResult.recurrence_label || (localParsed.weekday !== null ? 'Ogni ' + WEEKDAY_NAMES[localParsed.weekday] : ''),
+            source: 'ai'
+          };
+        }
+        return { ...localParsed, isRecurrent: localParsed.recurrenceConfidence === 'medium', source: 'local-fallback' };
+      }
+
+      function describeRecurrence(cap) {
+        if (!cap.isRecurrent) return 'Solo per questa volta';
+        if (cap.recurrenceLabel) return cap.recurrenceLabel;
+        if (cap.weekday !== null && cap.weekday !== undefined) {
+          return 'Ogni ' + WEEKDAY_NAMES[cap.weekday];
+        }
+        return 'Capacità ricorrente';
+      }
+
+      function showCapacityModal(cap) {
+        detectedCapacity = cap;
+        document.getElementById('capWhat').textContent = cap.what || '—';
+        document.getElementById('capWhen').innerHTML = cap.when || '<em>non specificato</em>';
+        document.getElementById('capArea').innerHTML = cap.area || '<em>non specificato</em>';
+        document.getElementById('capRecurrence').textContent = describeRecurrence(cap);
+
+        document.getElementById('capEditWhat').value = cap.what || '';
+        document.getElementById('capEditWhen').value = cap.when || '';
+        document.getElementById('capEditArea').value = cap.area || '';
+        const recSelect = document.getElementById('capEditRecurrence');
+        if (cap.weekday !== null && cap.weekday !== undefined) {
+          recSelect.value = 'weekly-' + cap.weekday;
+        } else {
+          recSelect.value = cap.isRecurrent ? 'weekly-5' : 'none';
+        }
+
+        document.getElementById('capSummaryView').style.display = 'block';
+        document.getElementById('capEditView').classList.remove('show');
+        document.getElementById('capModal').classList.add('open');
+      }
+
+      function closeCapacityModal() {
+        document.getElementById('capModal').classList.remove('open');
+        detectedCapacity = null;
+      }
+
+      function saveCapacityAsFixed(cap, recurrenceCode) {
+        const offersField = document.getElementById('companyOffers');
+        if (offersField) {
+          const summary = cap.what +
+            (cap.when ? ' · ' + cap.when : '') +
+            (cap.area ? ' · ' + cap.area : '') +
+            ' (' + describeRecurrence(cap) + ')';
+          const existing = offersField.value.trim();
+          offersField.value = existing ? existing + '\n' + summary : summary;
+        }
+
+        const recurrence = recurrenceCode || (cap.weekday !== null ? 'weekly-' + cap.weekday : 'weekly-5');
+        const dates = generateRecurrentDates(recurrence, 6);
+
+        try {
+          const STORAGE_SLOTS = 'agentlink-calendar-slots';
+          const slots = JSON.parse(localStorage.getItem(STORAGE_SLOTS) || '[]');
+          slots.push({
+            id: 'slot-cap-' + Date.now(),
+            dates: dates,
+            what: cap.what,
+            when: cap.when || '',
+            area: cap.area || '',
+            notes: 'Capacità fissa salvata dalla Home',
+            recurrence: recurrence,
+            createdAt: new Date().toISOString()
+          });
+          localStorage.setItem(STORAGE_SLOTS, JSON.stringify(slots));
+        } catch (e) {
+          console.error('Errore salvataggio slot:', e);
+        }
+
+        showToast('Capacità salvata', cap.what + ' aggiunta al profilo e al calendario (' + dates.length + ' occorrenze).');
+        closeCapacityModal();
+      }
+
+      function saveCapacityOnce(cap) {
+        showToast('Offerta pubblicata', cap.what + ' pubblicata solo per questa volta. L\'agente cerca match adesso.');
+        closeCapacityModal();
+      }
+
+      function generateRecurrentDates(code, months) {
+        const isos = [];
+        const today = new Date();
+        const stop = new Date();
+        stop.setMonth(stop.getMonth() + months);
+
+        if (code === 'monthly') {
+          let d = new Date(today);
+          d.setDate(15);
+          for (let i = 0; i < months; i++) {
+            if (d >= today && d <= stop) isos.push(toISO(d));
+            d.setMonth(d.getMonth() + 1);
+          }
+          return isos;
+        }
+        if (code === 'none') {
+          return [toISO(today)];
+        }
+        if (code === 'weekly-all') {
+          let d = new Date(today);
+          while (d <= stop) {
+            const dow = d.getDay();
+            if (dow >= 1 && dow <= 5) isos.push(toISO(d));
+            d.setDate(d.getDate() + 1);
+          }
+          return isos;
+        }
+        const target = parseInt(code.replace('weekly-', ''));
+        if (isNaN(target)) return [toISO(today)];
+        let d = new Date(today);
+        const diff = (target - d.getDay() + 7) % 7;
+        d.setDate(d.getDate() + diff);
+        while (d <= stop) {
+          isos.push(toISO(d));
+          d.setDate(d.getDate() + 7);
+        }
+        return isos;
+      }
+
+      function toISO(d) {
+        return d.getFullYear() + '-' +
+          String(d.getMonth() + 1).padStart(2, '0') + '-' +
+          String(d.getDate()).padStart(2, '0');
+      }
+
+      function showToast(title, msg) {
+        const t = document.getElementById('agToast');
+        if (!t) return;
+        document.getElementById('agToastTitle').textContent = title;
+        document.getElementById('agToastMsg').textContent = msg;
+        t.classList.add('show');
+        setTimeout(function () { t.classList.remove('show'); }, 4500);
+      }
+
+      const ctaBtn = document.getElementById('runQuickMission');
+      if (ctaBtn) {
+        ctaBtn.addEventListener('click', async function (e) {
+          const offerPill = document.querySelector('.al-pill.active[data-quick-mode="offer"]');
+          if (!offerPill) return;
+
+          const text = document.getElementById('quickMissionPrompt').value.trim();
+          if (!text) return;
+
+          e.stopImmediatePropagation();
+          e.preventDefault();
+
+          ctaBtn.disabled = true;
+
+          try {
+            const cap = await decideCapacity(text);
+            if (cap.isRecurrent) {
+              showCapacityModal(cap);
+            } else {
+              showCapacityModal({ ...cap, isRecurrent: false });
+            }
+          } catch (err) {
+            console.error('Errore decideCapacity:', err);
+            showToast('Errore', 'Non sono riuscito a processare l\'offerta. Riprova.');
+          } finally {
+            ctaBtn.disabled = false;
+          }
+        }, true);
+      }
+
+      const btnFixed = document.getElementById('capBtnFixed');
+      const btnOnce = document.getElementById('capBtnOnce');
+      const btnEdit = document.getElementById('capBtnEdit');
+      const btnEditCancel = document.getElementById('capEditCancel');
+      const btnEditSave = document.getElementById('capEditSave');
+      const capModal = document.getElementById('capModal');
+
+      if (btnFixed) btnFixed.addEventListener('click', function () {
+        if (!detectedCapacity) return;
+        saveCapacityAsFixed(detectedCapacity);
+      });
+
+      if (btnOnce) btnOnce.addEventListener('click', function () {
+        if (!detectedCapacity) return;
+        saveCapacityOnce(detectedCapacity);
+      });
+
+      if (btnEdit) btnEdit.addEventListener('click', function () {
+        document.getElementById('capSummaryView').style.display = 'none';
+        document.getElementById('capEditView').classList.add('show');
+      });
+
+      if (btnEditCancel) btnEditCancel.addEventListener('click', function () {
+        document.getElementById('capSummaryView').style.display = 'block';
+        document.getElementById('capEditView').classList.remove('show');
+      });
+
+      if (btnEditSave) btnEditSave.addEventListener('click', function () {
+        if (!detectedCapacity) return;
+        detectedCapacity.what = document.getElementById('capEditWhat').value.trim();
+        detectedCapacity.when = document.getElementById('capEditWhen').value.trim();
+        detectedCapacity.area = document.getElementById('capEditArea').value.trim();
+        const recCode = document.getElementById('capEditRecurrence').value;
+        if (recCode === 'none') {
+          saveCapacityOnce(detectedCapacity);
+        } else {
+          saveCapacityAsFixed(detectedCapacity, recCode);
+        }
+      });
+
+      if (capModal) capModal.addEventListener('click', function (e) {
+        if (e.target.id === 'capModal') closeCapacityModal();
+      });
+
+    })();
+
   </script>
+
+  <!-- Toast notification (Scatola Nera) -->
+  <div class="ag-toast" id="agToast">
+    <div class="ag-toast-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <div class="ag-toast-body">
+      <div class="ag-toast-title" id="agToastTitle">Salvato</div>
+      <div class="ag-toast-msg" id="agToastMsg">Capacità aggiunta al profilo.</div>
+    </div>
+  </div>
 </body>
 </html>
