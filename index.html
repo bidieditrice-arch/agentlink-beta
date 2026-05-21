@@ -466,7 +466,7 @@
 
     .auth-actions {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       width: 100%;
     }
@@ -2689,6 +2689,7 @@
               <div class="actions auth-actions">
                 <button class="btn secondary" id="createBetaAccount" type="button">Registrati</button>
                 <button class="btn secondary" id="loginBetaAccount" type="button">Accedi</button>
+                <button class="btn secondary" id="recoverBetaPassword" type="button">Recupera password</button>
                 <button class="btn secondary" id="logoutBetaAccount" type="button">Esci</button>
               </div>
               <div class="inline-note" id="authSessionStatus"></div>
@@ -3844,6 +3845,7 @@
     const handoffLogEndpoint = `${SUPABASE_URL}/rest/v1/handoff_log`;
     const authSignupEndpoint = `${SUPABASE_URL}/auth/v1/signup`;
     const authLoginEndpoint = `${SUPABASE_URL}/auth/v1/token?grant_type=password`;
+    const authRecoverEndpoint = `${SUPABASE_URL}/auth/v1/recover`;
     const useSupabase = SUPABASE_PUBLISHABLE_KEY && !SUPABASE_PUBLISHABLE_KEY.includes('INSERISCI_');
     const authStorageKey = 'agentlink-beta-session';
     let authSession = loadAuthSession();
@@ -4567,7 +4569,7 @@
     async function createBetaAccount() {
       const emailField = document.getElementById('accountEmail');
       const passwordField = document.getElementById('accountPassword');
-      const email = emailField ? emailField.value.trim() : '';
+      const email = emailField ? emailField.value.trim().toLowerCase() : '';
       const password = passwordField ? passwordField.value : '';
 
       if (!email) {
@@ -4610,6 +4612,8 @@
         }
 
         const sessionData = data.session || data;
+        const identities = Array.isArray(data?.user?.identities) ? data.user.identities : null;
+        const existingAccountDetected = !sessionData?.access_token && identities && identities.length === 0;
         if (sessionData?.access_token) {
           saveAuthSession({
             access_token: sessionData.access_token,
@@ -4618,6 +4622,8 @@
             user: sessionData.user || data.user || { email }
           });
           setInlineMessage('betaSignupMessage', 'Registrazione completata. Sessione attiva.', 'ok');
+        } else if (existingAccountDetected) {
+          setInlineMessage('betaSignupMessage', 'Email gia registrata. Premi "Accedi" con la password originale oppure "Recupera password".', 'warn');
         } else {
           setInlineMessage('betaSignupMessage', 'Registrazione completata. Se richiesto, conferma email e poi premi "Accedi".', 'ok');
         }
@@ -4631,7 +4637,7 @@
     async function loginBetaAccount() {
       const emailField = document.getElementById('accountEmail');
       const passwordField = document.getElementById('accountPassword');
-      const email = emailField ? emailField.value.trim() : '';
+      const email = emailField ? emailField.value.trim().toLowerCase() : '';
       const password = passwordField ? passwordField.value : '';
 
       if (!email || !password) {
@@ -4677,7 +4683,52 @@
         if (companyFields.email && !companyFields.email.value) companyFields.email.value = email;
         setInlineMessage('betaSignupMessage', 'Accesso effettuato con successo.', 'ok');
       } catch (error) {
-        setInlineMessage('betaSignupMessage', `Errore login: ${error.message}`, 'warn');
+        const raw = String(error.message || '');
+        const normalized = raw.toLowerCase();
+        if (normalized.includes('invalid login credentials')) {
+          setInlineMessage('betaSignupMessage', 'Login non riuscito: credenziali non valide. Usa la password del primo account creato o premi "Recupera password".', 'warn');
+        } else if (normalized.includes('email not confirmed')) {
+          setInlineMessage('betaSignupMessage', 'Email non ancora confermata. Apri la mail di conferma Supabase e riprova.', 'warn');
+        } else {
+          setInlineMessage('betaSignupMessage', `Errore login: ${raw}`, 'warn');
+        }
+      }
+    }
+
+    async function recoverBetaPassword() {
+      const emailField = document.getElementById('accountEmail');
+      const email = emailField ? emailField.value.trim().toLowerCase() : '';
+
+      if (!email) {
+        setInlineMessage('betaSignupMessage', 'Inserisci prima la tua email per recuperare la password.', 'warn');
+        return;
+      }
+
+      if (!useSupabase) {
+        setInlineMessage('betaSignupMessage', 'In modalita demo locale il recupero password non e necessario.', 'ok');
+        return;
+      }
+
+      setInlineMessage('betaSignupMessage', 'Invio email di recupero in corso...', 'warn');
+
+      try {
+        const response = await fetch(authRecoverEndpoint, {
+          method: 'POST',
+          headers: {
+            apikey: SUPABASE_PUBLISHABLE_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.error_description || data.msg || data.message || 'Recupero password non riuscito.');
+        }
+
+        setInlineMessage('betaSignupMessage', 'Email di recupero inviata. Controlla posta e spam, poi imposta una nuova password.', 'ok');
+      } catch (error) {
+        setInlineMessage('betaSignupMessage', `Errore recupero password: ${error.message}`, 'warn');
       }
     }
 
@@ -5616,6 +5667,7 @@
     });
     document.getElementById('createBetaAccount').addEventListener('click', createBetaAccount);
     document.getElementById('loginBetaAccount').addEventListener('click', loginBetaAccount);
+    document.getElementById('recoverBetaPassword').addEventListener('click', recoverBetaPassword);
     document.getElementById('logoutBetaAccount').addEventListener('click', logoutBetaAccount);
     document.getElementById('topAccessBtn').addEventListener('click', event => {
       event.preventDefault();
