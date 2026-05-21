@@ -2139,6 +2139,385 @@
       .al-footer-actions .btn { width: 100%; justify-content: center; }
     }
 
+    /* ===== STOCK & CALENDARIO ===== */
+    .sk-page { max-width: 1100px; margin: 0 auto; padding: 20px 0 60px; }
+
+    .sk-quickbox {
+      background: rgba(7, 17, 31, 0.62);
+      border: 2px solid rgba(72, 215, 207, 0.35);
+      border-radius: 14px;
+      padding: 18px 18px 18px 86px;
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .sk-quickbox textarea {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      width: 100%;
+      font-family: inherit;
+      font-size: 16px;
+      line-height: 1.5;
+      resize: none;
+      min-height: 64px;
+      outline: none;
+    }
+    .sk-quickbox textarea::placeholder { color: #6b7d96; font-style: italic; }
+    .sk-mic {
+      position: absolute;
+      left: 18px; top: 18px;
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--green));
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    .sk-mic.recording {
+      background: linear-gradient(135deg, #ff6767, #ff8c8c);
+      animation: al-pulse 1.2s ease-in-out infinite;
+    }
+    .sk-mic svg { width: 22px; height: 22px; }
+    .sk-quick-actions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .sk-mode-chip {
+      background: rgba(16, 34, 56, 0.58);
+      color: #b9c8da;
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .sk-mode-chip.active {
+      background: linear-gradient(135deg, rgba(72, 215, 207, 0.28), rgba(53, 207, 135, 0.19));
+      border-color: rgba(72, 215, 207, 0.58);
+      color: #e9fffb;
+    }
+    .sk-recurrent-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      margin-left: auto;
+    }
+    .sk-recurrent-wrap select {
+      background: rgba(7, 17, 31, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 6px 8px;
+      font-size: 13px;
+    }
+    .sk-add-btn {
+      background: linear-gradient(135deg, var(--teal), var(--green));
+      color: #06101b;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 16px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .sk-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .sk-card {
+      background: rgba(12, 26, 43, 0.86);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      border-radius: 14px;
+      padding: 22px 24px;
+    }
+    .sk-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .sk-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sk-card-count {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Calendar mini */
+    .sk-cal-month {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .sk-cal-month strong { font-size: 14px; color: var(--text); }
+    .sk-cal-nav {
+      background: rgba(16, 34, 56, 0.58);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      color: var(--muted);
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .sk-cal-nav:hover { color: var(--text); }
+    .sk-cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .sk-cal-day-head {
+      text-align: center;
+      font-size: 10px;
+      color: var(--muted-2, #64748b);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 6px 0;
+    }
+    .sk-cal-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: #b9c8da;
+      background: rgba(7, 17, 31, 0.4);
+      border: 1px solid transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+    }
+    .sk-cal-day:hover { border-color: rgba(72, 215, 207, 0.4); color: var(--text); }
+    .sk-cal-day.other-month { color: #475569; opacity: 0.4; cursor: default; }
+    .sk-cal-day.other-month:hover { border-color: transparent; }
+    .sk-cal-day.today { font-weight: 800; color: var(--text); }
+    .sk-cal-day.today::before {
+      content: ""; position: absolute; bottom: 3px; left: 50%;
+      transform: translateX(-50%); width: 4px; height: 4px;
+      border-radius: 50%; background: var(--gold);
+    }
+    .sk-cal-day.has-slot {
+      background: rgba(72, 215, 207, 0.18);
+      border-color: rgba(72, 215, 207, 0.5);
+      color: #e9fffb;
+      font-weight: 700;
+    }
+    .sk-cal-day.has-slot::after {
+      content: ""; position: absolute; top: 3px; right: 3px;
+      width: 5px; height: 5px; border-radius: 50%; background: var(--teal);
+    }
+    .sk-cal-day.selected {
+      background: var(--teal);
+      color: #06101b;
+      border-color: var(--teal);
+    }
+
+    /* Upcoming list */
+    .sk-upcoming {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(148, 163, 184, 0.16);
+    }
+    .sk-upcoming h4 {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      margin: 0 0 10px;
+      text-transform: uppercase;
+    }
+    .sk-slot {
+      display: grid;
+      grid-template-columns: 60px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+      font-size: 13px;
+    }
+    .sk-slot:last-child { border-bottom: none; }
+    .sk-slot-date {
+      color: var(--teal);
+      font-weight: 700;
+      font-size: 12px;
+      text-align: center;
+      padding: 5px 8px;
+      background: rgba(72, 215, 207, 0.08);
+      border-radius: 6px;
+    }
+    .sk-slot-info { color: var(--text); }
+    .sk-slot-info small { color: var(--muted); display: block; font-size: 11px; margin-top: 2px; }
+    .sk-slot-del {
+      background: none;
+      border: none;
+      color: var(--muted-2, #64748b);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px;
+    }
+    .sk-slot-del:hover { color: var(--red); }
+
+    /* Stock list */
+    .sk-stock-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: start;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+    }
+    .sk-stock-item:last-child { border-bottom: none; }
+    .sk-stock-name {
+      color: var(--text);
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 3px;
+    }
+    .sk-stock-meta {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .sk-stock-meta .qty {
+      color: var(--teal);
+      font-weight: 700;
+    }
+
+    .sk-empty {
+      color: var(--muted-2, #64748b);
+      font-style: italic;
+      font-size: 13px;
+      text-align: center;
+      padding: 24px 0;
+    }
+
+    /* Detail panel (when day clicked or slot edited) */
+    .sk-detail {
+      margin-top: 16px;
+      padding: 16px;
+      background: rgba(7, 17, 31, 0.5);
+      border: 1px solid rgba(72, 215, 207, 0.25);
+      border-radius: 10px;
+      display: none;
+    }
+    .sk-detail.show { display: block; }
+    .sk-detail h5 {
+      color: var(--teal);
+      font-size: 13px;
+      margin: 0 0 10px;
+      font-weight: 700;
+    }
+    .sk-detail input,
+    .sk-detail textarea {
+      background: rgba(7, 17, 31, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 9px 11px;
+      font-family: inherit;
+      font-size: 13px;
+      width: 100%;
+      margin-bottom: 8px;
+      outline: none;
+    }
+    .sk-detail input:focus, .sk-detail textarea:focus { border-color: var(--teal); }
+    .sk-detail-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .sk-detail-actions button {
+      flex: 1;
+      padding: 9px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .sk-save-btn {
+      background: var(--teal);
+      color: #06101b;
+    }
+    .sk-cancel-btn {
+      background: transparent;
+      border-color: rgba(148, 163, 184, 0.3);
+      color: var(--muted);
+    }
+
+    /* CSV upload */
+    .sk-csv-zone {
+      margin-top: 18px;
+      padding: 16px;
+      background: rgba(243, 168, 79, 0.06);
+      border: 1px dashed rgba(243, 168, 79, 0.3);
+      border-radius: 10px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .sk-csv-zone strong { color: var(--gold); display: block; margin-bottom: 4px; }
+    .sk-csv-label {
+      display: inline-block;
+      margin-top: 10px;
+      background: rgba(243, 168, 79, 0.15);
+      color: var(--gold);
+      border: 1px solid rgba(243, 168, 79, 0.35);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .sk-csv-label:hover { background: rgba(243, 168, 79, 0.25); }
+    .sk-csv-label input { display: none; }
+
+    /* Parse preview */
+    .sk-parsed {
+      background: rgba(72, 215, 207, 0.08);
+      border: 1px solid rgba(72, 215, 207, 0.25);
+      border-left: 3px solid var(--teal);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      display: none;
+      font-size: 13px;
+      color: #dce7f3;
+      line-height: 1.5;
+    }
+    .sk-parsed.show { display: block; }
+    .sk-parsed strong { color: var(--teal); }
+    .sk-parsed-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 860px) {
+      .sk-grid { grid-template-columns: 1fr; }
+      .sk-recurrent-wrap { width: 100%; margin-left: 0; margin-top: 6px; }
+    }
+
   </style>
 </head>
 <body>
@@ -2177,7 +2556,7 @@
           </span>
           <span>Profilo agente</span>
         </button>
-        <button data-screen="admin">
+        <button data-screen="stock">
           <span class="ico">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/><path d="M3 7l9 4 9-4M12 11v10"/>
@@ -2807,6 +3186,136 @@
             <p class="lead">Le aziende registrate vengono salvate nel database beta AgentLink con sessione utente attiva.</p>
             <div class="registry-list" id="companyList"></div>
           </aside>
+        </div>
+      </section>
+
+      <section class="screen" id="stock">
+        <div class="sk-page">
+
+          <span class="al-eyebrow">STOCK & CALENDARIO</span>
+          <h2 class="al-hero-title" style="font-size: clamp(28px, 4vw, 38px); margin-bottom: 12px;">
+            La tua disponibilità, <span class="accent">sempre aggiornata.</span>
+          </h2>
+          <p class="al-hero-sub">
+            Carica stock e disponibilità in 30 secondi. Scrivi o parla — l'agente capisce e organizza. Più dati ci sono, più opportunità il tuo agente trova.
+          </p>
+
+          <!-- BOX RAPIDO -->
+          <div class="sk-quickbox">
+            <button class="sk-mic" id="skMicBtn" type="button" aria-label="Voce">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#06101b" stroke-width="2.2">
+                <rect x="9" y="3" width="6" height="12" rx="3" fill="#06101b"/>
+                <path d="M5 11a7 7 0 0014 0M12 19v3" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <textarea id="skQuickInput" rows="2"
+              placeholder='Es. "Il 24 maggio 3 furgoni disponibili area Roma" · "Ogni venerdì 2 squadre pulizie Roma sud 14-22" · "200 bulloni M8 magazzino Vitinia"'></textarea>
+          </div>
+
+          <div class="sk-quick-actions">
+            <button class="sk-mode-chip active" data-sk-mode="auto">Riconoscimento automatico</button>
+            <button class="sk-mode-chip" data-sk-mode="calendar">Forza calendario</button>
+            <button class="sk-mode-chip" data-sk-mode="stock">Forza stock</button>
+            <div class="sk-recurrent-wrap">
+              <span>Ricorrenza:</span>
+              <select id="skRecurrence">
+                <option value="none">Singola data</option>
+                <option value="weekly">Settimanale</option>
+                <option value="biweekly">Ogni 2 settimane</option>
+                <option value="monthly">Mensile</option>
+              </select>
+              <button class="sk-add-btn" id="skAddBtn" type="button">Aggiungi</button>
+            </div>
+          </div>
+
+          <div class="sk-parsed" id="skParsedBox">
+            <strong>Anteprima:</strong> <span id="skParsedText"></span>
+            <div class="sk-parsed-actions">
+              <button class="sk-save-btn" id="skParsedConfirm" type="button">Conferma e salva</button>
+              <button class="sk-cancel-btn" id="skParsedCancel" type="button">Annulla</button>
+            </div>
+          </div>
+
+          <div class="sk-grid">
+
+            <!-- ===== CALENDARIO ===== -->
+            <div class="sk-card">
+              <div class="sk-card-head">
+                <div class="sk-card-title">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--teal);">
+                    <rect x="3" y="4" width="18" height="18" rx="2"/>
+                    <path d="M16 2v4M8 2v4M3 10h18"/>
+                  </svg>
+                  Calendario disponibilità
+                </div>
+                <span class="sk-card-count" id="skCalCount">0 slot</span>
+              </div>
+
+              <div class="sk-cal-month">
+                <button class="sk-cal-nav" id="skCalPrev" type="button">‹</button>
+                <strong id="skCalLabel">—</strong>
+                <button class="sk-cal-nav" id="skCalNext" type="button">›</button>
+              </div>
+
+              <div class="sk-cal-grid" id="skCalHeads">
+                <div class="sk-cal-day-head">LUN</div>
+                <div class="sk-cal-day-head">MAR</div>
+                <div class="sk-cal-day-head">MER</div>
+                <div class="sk-cal-day-head">GIO</div>
+                <div class="sk-cal-day-head">VEN</div>
+                <div class="sk-cal-day-head">SAB</div>
+                <div class="sk-cal-day-head">DOM</div>
+              </div>
+              <div class="sk-cal-grid" id="skCalGrid"></div>
+
+              <div class="sk-detail" id="skDetail">
+                <h5 id="skDetailDate">—</h5>
+                <input id="skDetailWhat" placeholder="Es. 3 furgoni con autista">
+                <input id="skDetailWhen" placeholder="Fascia oraria (es. 08:00-18:00)">
+                <input id="skDetailArea" placeholder="Area (es. Lazio, Roma sud)">
+                <textarea id="skDetailNotes" placeholder="Note operative (opzionale)" rows="2"></textarea>
+                <div class="sk-detail-actions">
+                  <button class="sk-save-btn" id="skDetailSave" type="button">Salva slot</button>
+                  <button class="sk-cancel-btn" id="skDetailCancel" type="button">Annulla</button>
+                </div>
+              </div>
+
+              <div class="sk-upcoming">
+                <h4>Prossime disponibilità</h4>
+                <div id="skUpcomingList">
+                  <div class="sk-empty">Nessuna disponibilità inserita.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== STOCK ===== -->
+            <div class="sk-card">
+              <div class="sk-card-head">
+                <div class="sk-card-title">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--teal);">
+                    <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                    <path d="M3.27 6.96L12 12l8.73-5.04M12 22V12"/>
+                  </svg>
+                  Stock prodotti
+                </div>
+                <span class="sk-card-count" id="skStockCount">0 voci</span>
+              </div>
+
+              <div id="skStockList">
+                <div class="sk-empty">Nessuno stock caricato. Usa il box sopra per aggiungere.</div>
+              </div>
+
+              <div class="sk-csv-zone">
+                <strong>Catalogo completo?</strong>
+                Carica un file CSV o Excel con tutti i tuoi prodotti.
+                <label class="sk-csv-label">
+                  + Carica catalogo (CSV / Excel)
+                  <input type="file" id="skCsvInput" accept=".csv,.tsv,.xlsx,.xls,.txt">
+                </label>
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 
@@ -5474,6 +5983,573 @@
         }
       });
       setTimeout(updateProgress, 500);
+    })();
+
+    /* =========================================================
+       STOCK & CALENDARIO — logica completa
+       Dati salvati in localStorage (browser session).
+       Quando colleghiamo Supabase, basta sostituire le funzioni save/load.
+       ========================================================= */
+    (function () {
+      const STORAGE_SLOTS = 'agentlink-calendar-slots';
+      const STORAGE_STOCK = 'agentlink-stock-items';
+      const MONTHS = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+      const DAYS_IT = {
+        lunedi: 1, martedi: 2, mercoledi: 3, giovedi: 4, venerdi: 5, sabato: 6, domenica: 0
+      };
+
+      let viewYear, viewMonth;
+      let selectedDateISO = null;
+      let parsedPending = null;
+      let currentMode = 'auto';
+
+      function loadSlots() { try { return JSON.parse(localStorage.getItem(STORAGE_SLOTS)) || []; } catch { return []; } }
+      function saveSlots(s) { localStorage.setItem(STORAGE_SLOTS, JSON.stringify(s)); }
+      function loadStock() { try { return JSON.parse(localStorage.getItem(STORAGE_STOCK)) || []; } catch { return []; } }
+      function saveStock(s) { localStorage.setItem(STORAGE_STOCK, JSON.stringify(s)); }
+
+      function pad(n) { return String(n).padStart(2, '0'); }
+      function isoDate(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+      function todayISO() { return isoDate(new Date()); }
+      function prettyDate(iso) {
+        const [y, m, d] = iso.split('-').map(Number);
+        return d + ' ' + MONTHS[m - 1].toLowerCase();
+      }
+      function escapeHtml(s) {
+        return String(s == null ? '' : s)
+          .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+      }
+
+      /* ====== PARSER linguaggio naturale ====== */
+      function parseInput(text, mode) {
+        const t = String(text || '').trim();
+        if (!t) return null;
+        const lower = t.toLowerCase();
+
+        // Detection auto vs stock vs calendar
+        const hasDate = /\b(\d{1,2})\s*(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre|gen|feb|mar|apr|mag|giu|lug|ago|set|ott|nov|dic)\b/i.test(t)
+          || /\b\d{1,2}[\/\-]\d{1,2}([\/\-]\d{2,4})?\b/.test(t);
+        const hasWeekday = /\b(lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica)\b/i.test(lower);
+        const hasRecurrent = /\b(ogni|tutti)\b/i.test(lower);
+        const hasStockSignal = /\b(stock|magazzino|pezzi|in magazzino|disponibili in magazzino|cataloghi|articoli)\b/i.test(lower);
+
+        let detectedMode = mode;
+        if (mode === 'auto') {
+          if (hasStockSignal && !hasDate && !hasWeekday) detectedMode = 'stock';
+          else if (hasDate || hasWeekday || hasRecurrent) detectedMode = 'calendar';
+          else detectedMode = 'stock';
+        }
+
+        if (detectedMode === 'stock') {
+          // Estrazione stock
+          const qty = (t.match(/(\d+)\s*(pezzi|pz|unità|unita|kg|ton|tonnellate|pallet|metri|mt|m|litri|l)\b/i) || [, '', ''])[0];
+          const area = extractArea(t);
+          return {
+            type: 'stock',
+            name: cleanProductName(t, qty, area),
+            quantity: qty || '',
+            area: area || '',
+            raw: t
+          };
+        } else {
+          // Calendar
+          const dates = extractDates(t);
+          const recurrence = extractRecurrence(lower);
+          const time = (t.match(/\b(\d{1,2}[:.]?\d{0,2}\s*[-–]\s*\d{1,2}[:.]?\d{0,2}|fascia\s+[a-z0-9 :-]+|mattina|pomeriggio|sera|notte)\b/i) || [''])[0];
+          const area = extractArea(t);
+          const what = cleanWhatPart(t, dates, time, area);
+          return {
+            type: 'calendar',
+            dates: dates,
+            recurrence: recurrence,
+            what: what,
+            when: time || '',
+            area: area || '',
+            raw: t
+          };
+        }
+      }
+
+      function cleanProductName(t, qty, area) {
+        let s = t;
+        if (qty) s = s.replace(qty, '');
+        if (area) s = s.replace(new RegExp(area, 'i'), '');
+        s = s.replace(/\b(magazzino|stock|in magazzino|zona|area)\b/gi, '').trim();
+        s = s.replace(/\s+/g, ' ').replace(/^[,.\-\s]+|[,.\-\s]+$/g, '');
+        return s || 'Stock generico';
+      }
+      function cleanWhatPart(t, dates, time, area) {
+        let s = t;
+        dates.forEach(d => { if (d.label) s = s.replace(d.label, ''); });
+        if (time) s = s.replace(time, '');
+        if (area) s = s.replace(new RegExp(area, 'i'), '');
+        s = s.replace(/\b(il|la|le|i|gli|un|una|ogni|tutti|disponibil[ei]|libero[ai]?|zona|area|fascia)\b/gi, ' ');
+        s = s.replace(/\s+/g, ' ').replace(/^[,.\-\s]+|[,.\-\s]+$/g, '').trim();
+        return s || 'Disponibilità';
+      }
+
+      function extractDates(text) {
+        const results = [];
+        // Pattern: "24 maggio", "12 giugno 2026"
+        const monthRegex = /\b(\d{1,2})\s+(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)(?:\s+(\d{4}))?\b/gi;
+        let m;
+        while ((m = monthRegex.exec(text)) !== null) {
+          const day = parseInt(m[1]);
+          const monthIdx = MONTHS.findIndex(x => x.toLowerCase() === m[2].toLowerCase());
+          const year = m[3] ? parseInt(m[3]) : new Date().getFullYear();
+          if (monthIdx >= 0 && day >= 1 && day <= 31) {
+            const d = new Date(year, monthIdx, day);
+            // if past, push to next year
+            if (d < new Date() && !m[3]) d.setFullYear(year + 1);
+            results.push({ iso: isoDate(d), label: m[0] });
+          }
+        }
+        // Pattern: "24/05" or "24-05-2026"
+        const numRegex = /\b(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?\b/g;
+        while ((m = numRegex.exec(text)) !== null) {
+          const day = parseInt(m[1]), monthN = parseInt(m[2]);
+          let year = m[3] ? parseInt(m[3]) : new Date().getFullYear();
+          if (year < 100) year += 2000;
+          if (monthN >= 1 && monthN <= 12 && day >= 1 && day <= 31) {
+            const d = new Date(year, monthN - 1, day);
+            if (d < new Date() && !m[3]) d.setFullYear(year + 1);
+            results.push({ iso: isoDate(d), label: m[0] });
+          }
+        }
+        // Today / tomorrow / "domani"
+        if (/\boggi\b/i.test(text)) results.push({ iso: todayISO(), label: 'oggi' });
+        if (/\bdomani\b/i.test(text)) {
+          const t = new Date();
+          t.setDate(t.getDate() + 1);
+          results.push({ iso: isoDate(t), label: 'domani' });
+        }
+        // Weekday next occurrence (only if no specific date found)
+        if (results.length === 0) {
+          for (const [name, dow] of Object.entries(DAYS_IT)) {
+            if (new RegExp('\\b' + name + '\\b', 'i').test(text)) {
+              const t = new Date();
+              const diff = (dow - t.getDay() + 7) % 7 || 7;
+              t.setDate(t.getDate() + diff);
+              results.push({ iso: isoDate(t), label: name });
+              break;
+            }
+          }
+        }
+        return results;
+      }
+
+      function extractRecurrence(lower) {
+        const sel = document.getElementById('skRecurrence');
+        const selected = sel ? sel.value : 'none';
+        if (selected !== 'none') return selected;
+        if (/\bogni\s+(lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica)\b/i.test(lower)) return 'weekly';
+        if (/\btutti\s+i\s+(lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica)\b/i.test(lower)) return 'weekly';
+        if (/\bogni settimana\b/i.test(lower)) return 'weekly';
+        if (/\bogni mese\b/i.test(lower)) return 'monthly';
+        return 'none';
+      }
+
+      function extractArea(t) {
+        const areas = ['Roma sud','Roma nord','Roma est','Roma ovest','Roma centro','Roma','Milano','Torino','Bologna','Firenze','Napoli','Bari','Palermo','Genova','Verona','Padova','Brescia','Bergamo','Vitinia','Eur','Lazio','Lombardia','Veneto','Piemonte','Toscana','Emilia-Romagna','Campania','Sicilia','Puglia','Nord Italia','Centro Italia','Sud Italia'];
+        for (const a of areas) {
+          const re = new RegExp('\\b' + a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+          if (re.test(t)) return a;
+        }
+        // "zona Vitinia" generic
+        const m = t.match(/\bzona\s+([A-Za-z]{3,})/i);
+        if (m) return m[1];
+        return '';
+      }
+
+      /* ====== RENDER CALENDARIO ====== */
+      function renderCalendar() {
+        const grid = document.getElementById('skCalGrid');
+        const label = document.getElementById('skCalLabel');
+        if (!grid || !label) return;
+
+        label.textContent = MONTHS[viewMonth] + ' ' + viewYear;
+
+        const slots = loadSlots();
+        const slotsByDate = {};
+        slots.forEach(s => {
+          (s.dates || []).forEach(iso => {
+            slotsByDate[iso] = (slotsByDate[iso] || 0) + 1;
+          });
+        });
+
+        const firstDay = new Date(viewYear, viewMonth, 1);
+        let startDow = firstDay.getDay() - 1; // mon=0
+        if (startDow < 0) startDow = 6;
+        const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+        const daysPrevMonth = new Date(viewYear, viewMonth, 0).getDate();
+
+        let html = '';
+        // Previous month days
+        for (let i = startDow - 1; i >= 0; i--) {
+          html += '<div class="sk-cal-day other-month">' + (daysPrevMonth - i) + '</div>';
+        }
+        const todayStr = todayISO();
+        for (let d = 1; d <= daysInMonth; d++) {
+          const iso = viewYear + '-' + pad(viewMonth + 1) + '-' + pad(d);
+          const classes = ['sk-cal-day'];
+          if (iso === todayStr) classes.push('today');
+          if (slotsByDate[iso]) classes.push('has-slot');
+          if (iso === selectedDateISO) classes.push('selected');
+          html += '<div class="' + classes.join(' ') + '" data-iso="' + iso + '">' + d + '</div>';
+        }
+        // Trailing days
+        const totalCells = startDow + daysInMonth;
+        const trailing = (7 - (totalCells % 7)) % 7;
+        for (let i = 1; i <= trailing; i++) {
+          html += '<div class="sk-cal-day other-month">' + i + '</div>';
+        }
+        grid.innerHTML = html;
+
+        // Attach click on real days
+        grid.querySelectorAll('.sk-cal-day[data-iso]').forEach(el => {
+          el.addEventListener('click', () => openDayDetail(el.dataset.iso));
+        });
+
+        // Count
+        const slotCount = slots.reduce((acc, s) => acc + (s.dates || []).length, 0);
+        document.getElementById('skCalCount').textContent = slotCount + ' slot';
+
+        renderUpcoming();
+      }
+
+      function renderUpcoming() {
+        const list = document.getElementById('skUpcomingList');
+        const slots = loadSlots();
+        const today = todayISO();
+        const flat = [];
+        slots.forEach(s => {
+          (s.dates || []).forEach(iso => {
+            if (iso >= today) flat.push({ ...s, date: iso });
+          });
+        });
+        flat.sort((a, b) => a.date.localeCompare(b.date));
+        const upcoming = flat.slice(0, 5);
+
+        if (!upcoming.length) {
+          list.innerHTML = '<div class="sk-empty">Nessuna disponibilità inserita.</div>';
+          return;
+        }
+        list.innerHTML = upcoming.map((s, idx) => `
+          <div class="sk-slot">
+            <div class="sk-slot-date">${escapeHtml(prettyDate(s.date))}</div>
+            <div class="sk-slot-info">
+              ${escapeHtml(s.what || 'Disponibilità')}
+              <small>${escapeHtml([s.when, s.area].filter(Boolean).join(' · ') || 'Senza dettagli')}</small>
+            </div>
+            <button class="sk-slot-del" data-slot-id="${escapeHtml(s.id)}" data-iso="${escapeHtml(s.date)}" title="Rimuovi">×</button>
+          </div>
+        `).join('');
+        list.querySelectorAll('[data-slot-id]').forEach(btn => {
+          btn.addEventListener('click', () => removeSlotOccurrence(btn.dataset.slotId, btn.dataset.iso));
+        });
+      }
+
+      function removeSlotOccurrence(id, iso) {
+        const slots = loadSlots();
+        const slot = slots.find(s => s.id === id);
+        if (!slot) return;
+        slot.dates = (slot.dates || []).filter(d => d !== iso);
+        const next = slot.dates.length ? slots : slots.filter(s => s.id !== id);
+        saveSlots(next);
+        renderCalendar();
+      }
+
+      function openDayDetail(iso) {
+        selectedDateISO = iso;
+        document.getElementById('skDetailDate').textContent = 'Disponibilità per ' + prettyDate(iso);
+        const detail = document.getElementById('skDetail');
+        detail.classList.add('show');
+        document.getElementById('skDetailWhat').value = '';
+        document.getElementById('skDetailWhen').value = '';
+        document.getElementById('skDetailArea').value = '';
+        document.getElementById('skDetailNotes').value = '';
+        renderCalendar();
+        document.getElementById('skDetailWhat').focus();
+      }
+
+      function closeDetail() {
+        selectedDateISO = null;
+        document.getElementById('skDetail').classList.remove('show');
+        renderCalendar();
+      }
+
+      function saveDetailSlot() {
+        if (!selectedDateISO) return;
+        const what = document.getElementById('skDetailWhat').value.trim();
+        if (!what) {
+          alert('Scrivi cosa hai disponibile.');
+          return;
+        }
+        const slots = loadSlots();
+        slots.push({
+          id: 'slot-' + Date.now(),
+          dates: [selectedDateISO],
+          what,
+          when: document.getElementById('skDetailWhen').value.trim(),
+          area: document.getElementById('skDetailArea').value.trim(),
+          notes: document.getElementById('skDetailNotes').value.trim(),
+          createdAt: new Date().toISOString()
+        });
+        saveSlots(slots);
+        closeDetail();
+      }
+
+      /* ====== RENDER STOCK ====== */
+      function renderStock() {
+        const list = document.getElementById('skStockList');
+        const items = loadStock();
+        document.getElementById('skStockCount').textContent = items.length + ' voci';
+        if (!items.length) {
+          list.innerHTML = '<div class="sk-empty">Nessuno stock caricato. Usa il box sopra per aggiungere.</div>';
+          return;
+        }
+        list.innerHTML = items.map(it => `
+          <div class="sk-stock-item">
+            <div>
+              <div class="sk-stock-name">${escapeHtml(it.name)}</div>
+              <div class="sk-stock-meta">
+                ${it.quantity ? '<span class="qty">' + escapeHtml(it.quantity) + '</span>' : ''}
+                ${it.area ? ' · ' + escapeHtml(it.area) : ''}
+                ${it.notes ? ' · ' + escapeHtml(it.notes) : ''}
+              </div>
+            </div>
+            <button class="sk-slot-del" data-stock-id="${escapeHtml(it.id)}" title="Rimuovi">×</button>
+          </div>
+        `).join('');
+        list.querySelectorAll('[data-stock-id]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const items = loadStock().filter(x => x.id !== btn.dataset.stockId);
+            saveStock(items);
+            renderStock();
+          });
+        });
+      }
+
+      /* ====== EXPANSION RICORRENZE ====== */
+      function expandRecurrenceDates(baseDates, recurrence) {
+        if (!baseDates.length) return [];
+        if (recurrence === 'none') return baseDates.map(d => d.iso);
+        const isos = new Set();
+        baseDates.forEach(d => {
+          let dt = new Date(d.iso + 'T00:00:00');
+          isos.add(d.iso);
+          // Add next N occurrences within 6 months
+          const stop = new Date();
+          stop.setMonth(stop.getMonth() + 6);
+          for (let i = 0; i < 26; i++) {
+            if (recurrence === 'weekly') dt.setDate(dt.getDate() + 7);
+            else if (recurrence === 'biweekly') dt.setDate(dt.getDate() + 14);
+            else if (recurrence === 'monthly') dt.setMonth(dt.getMonth() + 1);
+            else break;
+            if (dt > stop) break;
+            isos.add(isoDate(dt));
+          }
+        });
+        return [...isos];
+      }
+
+      /* ====== ADD da box rapido ====== */
+      function showParsedPreview(parsed) {
+        const box = document.getElementById('skParsedBox');
+        const text = document.getElementById('skParsedText');
+        if (!parsed) {
+          box.classList.remove('show');
+          return;
+        }
+        let msg = '';
+        if (parsed.type === 'stock') {
+          msg = `Ho capito uno <strong>stock</strong>: <em>${escapeHtml(parsed.name)}</em>` +
+            (parsed.quantity ? ' · ' + escapeHtml(parsed.quantity) : '') +
+            (parsed.area ? ' · ' + escapeHtml(parsed.area) : '');
+        } else {
+          const dateLabels = (parsed.dates || []).map(d => prettyDate(d.iso)).join(', ');
+          msg = `Ho capito una <strong>disponibilità</strong>: <em>${escapeHtml(parsed.what)}</em>` +
+            (dateLabels ? ' · ' + escapeHtml(dateLabels) : ' · <span style="color:#ff9999">data mancante!</span>') +
+            (parsed.recurrence !== 'none' ? ' · ricorrenza ' + escapeHtml(parsed.recurrence) : '') +
+            (parsed.when ? ' · ' + escapeHtml(parsed.when) : '') +
+            (parsed.area ? ' · ' + escapeHtml(parsed.area) : '');
+        }
+        text.innerHTML = msg;
+        box.classList.add('show');
+        parsedPending = parsed;
+      }
+
+      function confirmParsed() {
+        if (!parsedPending) return;
+        if (parsedPending.type === 'stock') {
+          const items = loadStock();
+          items.unshift({
+            id: 'stock-' + Date.now(),
+            name: parsedPending.name,
+            quantity: parsedPending.quantity,
+            area: parsedPending.area,
+            notes: '',
+            createdAt: new Date().toISOString()
+          });
+          saveStock(items);
+          renderStock();
+        } else {
+          if (!parsedPending.dates || !parsedPending.dates.length) {
+            alert('Non ho capito la data. Riprova specificando ad esempio "24 maggio" o "ogni venerdì".');
+            return;
+          }
+          const allIsos = expandRecurrenceDates(parsedPending.dates, parsedPending.recurrence);
+          const slots = loadSlots();
+          slots.push({
+            id: 'slot-' + Date.now(),
+            dates: allIsos,
+            what: parsedPending.what,
+            when: parsedPending.when,
+            area: parsedPending.area,
+            notes: '',
+            recurrence: parsedPending.recurrence,
+            createdAt: new Date().toISOString()
+          });
+          saveSlots(slots);
+          renderCalendar();
+        }
+        document.getElementById('skQuickInput').value = '';
+        document.getElementById('skParsedBox').classList.remove('show');
+        parsedPending = null;
+      }
+
+      /* ====== VOICE ====== */
+      (function () {
+        const micBtn = document.getElementById('skMicBtn');
+        if (!micBtn) return;
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+        let recording = false;
+        let finalText = '';
+
+        function setup() {
+          if (!SR) return null;
+          const r = new SR();
+          r.lang = 'it-IT';
+          r.continuous = false;
+          r.interimResults = true;
+          r.onstart = function () {
+            const input = document.getElementById('skQuickInput');
+            finalText = input && input.value ? input.value + ' ' : '';
+          };
+          r.onresult = function (e) {
+            let interim = '';
+            for (let i = e.resultIndex; i < e.results.length; i++) {
+              if (e.results[i].isFinal) finalText += e.results[i][0].transcript + ' ';
+              else interim += e.results[i][0].transcript;
+            }
+            const input = document.getElementById('skQuickInput');
+            if (input) input.value = (finalText + interim).trim();
+          };
+          r.onerror = stop;
+          r.onend = stop;
+          return r;
+        }
+        function start() {
+          if (!recognition) recognition = setup();
+          if (!recognition) {
+            alert('Il tuo browser non supporta il riconoscimento vocale. Prova con Chrome o Edge.');
+            return;
+          }
+          try { recognition.start(); recording = true; micBtn.classList.add('recording'); }
+          catch (e) {}
+        }
+        function stop() {
+          recording = false;
+          micBtn.classList.remove('recording');
+          if (recognition) { try { recognition.stop(); } catch (e) {} }
+        }
+        micBtn.addEventListener('click', () => recording ? stop() : start());
+      })();
+
+      /* ====== EVENT BINDINGS ====== */
+      const today = new Date();
+      viewYear = today.getFullYear();
+      viewMonth = today.getMonth();
+
+      document.getElementById('skCalPrev').addEventListener('click', () => {
+        viewMonth--;
+        if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+        renderCalendar();
+      });
+      document.getElementById('skCalNext').addEventListener('click', () => {
+        viewMonth++;
+        if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+        renderCalendar();
+      });
+
+      document.querySelectorAll('[data-sk-mode]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('[data-sk-mode]').forEach(x => x.classList.remove('active'));
+          btn.classList.add('active');
+          currentMode = btn.dataset.skMode;
+        });
+      });
+
+      document.getElementById('skAddBtn').addEventListener('click', () => {
+        const text = document.getElementById('skQuickInput').value.trim();
+        if (!text) {
+          document.getElementById('skQuickInput').focus();
+          return;
+        }
+        const parsed = parseInput(text, currentMode);
+        showParsedPreview(parsed);
+      });
+
+      document.getElementById('skParsedConfirm').addEventListener('click', confirmParsed);
+      document.getElementById('skParsedCancel').addEventListener('click', () => {
+        document.getElementById('skParsedBox').classList.remove('show');
+        parsedPending = null;
+      });
+
+      document.getElementById('skDetailSave').addEventListener('click', saveDetailSlot);
+      document.getElementById('skDetailCancel').addEventListener('click', closeDetail);
+
+      // CSV / Excel upload (legge solo .csv/.txt come testo, ignora .xlsx per ora)
+      document.getElementById('skCsvInput').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const isText = /\.(csv|tsv|txt)$/i.test(file.name);
+        if (!isText) {
+          alert('Per ora carico solo CSV/TXT. Il supporto Excel lo aggiungiamo prossimamente.');
+          e.target.value = '';
+          return;
+        }
+        const text = await file.text();
+        // Parser CSV semplice: prima riga header opzionale, formato: nome, quantità, area, note
+        const lines = text.split(/\r?\n/).filter(x => x.trim());
+        const items = loadStock();
+        let added = 0;
+        lines.forEach((line, idx) => {
+          // skip header se sembra header
+          if (idx === 0 && /nome|prodotto|articolo/i.test(line)) return;
+          const parts = line.split(/[,;\t]/).map(x => x.trim().replace(/^"|"$/g, ''));
+          if (!parts[0]) return;
+          items.unshift({
+            id: 'stock-' + Date.now() + '-' + idx,
+            name: parts[0],
+            quantity: parts[1] || '',
+            area: parts[2] || '',
+            notes: parts[3] || '',
+            createdAt: new Date().toISOString()
+          });
+          added++;
+        });
+        saveStock(items);
+        renderStock();
+        e.target.value = '';
+        alert(`Caricati ${added} prodotti dal file.`);
+      });
+
+      // Init
+      renderCalendar();
+      renderStock();
     })();
 
   </script>
