@@ -143,6 +143,7 @@ Regole:
 - Non bloccare missioni normali solo perche mancano alcuni dettagli: cerca comunque tra le aziende e assegna confidenza corretta.
 - Imposta needs_clarification a true solo se la missione e generica al punto da non capire cosa cercare, per esempio "mi aiuti?" o "trova qualcosa di utile".
 - Considera trasporto, spedizione, consegna, merce e materiale come settore/servizio valido per missioni logistiche.
+- Considera anche termini come furgone, noleggio, autista, mezzo, flotta e ritiro come missioni logistiche valide.
 - Se la missione indica una tratta, per esempio "da Milano a Roma", considerala area geografica sufficiente per iniziare la ricerca.
 - Quando needs_clarification e true, fai domande utili e non forzare top_matches: puoi lasciarlo vuoto.
 - top_matches deve contenere massimo 3 aziende.
