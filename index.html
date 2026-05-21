@@ -4334,13 +4334,21 @@
 
     async function fetchCompanies() {
       if (!useSupabase) return getLocalCompanies();
-
-      const response = await fetch(`${companiesEndpoint}?select=*&order=created_at.desc`, {
+      const url = `${companiesEndpoint}?select=*&order=created_at.desc`;
+      let response = await fetch(url, {
         headers: supabaseHeaders({ useSession: true })
       });
 
+      // Fallback beta: se la sessione ha policy piu restrittive, usa lettura pubblica.
+      if (!response.ok || response.status === 401 || response.status === 403) {
+        response = await fetch(url, {
+          headers: supabaseHeaders({ useSession: false })
+        });
+      }
+
       if (!response.ok) throw new Error('Impossibile leggere il database aziende.');
-      return response.json();
+      const rows = await response.json();
+      return Array.isArray(rows) ? rows : [];
     }
 
     async function saveCompany(company) {
@@ -4381,13 +4389,20 @@
 
     async function fetchCompanyAssets() {
       if (!useSupabase) return getLocalCompanyAssets();
-
-      const response = await fetch(`${companyAssetsEndpoint}?select=*&order=created_at.desc`, {
+      const url = `${companyAssetsEndpoint}?select=*&order=created_at.desc`;
+      let response = await fetch(url, {
         headers: supabaseHeaders({ useSession: true })
       });
 
+      if (!response.ok || response.status === 401 || response.status === 403) {
+        response = await fetch(url, {
+          headers: supabaseHeaders({ useSession: false })
+        });
+      }
+
       if (!response.ok) throw new Error('Impossibile leggere la memoria asset aziende.');
-      return response.json();
+      const rows = await response.json();
+      return Array.isArray(rows) ? rows : [];
     }
 
     function toNumericId(value) {
@@ -4399,7 +4414,7 @@
       const value = String(text || '').toLowerCase();
       if (/fornitor|acquist|compra|approvvigion|stock|materiale|subappalt/.test(value)) return 'ricerca_fornitore';
       if (/cliente|vend|distribut|commercial|prospez|offerta/.test(value)) return 'sviluppo_clienti';
-      if (/trasport|logistic|spedizion/.test(value)) return 'ricerca_logistica';
+      if (/trasport|logistic|spedizion|trasloc|furgon|nolegg|autista|mezzo|flotta|ritiro|consegna/.test(value)) return 'ricerca_logistica';
       return 'generico_b2b';
     }
 
@@ -4461,8 +4476,8 @@
       const raw = String(text || '').trim();
       const whereMatch = raw.match(/\b(a|in|zona|su)\s+([a-zA-Z0-9 ,.-]{2,})/i);
       const whenMatch = raw.match(/\b(oggi|domani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|entro\s+\d+\s*(ore|giorni|settimane)|da\s+[a-zA-Z0-9 :.-]+\s+a\s+[a-zA-Z0-9 :.-]+)\b/i);
-      const constraintsMatch = raw.match(/\b(certific|budget|massimo|minimo|soglia|entro|urgente|verificat|iso|d urc|durc|en\s*10204|tempo|scadenza)\b/i);
-      const whatSignals = /\b(trova|cerca|acquista|compra|vendi|fornit|subappalt|trasport|pulizi|logistic|stock|ricamb|servizio|impiant)\b/i.test(raw);
+      const constraintsMatch = raw.match(/\b(certific|budget|massimo|minimo|soglia|entro|urgente|verificat|iso|d urc|durc|en\s*10204|tempo|scadenza|prezzo|costo|giornat|fascia|orario|turno)\b/i);
+      const whatSignals = /\b(trova|cerca|acquista|compra|vendi|offro|offerta|fornit|subappalt|trasport|trasloc|pulizi|logistic|stock|ricamb|servizio|impiant|furgon|nolegg|autista|mezzo|flotta)\b/i.test(raw);
 
       const details = {
         what: whatSignals ? raw : '',
@@ -4648,7 +4663,7 @@
       const value = text.toLowerCase();
       if (/edil|subappalt|cantiere|impiant|elettric/.test(value)) return 'Subappalti ed edilizia';
       if (/acciaio|inox|metall|fornit|stock|magazzino|prodotto|commercial/.test(value)) return 'Sourcing industriale';
-      if (/trasport|logistic|spedizion|refrigerat|pallet/.test(value)) return 'Logistica e trasporti';
+      if (/trasport|logistic|spedizion|trasloc|refrigerat|pallet|furgon|nolegg|autista|flotta|ritiro|consegna|ultimo miglio/.test(value)) return 'Logistica e trasporti';
       if (/serviz|consulenz|crm|software|facility|manutenzion/.test(value)) return 'Servizi B2B';
       return 'Manifattura';
     }
@@ -5662,6 +5677,9 @@
     }
 
     function quickSetWaiting(message) {
+      document.querySelectorAll('.quick-report').forEach(panel => {
+        panel.style.display = 'block';
+      });
       document.getElementById('quickReportSummary').innerHTML = message;
       document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="6">Agente al lavoro sul database...</td></tr>';
       const draft = document.getElementById('quickEmailDraft');
@@ -5782,6 +5800,9 @@
       }
 
       if (parsed.missingRequired.length) {
+        document.querySelectorAll('.quick-report').forEach(panel => {
+          panel.style.display = 'block';
+        });
         const miss = parsed.missingRequired.join(', ');
         document.getElementById('quickReportSummary').innerHTML = `<strong>Missione incompleta:</strong> manca ${escapeHtml(miss)}.`;
         document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="6">Per partire scrivi chiaramente cosa vuoi cercare o offrire.</td></tr>';
@@ -5862,6 +5883,9 @@
           error_message: null
         });
       } catch (error) {
+        document.querySelectorAll('.quick-report').forEach(panel => {
+          panel.style.display = 'block';
+        });
         document.getElementById('quickReportSummary').innerHTML = `<strong>Errore agente:</strong> ${escapeHtml(error.message)}`;
         document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="6">Correggi il problema e riprova.</td></tr>';
         setQuickFeed([
