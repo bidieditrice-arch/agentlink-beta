@@ -1990,53 +1990,6 @@
     .al-hint a { color: var(--teal); font-weight: 700; text-decoration: none; margin-left: 4px; }
     .al-hint a:hover { text-decoration: underline; }
 
-    .al-watch {
-      margin-top: 14px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      font-size: 12px;
-      color: #9fb0c8;
-    }
-    .al-watch label {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border: 1px solid rgba(148, 163, 184, 0.24);
-      background: rgba(16, 34, 56, 0.42);
-      padding: 8px 10px;
-    }
-    .al-watch select {
-      border: 1px solid rgba(148, 163, 184, 0.24);
-      background: rgba(7, 17, 31, 0.72);
-      color: var(--text);
-      padding: 8px 10px;
-      min-height: 36px;
-    }
-    .al-watch button {
-      min-height: 36px;
-      padding: 8px 10px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-    .al-watch-status {
-      border: 1px solid rgba(148, 163, 184, 0.2);
-      background: rgba(16, 34, 56, 0.42);
-      padding: 8px 10px;
-      color: #9fb0c8;
-    }
-    .al-watch-status.ok {
-      border-color: rgba(53, 207, 135, 0.28);
-      color: #c8fbe2;
-      background: rgba(53, 207, 135, 0.12);
-    }
-    .al-watch-status.warn {
-      border-color: rgba(243, 168, 79, 0.35);
-      color: #ffe4ba;
-      background: rgba(243, 168, 79, 0.1);
-    }
-
     .al-feed {
       margin-top: 48px;
       padding-top: 24px;
@@ -2989,20 +2942,6 @@
           <div class="al-hint">
             Non sai cosa scrivere?
             <a href="#" id="quickExampleLink">Prova un esempio →</a>
-          </div>
-
-          <div class="al-watch">
-            <label>
-              <input type="checkbox" id="quickAutoWatch" checked>
-              Monitoraggio continuo
-            </label>
-            <select id="quickWatchEvery" aria-label="Intervallo monitoraggio">
-              <option value="15">Ogni 15 minuti</option>
-              <option value="30" selected>Ogni 30 minuti</option>
-              <option value="60">Ogni 60 minuti</option>
-            </select>
-            <button class="btn secondary" id="quickStopWatch" type="button">Ferma monitoraggio</button>
-            <span class="al-watch-status" id="quickWatchStatus">Monitoraggio spento</span>
           </div>
 
           <button class="btn secondary" id="quickExampleMission" type="button" style="display:none">Carica esempio</button>
@@ -4241,14 +4180,6 @@
           topAuthState.textContent = email ? `Connesso: ${email}` : 'Sessione attiva';
         }
         if (topAccessBtn) topAccessBtn.textContent = 'Gestisci account';
-        if (quickMissionWatch.active && !quickMissionWatch.timer && quickMissionWatch.mission) {
-          startQuickMissionWatch({
-            mission: quickMissionWatch.mission,
-            mode: quickMissionWatch.mode,
-            profile: quickMissionWatch.profile,
-            intervalMinutes: quickMissionWatch.intervalMinutes || Number(document.getElementById('quickWatchEvery')?.value || 30)
-          });
-        }
       } else {
         if (logoutButton) logoutButton.style.display = 'none';
         setInlineMessage('authSessionStatus', 'Sessione non attiva: registrati o accedi prima di usare le funzioni operative.', 'warn');
@@ -4257,9 +4188,6 @@
           topAuthState.textContent = 'Sessione non attiva';
         }
         if (topAccessBtn) topAccessBtn.textContent = 'Registrati / Accedi';
-        if (quickMissionWatch.active) {
-          stopQuickMissionWatch('Monitoraggio in pausa: accedi di nuovo per riattivarlo.');
-        }
       }
     }
 
@@ -4269,13 +4197,13 @@
       panel.classList.toggle('open', Boolean(open));
     }
 
-    function requireAuthenticated(actionLabel, options = {}) {
+    function requireAuthenticated(actionLabel) {
       if (isAuthenticated()) return true;
       const msg = `Per ${actionLabel} devi prima registrarti o accedere dal pulsante "Registrati / Accedi" in alto a destra.`;
       setInlineMessage('betaSignupMessage', msg, 'warn');
       setTopAuthPanel(true);
       document.getElementById('accountEmail')?.focus();
-      if (!options.silent) alert(msg);
+      alert(msg);
       return false;
     }
 
@@ -4334,21 +4262,13 @@
 
     async function fetchCompanies() {
       if (!useSupabase) return getLocalCompanies();
-      const url = `${companiesEndpoint}?select=*&order=created_at.desc`;
-      let response = await fetch(url, {
+
+      const response = await fetch(`${companiesEndpoint}?select=*&order=created_at.desc`, {
         headers: supabaseHeaders({ useSession: true })
       });
 
-      // Fallback beta: se la sessione ha policy piu restrittive, usa lettura pubblica.
-      if (!response.ok || response.status === 401 || response.status === 403) {
-        response = await fetch(url, {
-          headers: supabaseHeaders({ useSession: false })
-        });
-      }
-
       if (!response.ok) throw new Error('Impossibile leggere il database aziende.');
-      const rows = await response.json();
-      return Array.isArray(rows) ? rows : [];
+      return response.json();
     }
 
     async function saveCompany(company) {
@@ -4389,20 +4309,13 @@
 
     async function fetchCompanyAssets() {
       if (!useSupabase) return getLocalCompanyAssets();
-      const url = `${companyAssetsEndpoint}?select=*&order=created_at.desc`;
-      let response = await fetch(url, {
+
+      const response = await fetch(`${companyAssetsEndpoint}?select=*&order=created_at.desc`, {
         headers: supabaseHeaders({ useSession: true })
       });
 
-      if (!response.ok || response.status === 401 || response.status === 403) {
-        response = await fetch(url, {
-          headers: supabaseHeaders({ useSession: false })
-        });
-      }
-
       if (!response.ok) throw new Error('Impossibile leggere la memoria asset aziende.');
-      const rows = await response.json();
-      return Array.isArray(rows) ? rows : [];
+      return response.json();
     }
 
     function toNumericId(value) {
@@ -4414,7 +4327,7 @@
       const value = String(text || '').toLowerCase();
       if (/fornitor|acquist|compra|approvvigion|stock|materiale|subappalt/.test(value)) return 'ricerca_fornitore';
       if (/cliente|vend|distribut|commercial|prospez|offerta/.test(value)) return 'sviluppo_clienti';
-      if (/trasport|logistic|spedizion|trasloc|furgon|nolegg|autista|mezzo|flotta|ritiro|consegna/.test(value)) return 'ricerca_logistica';
+      if (/trasport|logistic|spedizion/.test(value)) return 'ricerca_logistica';
       return 'generico_b2b';
     }
 
@@ -4476,8 +4389,8 @@
       const raw = String(text || '').trim();
       const whereMatch = raw.match(/\b(a|in|zona|su)\s+([a-zA-Z0-9 ,.-]{2,})/i);
       const whenMatch = raw.match(/\b(oggi|domani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|entro\s+\d+\s*(ore|giorni|settimane)|da\s+[a-zA-Z0-9 :.-]+\s+a\s+[a-zA-Z0-9 :.-]+)\b/i);
-      const constraintsMatch = raw.match(/\b(certific|budget|massimo|minimo|soglia|entro|urgente|verificat|iso|d urc|durc|en\s*10204|tempo|scadenza|prezzo|costo|giornat|fascia|orario|turno)\b/i);
-      const whatSignals = /\b(trova|cerca|acquista|compra|vendi|offro|offerta|fornit|subappalt|trasport|trasloc|pulizi|logistic|stock|ricamb|servizio|impiant|furgon|nolegg|autista|mezzo|flotta)\b/i.test(raw);
+      const constraintsMatch = raw.match(/\b(certific|budget|massimo|minimo|soglia|entro|urgente|verificat|iso|d urc|durc|en\s*10204|tempo|scadenza)\b/i);
+      const whatSignals = /\b(trova|cerca|acquista|compra|vendi|fornit|subappalt|trasport|pulizi|logistic|stock|ricamb|servizio|impiant)\b/i.test(raw);
 
       const details = {
         what: whatSignals ? raw : '',
@@ -4663,7 +4576,7 @@
       const value = text.toLowerCase();
       if (/edil|subappalt|cantiere|impiant|elettric/.test(value)) return 'Subappalti ed edilizia';
       if (/acciaio|inox|metall|fornit|stock|magazzino|prodotto|commercial/.test(value)) return 'Sourcing industriale';
-      if (/trasport|logistic|spedizion|trasloc|refrigerat|pallet|furgon|nolegg|autista|flotta|ritiro|consegna|ultimo miglio/.test(value)) return 'Logistica e trasporti';
+      if (/trasport|logistic|spedizion|refrigerat|pallet/.test(value)) return 'Logistica e trasporti';
       if (/serviz|consulenz|crm|software|facility|manutenzion/.test(value)) return 'Servizi B2B';
       return 'Manifattura';
     }
@@ -5472,130 +5385,6 @@
 
     let quickMissionContext = null;
     let quickMissionMode = 'search';
-    const quickWatchStorageKey = 'agentlink-quick-watch';
-    let quickMissionWatch = {
-      active: false,
-      timer: null,
-      inFlight: false,
-      mission: '',
-      mode: 'search',
-      profile: '',
-      intervalMinutes: 30,
-      lastRunAt: null
-    };
-
-    function formatWatchTime(timestamp) {
-      if (!timestamp) return '--:--';
-      try {
-        return new Date(timestamp).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-      } catch {
-        return '--:--';
-      }
-    }
-
-    function setQuickWatchStatus(text, tone = '') {
-      const node = document.getElementById('quickWatchStatus');
-      if (!node) return;
-      node.textContent = text;
-      node.classList.remove('ok', 'warn');
-      if (tone) node.classList.add(tone);
-    }
-
-    function persistQuickWatch() {
-      try {
-        localStorage.setItem(quickWatchStorageKey, JSON.stringify({
-          active: quickMissionWatch.active,
-          mission: quickMissionWatch.mission,
-          mode: quickMissionWatch.mode,
-          profile: quickMissionWatch.profile,
-          intervalMinutes: quickMissionWatch.intervalMinutes
-        }));
-      } catch {}
-    }
-
-    function clearQuickWatchPersisted() {
-      try { localStorage.removeItem(quickWatchStorageKey); } catch {}
-    }
-
-    function stopQuickMissionWatch(reason = 'Monitoraggio fermato.') {
-      if (quickMissionWatch.timer) {
-        clearInterval(quickMissionWatch.timer);
-      }
-      quickMissionWatch.active = false;
-      quickMissionWatch.timer = null;
-      quickMissionWatch.inFlight = false;
-      setQuickWatchStatus(reason, '');
-      clearQuickWatchPersisted();
-    }
-
-    function startQuickMissionWatch(config = {}) {
-      const mission = String(config.mission || quickMissionWatch.mission || '').trim();
-      if (!mission) return;
-
-      const intervalMinutesRaw = Number(config.intervalMinutes ?? quickMissionWatch.intervalMinutes ?? 30);
-      const intervalMinutes = Number.isFinite(intervalMinutesRaw) ? Math.max(5, Math.min(240, intervalMinutesRaw)) : 30;
-
-      if (quickMissionWatch.timer) {
-        clearInterval(quickMissionWatch.timer);
-      }
-
-      quickMissionWatch.active = true;
-      quickMissionWatch.mission = mission;
-      quickMissionWatch.mode = config.mode || quickMissionWatch.mode || getQuickMode();
-      quickMissionWatch.profile = String(config.profile ?? quickMissionWatch.profile ?? '');
-      quickMissionWatch.intervalMinutes = intervalMinutes;
-      quickMissionWatch.lastRunAt = Date.now();
-      quickMissionWatch.timer = setInterval(async () => {
-        if (!quickMissionWatch.active || quickMissionWatch.inFlight) return;
-        quickMissionWatch.inFlight = true;
-        try {
-          await runQuickMission({
-            fromWatch: true,
-            forceMission: quickMissionWatch.mission,
-            forceMode: quickMissionWatch.mode,
-            forceProfile: quickMissionWatch.profile
-          });
-        } finally {
-          quickMissionWatch.inFlight = false;
-          quickMissionWatch.lastRunAt = Date.now();
-          const nextAt = Date.now() + (quickMissionWatch.intervalMinutes * 60000);
-          setQuickWatchStatus(`Attivo: prossimo controllo alle ${formatWatchTime(nextAt)}`, 'ok');
-          persistQuickWatch();
-        }
-      }, intervalMinutes * 60000);
-
-      const nextAt = Date.now() + (intervalMinutes * 60000);
-      setQuickWatchStatus(`Attivo: prossimo controllo alle ${formatWatchTime(nextAt)}`, 'ok');
-      persistQuickWatch();
-    }
-
-    function restoreQuickMissionWatch() {
-      const checkbox = document.getElementById('quickAutoWatch');
-      const intervalSelect = document.getElementById('quickWatchEvery');
-      if (!checkbox || !intervalSelect) return;
-
-      let saved = null;
-      try {
-        saved = JSON.parse(localStorage.getItem(quickWatchStorageKey) || 'null');
-      } catch {
-        saved = null;
-      }
-
-      if (!saved || !saved.active || !saved.mission) {
-        setQuickWatchStatus('Monitoraggio spento', '');
-        return;
-      }
-
-      checkbox.checked = true;
-      const minutes = Number(saved.intervalMinutes || 30);
-      intervalSelect.value = String([15, 30, 60].includes(minutes) ? minutes : 30);
-      quickMissionWatch.active = true;
-      quickMissionWatch.mission = String(saved.mission || '');
-      quickMissionWatch.mode = saved.mode === 'offer' ? 'offer' : 'search';
-      quickMissionWatch.profile = String(saved.profile || '');
-      quickMissionWatch.intervalMinutes = Number(intervalSelect.value || 30);
-      setQuickWatchStatus('Monitoraggio pronto: in attesa sessione attiva.', 'warn');
-    }
 
     function getQuickMode() {
       return quickMissionMode === 'offer' ? 'offer' : 'search';
@@ -5677,9 +5466,6 @@
     }
 
     function quickSetWaiting(message) {
-      document.querySelectorAll('.quick-report').forEach(panel => {
-        panel.style.display = 'block';
-      });
       document.getElementById('quickReportSummary').innerHTML = message;
       document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="6">Agente al lavoro sul database...</td></tr>';
       const draft = document.getElementById('quickEmailDraft');
@@ -5776,16 +5562,11 @@
       }).join('');
     }
 
-    async function runQuickMission(options = {}) {
-      const fromWatch = Boolean(options.fromWatch);
-      if (!requireAuthenticated('avviare una missione dalla Home', { silent: fromWatch })) {
-        if (fromWatch) stopQuickMissionWatch('Monitoraggio fermato: sessione non attiva.');
-        return;
-      }
-
-      const profile = String(options.forceProfile ?? document.getElementById('quickCompanyProfile').value ?? '').trim();
-      const mission = String(options.forceMission ?? document.getElementById('quickMissionPrompt').value ?? '').trim();
-      const mode = options.forceMode || getQuickMode();
+    async function runQuickMission() {
+      if (!requireAuthenticated('avviare una missione dalla Home')) return;
+      const profile = document.getElementById('quickCompanyProfile').value.trim();
+      const mission = document.getElementById('quickMissionPrompt').value.trim();
+      const mode = getQuickMode();
       const button = document.getElementById('runQuickMission');
       const originalText = button.textContent;
       const startedAt = Date.now();
@@ -5794,15 +5575,11 @@
       renderMissionParsedBox('quickMissionParsed', parsed);
 
       if (!mission) {
-        if (!fromWatch) alert('Scrivi la missione dell agente.');
-        else stopQuickMissionWatch('Monitoraggio fermato: missione vuota.');
+        alert('Scrivi la missione dell agente.');
         return;
       }
 
       if (parsed.missingRequired.length) {
-        document.querySelectorAll('.quick-report').forEach(panel => {
-          panel.style.display = 'block';
-        });
         const miss = parsed.missingRequired.join(', ');
         document.getElementById('quickReportSummary').innerHTML = `<strong>Missione incompleta:</strong> manca ${escapeHtml(miss)}.`;
         document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="6">Per partire scrivi chiaramente cosa vuoi cercare o offrire.</td></tr>';
@@ -5810,22 +5587,15 @@
           { type: 'warn', text: `Missione incompleta: manca ${miss}.` },
           { type: 'muted', text: 'Aggiungi almeno cosa e poi rilancia la missione.' }
         ]);
-        if (fromWatch) setQuickWatchStatus('Monitoraggio in pausa: completa i campi minimi missione.', 'warn');
         return;
       }
 
-      if (!fromWatch) {
-        button.disabled = true;
-        button.textContent = 'Agente al lavoro...';
-      }
+      button.disabled = true;
+      button.textContent = 'Agente al lavoro...';
       const advised = parsed.missingAdvised.length
         ? ` <br><strong>Nota:</strong> missione valida, ma senza ${escapeHtml(parsed.missingAdvised.join(', '))} il risultato puo essere meno preciso.`
         : '';
-      if (!fromWatch) {
-        quickSetWaiting(`<strong>AgentLink sta lavorando:</strong> leggo aziende registrate, memoria asset e requisiti della missione.${advised}`);
-      } else {
-        setQuickWatchStatus('Controllo automatico in corso...', 'ok');
-      }
+      quickSetWaiting(`<strong>AgentLink sta lavorando:</strong> leggo aziende registrate, memoria asset e requisiti della missione.${advised}`);
 
       try {
         const companies = await fetchCompanies();
@@ -5855,15 +5625,6 @@
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Missione rapida non riuscita.');
         quickRenderActionReport(data, companies, buyer);
-        if (fromWatch) {
-          const found = Array.isArray(data.top_matches) ? data.top_matches.length : 0;
-          if (found > 0) {
-            setQuickWatchStatus(`Attivo: trovati ${found} match alle ${formatWatchTime(Date.now())}`, 'ok');
-          } else {
-            const nextAt = Date.now() + (quickMissionWatch.intervalMinutes * 60000);
-            setQuickWatchStatus(`Attivo: nessun match nuovo, riprovo alle ${formatWatchTime(nextAt)}`, 'warn');
-          }
-        }
         await trackMissionLog({
           source_screen: 'quickmission',
           mission_text: mission,
@@ -5883,9 +5644,6 @@
           error_message: null
         });
       } catch (error) {
-        document.querySelectorAll('.quick-report').forEach(panel => {
-          panel.style.display = 'block';
-        });
         document.getElementById('quickReportSummary').innerHTML = `<strong>Errore agente:</strong> ${escapeHtml(error.message)}`;
         document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="6">Correggi il problema e riprova.</td></tr>';
         setQuickFeed([
@@ -5910,28 +5668,9 @@
           duration_ms: Date.now() - startedAt,
           error_message: String(error.message || '').slice(0, 500)
         });
-        if (fromWatch) {
-          const nextAt = Date.now() + (quickMissionWatch.intervalMinutes * 60000);
-          setQuickWatchStatus(`Attivo con warning: errore nel controllo, riprovo alle ${formatWatchTime(nextAt)}`, 'warn');
-        }
       } finally {
-        if (!fromWatch) {
-          button.disabled = false;
-          button.textContent = originalText;
-
-          const autoWatchEnabled = Boolean(document.getElementById('quickAutoWatch')?.checked);
-          if (autoWatchEnabled) {
-            const intervalMinutes = Number(document.getElementById('quickWatchEvery')?.value || 30);
-            startQuickMissionWatch({
-              mission,
-              mode,
-              profile,
-              intervalMinutes
-            });
-          } else {
-            stopQuickMissionWatch('Monitoraggio spento.');
-          }
-        }
+        button.disabled = false;
+        button.textContent = originalText;
       }
     }
 
@@ -6081,21 +5820,6 @@
         await renderCompanies();
         await renderAdminCompanies();
         alert(`Azienda salvata nel registro AgentLink. Memoria agente creata: ${assets.length} asset.`);
-        if (quickMissionWatch.active && quickMissionWatch.mission) {
-          setQuickWatchStatus('Nuova azienda rilevata: rilancio controllo ora...', 'ok');
-          quickMissionWatch.inFlight = true;
-          try {
-            await runQuickMission({
-              fromWatch: true,
-              forceMission: quickMissionWatch.mission,
-              forceMode: quickMissionWatch.mode,
-              forceProfile: quickMissionWatch.profile
-            });
-          } finally {
-            quickMissionWatch.inFlight = false;
-            quickMissionWatch.lastRunAt = Date.now();
-          }
-        }
       } catch (error) {
         alert(`Errore salvataggio: ${error.message}`);
       }
@@ -6220,40 +5944,6 @@
     document.getElementById('runMissionAgent').addEventListener('click', runMissionAgent);
     document.getElementById('refreshMissionData').addEventListener('click', refreshMissionData);
     document.getElementById('runQuickMission').addEventListener('click', runQuickMission);
-    document.getElementById('quickStopWatch').addEventListener('click', () => {
-      const auto = document.getElementById('quickAutoWatch');
-      if (auto) auto.checked = false;
-      stopQuickMissionWatch('Monitoraggio fermato manualmente.');
-    });
-    document.getElementById('quickAutoWatch').addEventListener('change', event => {
-      if (!event.target.checked) {
-        stopQuickMissionWatch('Monitoraggio spento.');
-        return;
-      }
-      const mission = document.getElementById('quickMissionPrompt').value.trim() || quickMissionWatch.mission;
-      if (!mission) {
-        setQuickWatchStatus('Scrivi una missione e premi Avvia agente per attivare il monitoraggio.', 'warn');
-        return;
-      }
-      const intervalMinutes = Number(document.getElementById('quickWatchEvery')?.value || 30);
-      startQuickMissionWatch({
-        mission,
-        mode: getQuickMode(),
-        profile: document.getElementById('quickCompanyProfile').value.trim(),
-        intervalMinutes
-      });
-    });
-    document.getElementById('quickWatchEvery').addEventListener('change', event => {
-      const value = Number(event.target.value || 30);
-      if (quickMissionWatch.active && quickMissionWatch.mission) {
-        startQuickMissionWatch({
-          mission: quickMissionWatch.mission,
-          mode: quickMissionWatch.mode,
-          profile: quickMissionWatch.profile,
-          intervalMinutes: value
-        });
-      }
-    });
     document.getElementById('quickExampleMission').addEventListener('click', quickUseExampleMission);
     document.getElementById('quickExampleLink').addEventListener('click', event => {
       event.preventDefault();
@@ -6286,7 +5976,6 @@
     showScreen(document.querySelector('.screen.active')?.id || 'quickmission');
     updateAuthUi();
     setQuickMode('search');
-    restoreQuickMissionWatch();
     setQuickFeed([
       { type: '', text: 'Ricerca bulloni M8 zona Vitinia', status: 'In trattativa con 3 ferramenta' },
       { type: '', text: 'Capacita venerdi libero, team pulizie', status: 'Scansione richieste in corso' },
