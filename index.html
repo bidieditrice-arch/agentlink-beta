@@ -131,14 +131,28 @@
     }
 
     .ico {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       border: 0;
-      display: grid;
-      place-items: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       color: #9fb0c8;
-      font-size: 11px;
-      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .ico svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    .nav button.active .ico {
+      color: var(--teal);
+    }
+
+    .nav button:hover .ico {
+      color: #d7e4f1;
     }
 
     .sidebar-card {
@@ -2139,11 +2153,46 @@
       </div>
 
       <nav class="nav" aria-label="Demo AgentLink">
-        <button class="active" data-screen="quickmission"><span class="ico">⌂</span><span>Home</span></button>
-        <button data-screen="agent"><span class="ico">◷</span><span>Le mie missioni</span></button>
-        <button data-screen="register"><span class="ico">◌</span><span>Profilo agente</span></button>
-        <button data-screen="admin"><span class="ico">◫</span><span>Stock & calendario</span></button>
-        <button data-screen="configure"><span class="ico">⚙</span><span>Impostazioni</span></button>
+        <button class="active" data-screen="quickmission">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/>
+            </svg>
+          </span>
+          <span>Home</span>
+        </button>
+        <button data-screen="agent">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+            </svg>
+          </span>
+          <span>Le mie missioni</span>
+        </button>
+        <button data-screen="register">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 016-6h4a6 6 0 016 6v2"/>
+            </svg>
+          </span>
+          <span>Profilo agente</span>
+        </button>
+        <button data-screen="admin">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/><path d="M3 7l9 4 9-4M12 11v10"/>
+            </svg>
+          </span>
+          <span>Stock & calendario</span>
+        </button>
+        <button data-screen="configure">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3h.1a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8v.1a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/>
+            </svg>
+          </span>
+          <span>Impostazioni</span>
+        </button>
       </nav>
 
       <div class="sidebar-card">
