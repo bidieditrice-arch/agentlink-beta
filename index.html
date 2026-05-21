@@ -1855,6 +1855,53 @@
     }
     .al-mic svg { width: 26px; height: 26px; }
 
+    /* Listening indicator */
+    .al-listening {
+      position: absolute;
+      left: 90px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: none;
+      align-items: center;
+      gap: 8px;
+      color: #ff8c8c;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      pointer-events: none;
+      z-index: 3;
+      background: rgba(7, 17, 31, 0.92);
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 103, 103, 0.4);
+    }
+    .al-listening.show { display: flex; }
+    .al-listening-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ff6767;
+      animation: al-listen-blink 1s ease-in-out infinite;
+    }
+    @keyframes al-listen-blink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.3; transform: scale(0.7); }
+    }
+    .al-listening-text::after {
+      content: '';
+      display: inline-block;
+      width: 18px;
+      text-align: left;
+      animation: al-dots 1.4s steps(4, end) infinite;
+    }
+    @keyframes al-dots {
+      0%   { content: ''; }
+      25%  { content: '.'; }
+      50%  { content: '..'; }
+      75%  { content: '...'; }
+      100% { content: ''; }
+    }
+
     .al-pills { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
     .al-pill {
       background: rgba(16, 34, 56, 0.58);
@@ -2611,12 +2658,16 @@
           <textarea id="quickCompanyProfile" style="display:none"></textarea>
 
           <div class="al-input-wrap">
-            <button class="al-mic" id="quickMicBtn" type="button" aria-label="Registra messaggio vocale" title="Tieni premuto per registrare">
+            <button class="al-mic" id="quickMicBtn" type="button" aria-label="Registra messaggio vocale" title="Clicca e parla">
               <svg viewBox="0 0 24 24" fill="none" stroke="#06101b" stroke-width="2.2">
                 <rect x="9" y="3" width="6" height="12" rx="3" fill="#06101b"/>
                 <path d="M5 11a7 7 0 0014 0M12 19v3" stroke-linecap="round"/>
               </svg>
             </button>
+            <div class="al-listening" id="quickListening">
+              <span class="al-listening-dot"></span>
+              <span>Ascolto<span class="al-listening-text"></span></span>
+            </div>
             <textarea
               id="quickMissionPrompt"
               class="al-input"
@@ -3208,6 +3259,10 @@
                 <path d="M5 11a7 7 0 0014 0M12 19v3" stroke-linecap="round"/>
               </svg>
             </button>
+            <div class="al-listening" id="skListening" style="left: 80px;">
+              <span class="al-listening-dot"></span>
+              <span>Ascolto<span class="al-listening-text"></span></span>
+            </div>
             <textarea id="skQuickInput" rows="2"
               placeholder='Es. "Il 24 maggio 3 furgoni disponibili area Roma" · "Ogni venerdì 2 squadre pulizie Roma sud 14-22" · "200 bulloni M8 magazzino Vitinia"'></textarea>
           </div>
@@ -5860,7 +5915,7 @@
         if (!SR) return null;
         var r = new SR();
         r.lang = 'it-IT';
-        r.continuous = false;
+        r.continuous = true;
         r.interimResults = true;
         r.onstart = function () {
           var input = document.getElementById('quickMissionPrompt');
@@ -5876,7 +5931,14 @@
           if (input) input.value = (finalText + interim).trim();
         };
         r.onerror = stop;
-        r.onend = stop;
+        r.onend = function () {
+          // se siamo ancora in modalità recording, riavvia (continous può chiudersi da solo)
+          if (recording) {
+            try { r.start(); } catch (e) { stop(); }
+          } else {
+            stop();
+          }
+        };
         return r;
       }
 
@@ -5886,13 +5948,21 @@
           alert('Il tuo browser non supporta il riconoscimento vocale. Prova con Chrome o Edge.');
           return;
         }
-        try { recognition.start(); recording = true; micBtn.classList.add('recording'); }
+        try {
+          recognition.start();
+          recording = true;
+          micBtn.classList.add('recording');
+          var ind = document.getElementById('quickListening');
+          if (ind) ind.classList.add('show');
+        }
         catch (e) {}
       }
 
       function stop() {
         recording = false;
         micBtn.classList.remove('recording');
+        var ind = document.getElementById('quickListening');
+        if (ind) ind.classList.remove('show');
         if (recognition) { try { recognition.stop(); } catch (e) {} }
       }
 
@@ -6432,7 +6502,7 @@
           if (!SR) return null;
           const r = new SR();
           r.lang = 'it-IT';
-          r.continuous = false;
+          r.continuous = true;
           r.interimResults = true;
           r.onstart = function () {
             const input = document.getElementById('skQuickInput');
@@ -6448,7 +6518,13 @@
             if (input) input.value = (finalText + interim).trim();
           };
           r.onerror = stop;
-          r.onend = stop;
+          r.onend = function () {
+            if (recording) {
+              try { r.start(); } catch (e) { stop(); }
+            } else {
+              stop();
+            }
+          };
           return r;
         }
         function start() {
@@ -6457,12 +6533,20 @@
             alert('Il tuo browser non supporta il riconoscimento vocale. Prova con Chrome o Edge.');
             return;
           }
-          try { recognition.start(); recording = true; micBtn.classList.add('recording'); }
+          try {
+            recognition.start();
+            recording = true;
+            micBtn.classList.add('recording');
+            const ind = document.getElementById('skListening');
+            if (ind) ind.classList.add('show');
+          }
           catch (e) {}
         }
         function stop() {
           recording = false;
           micBtn.classList.remove('recording');
+          const ind = document.getElementById('skListening');
+          if (ind) ind.classList.remove('show');
           if (recognition) { try { recognition.stop(); } catch (e) {} }
         }
         micBtn.addEventListener('click', () => recording ? stop() : start());
