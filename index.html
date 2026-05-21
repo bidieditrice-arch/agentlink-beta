@@ -182,6 +182,7 @@
       justify-content: flex-end;
       gap: 10px;
       flex-wrap: wrap;
+      position: relative;
     }
 
     .topbar-copy {
@@ -216,6 +217,34 @@
 
     .top-access-btn:hover {
       background: rgba(72, 215, 207, .22);
+    }
+
+    .top-auth-panel {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: min(360px, 92vw);
+      border: 1px solid rgba(72, 215, 207, .22);
+      background: rgba(7, 17, 31, .96);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
+      padding: 14px;
+      z-index: 30;
+      display: none;
+    }
+
+    .top-auth-panel.open {
+      display: block;
+    }
+
+    .top-auth-panel .label {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .top-auth-panel .lead {
+      margin: 0 0 10px;
+      font-size: 13px;
+      max-width: none;
     }
 
     h1 {
@@ -324,6 +353,10 @@
       grid-template-columns: 1fr 360px;
       gap: 18px;
       align-items: start;
+    }
+
+    .register-workspace {
+      grid-template-columns: 1fr;
     }
 
     .logo-strip {
@@ -891,7 +924,7 @@
     }
 
     .screen-quickmission .topbar {
-      display: none;
+      display: flex;
     }
 
     .screen-quickmission #quickmission .panel {
@@ -1726,6 +1759,10 @@
       .topbar-right {
         width: 100%;
         justify-content: flex-start;
+      }
+      .top-auth-panel {
+        right: auto;
+        left: 0;
       }
       .quick-agent-head, .quick-agent-input { grid-template-columns: 1fr; flex-direction: column; }
       .nav {
@@ -2634,9 +2671,30 @@
           <p class="lead">Ogni azienda carica stock, slot servizio, ore libere e aree coperte. L'agente trasforma richieste naturali in match operativi, con supervisione umana finale.</p>
         </div>
         <div class="topbar-right">
-          <button class="top-access-btn" id="topAccessBtn" type="button" data-screen="register">Registrati / Accedi</button>
+          <button class="top-access-btn" id="topAccessBtn" type="button">Registrati / Accedi</button>
           <span class="top-auth-state" id="topAuthState">Sessione non attiva</span>
           <div class="status-pill"><span class="dot"></span> Demo interattiva</div>
+          <div class="top-auth-panel" id="topAuthPanel">
+            <span class="label">Accesso</span>
+            <p class="lead">Per usare missioni, salvataggi e matching nella beta devi registrarti e accedere con email e password.</p>
+            <div class="auth-box">
+              <div class="field">
+                <label>Email account</label>
+                <input id="accountEmail" type="email" placeholder="Es. nome@azienda.it">
+              </div>
+              <div class="field">
+                <label>Password account</label>
+                <input id="accountPassword" type="password" placeholder="Minimo 8 caratteri">
+              </div>
+              <div class="actions auth-actions">
+                <button class="btn secondary" id="createBetaAccount" type="button">Registrati</button>
+                <button class="btn secondary" id="loginBetaAccount" type="button">Accedi</button>
+                <button class="btn secondary" id="logoutBetaAccount" type="button">Esci</button>
+              </div>
+              <div class="inline-note" id="authSessionStatus"></div>
+            </div>
+            <div class="inline-note" id="betaSignupMessage"></div>
+          </div>
         </div>
       </div>
 
@@ -2969,7 +3027,7 @@
       </section>
 
       <section class="screen" id="register">
-        <div class="workspace">
+        <div class="workspace register-workspace">
           <div class="panel" style="background: transparent; border: none; box-shadow: none; padding: 0;">
             <div class="al-profile">
 
@@ -3208,36 +3266,8 @@
             </div>
           </div>
 
-          <aside class="panel">
-            <span class="label">Accesso</span>
-            <h2>Accesso obbligatorio</h2>
-            <p class="lead">Per usare missioni, salvataggi e matching nella beta devi registrarti e accedere con email e password.</p>
-            <div class="auth-box">
-              <div class="field">
-                <label>Email account</label>
-                <input id="accountEmail" type="email" placeholder="Es. nome@azienda.it">
-              </div>
-              <div class="field">
-                <label>Password account</label>
-                <input id="accountPassword" type="password" placeholder="Minimo 8 caratteri">
-              </div>
-              <div class="actions auth-actions">
-                <button class="btn secondary" id="createBetaAccount" type="button">Registrati</button>
-                <button class="btn secondary" id="loginBetaAccount" type="button">Accedi</button>
-                <button class="btn secondary" id="logoutBetaAccount" type="button">Esci</button>
-              </div>
-              <div class="inline-note" id="authSessionStatus"></div>
-            </div>
-            <div class="inline-note" id="betaSignupMessage"></div>
-
-            <hr class="panel-divider">
-
-            <span class="label">Directory aziende</span>
-            <h2>Aziende registrate</h2>
-            <p class="lead">Le aziende registrate vengono salvate nel database beta AgentLink con sessione utente attiva.</p>
-            <div class="registry-list" id="companyList"></div>
-          </aside>
         </div>
+        <div id="companyList" style="display:none"></div>
       </section>
 
       <section class="screen" id="stock">
@@ -3908,11 +3938,17 @@
       }
     }
 
+    function setTopAuthPanel(open) {
+      const panel = document.getElementById('topAuthPanel');
+      if (!panel) return;
+      panel.classList.toggle('open', Boolean(open));
+    }
+
     function requireAuthenticated(actionLabel) {
       if (isAuthenticated()) return true;
-      const msg = `Per ${actionLabel} devi prima registrarti e accedere nell'area "Accesso obbligatorio".`;
+      const msg = `Per ${actionLabel} devi prima registrarti o accedere dal pulsante "Registrati / Accedi" in alto a destra.`;
       setInlineMessage('betaSignupMessage', msg, 'warn');
-      showScreen('register');
+      setTopAuthPanel(true);
       document.getElementById('accountEmail')?.focus();
       alert(msg);
       return false;
@@ -5581,6 +5617,22 @@
     document.getElementById('createBetaAccount').addEventListener('click', createBetaAccount);
     document.getElementById('loginBetaAccount').addEventListener('click', loginBetaAccount);
     document.getElementById('logoutBetaAccount').addEventListener('click', logoutBetaAccount);
+    document.getElementById('topAccessBtn').addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const panel = document.getElementById('topAuthPanel');
+      if (!panel) return;
+      const shouldOpen = !panel.classList.contains('open');
+      setTopAuthPanel(shouldOpen);
+      if (shouldOpen) document.getElementById('accountEmail')?.focus();
+    });
+    document.addEventListener('click', event => {
+      const panel = document.getElementById('topAuthPanel');
+      if (!panel || !panel.classList.contains('open')) return;
+      const trigger = document.getElementById('topAccessBtn');
+      if (panel.contains(event.target) || trigger?.contains(event.target)) return;
+      setTopAuthPanel(false);
+    });
     document.getElementById('refreshAdmin').addEventListener('click', renderAdminCompanies);
     document.getElementById('seedDemoNetwork').addEventListener('click', seedDemoNetwork);
     document.getElementById('reloadMatchCompanies').addEventListener('click', populateMatchSelectors);
@@ -6639,4 +6691,3 @@
   </script>
 </body>
 </html>
-
