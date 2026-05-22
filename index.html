@@ -2602,6 +2602,203 @@
       .sk-recurrent-wrap { width: 100%; margin-left: 0; margin-top: 6px; }
     }
 
+    /* === Bell notifica + panel === */
+    .al-bell-btn {
+      position: relative;
+      background: rgba(7, 17, 31, 0.5);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 10px;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #b9c8da;
+      transition: all 0.15s;
+      margin-left: 6px;
+    }
+    .al-bell-btn:hover { color: var(--text); border-color: rgba(72, 215, 207, 0.4); }
+    .al-bell-btn svg { width: 18px; height: 18px; }
+    .al-bell-btn.has-new {
+      color: var(--gold);
+      border-color: rgba(243, 168, 79, 0.4);
+      animation: bell-shake 0.6s ease-in-out;
+    }
+    @keyframes bell-shake {
+      0%, 100% { transform: rotate(0); }
+      20%, 60% { transform: rotate(-12deg); }
+      40%, 80% { transform: rotate(12deg); }
+    }
+    .al-bell-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #ff4d4f;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      border-radius: 999px;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--bg, #06101b);
+    }
+
+    .al-notif-panel {
+      position: absolute;
+      top: 56px;
+      right: 16px;
+      background: linear-gradient(180deg, rgba(16, 34, 56, 0.98), rgba(7, 17, 31, 0.98));
+      border: 1px solid rgba(72, 215, 207, 0.3);
+      border-radius: 14px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+      min-width: 360px;
+      max-width: 440px;
+      max-height: 540px;
+      overflow: hidden;
+      z-index: 1400;
+      display: none;
+      flex-direction: column;
+    }
+    .al-notif-panel.open { display: flex; }
+    .al-notif-head {
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .al-notif-head strong { color: var(--text); font-size: 15px; }
+    .al-notif-mark-all {
+      background: none;
+      border: none;
+      color: var(--teal);
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .al-notif-mark-all:hover { text-decoration: underline; }
+    .al-notif-list {
+      flex: 1;
+      overflow-y: auto;
+      max-height: 460px;
+    }
+    .al-notif-empty {
+      padding: 30px 20px;
+      text-align: center;
+      color: var(--muted, #94a3b8);
+      font-size: 13px;
+      font-style: italic;
+    }
+    .al-notif-item {
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+      cursor: pointer;
+      transition: background 0.15s;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .al-notif-item:hover { background: rgba(72, 215, 207, 0.06); }
+    .al-notif-item.unread { background: rgba(72, 215, 207, 0.04); border-left: 3px solid var(--teal); }
+    .al-notif-icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(72, 215, 207, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--teal);
+    }
+    .al-notif-icon-wrap svg { width: 18px; height: 18px; }
+    .al-notif-body { flex: 1; min-width: 0; }
+    .al-notif-from {
+      color: var(--teal);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 3px;
+    }
+    .al-notif-msg {
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+    .al-notif-msg strong { color: var(--text); }
+    .al-notif-time {
+      color: var(--muted, #94a3b8);
+      font-size: 11px;
+    }
+    .al-notif-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .al-notif-actions button {
+      flex: 1;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .al-notif-btn-accept {
+      background: linear-gradient(135deg, var(--teal), var(--green));
+      color: #06101b;
+    }
+    .al-notif-btn-reject {
+      background: transparent;
+      border-color: rgba(148, 163, 184, 0.3);
+      color: var(--muted, #94a3b8);
+    }
+    .al-notif-btn-reject:hover { color: var(--text); }
+
+    /* Toast notifica realtime in arrivo */
+    .al-realtime-toast {
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      background: linear-gradient(180deg, rgba(16, 34, 56, 0.98), rgba(7, 17, 31, 0.98));
+      border: 1px solid var(--gold);
+      border-left: 4px solid var(--gold);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: var(--text);
+      max-width: 360px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+      transform: translateX(120%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 2100;
+      cursor: pointer;
+    }
+    .al-realtime-toast.show { transform: translateX(0); }
+    .al-realtime-toast-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--gold);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .al-realtime-toast-msg {
+      font-size: 13px;
+      line-height: 1.4;
+      color: var(--text);
+    }
+    .al-realtime-toast-msg strong { color: var(--text); }
+
     /* === Cross-account match box === */
     .al-cross-match-box {
       background: linear-gradient(135deg, rgba(72, 215, 207, 0.08), rgba(53, 207, 135, 0.06));
@@ -2925,6 +3122,27 @@
         <div class="topbar-right">
           <button class="top-access-btn" id="topAccessBtn" type="button">Registrati / Accedi</button>
           <span class="top-auth-state" id="topAuthState">Sessione non attiva</span>
+
+          <!-- Campanella notifiche realtime -->
+          <button class="al-bell-btn" id="alBellBtn" type="button" aria-label="Notifiche" style="display:none">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 01-3.46 0"/>
+            </svg>
+            <span class="al-bell-badge" id="alBellBadge" style="display:none">0</span>
+          </button>
+
+          <!-- Dropdown notifiche -->
+          <div class="al-notif-panel" id="alNotifPanel">
+            <div class="al-notif-head">
+              <strong>Notifiche</strong>
+              <button class="al-notif-mark-all" id="alNotifMarkAll" type="button">Segna tutte lette</button>
+            </div>
+            <div class="al-notif-list" id="alNotifList">
+              <div class="al-notif-empty">Nessuna notifica.</div>
+            </div>
+          </div>
+
           <div class="status-pill"><span class="dot"></span> Demo interattiva</div>
           <div class="top-auth-panel" id="topAuthPanel">
             <span class="label">Accesso</span>
@@ -4165,6 +4383,8 @@
     const handoffLogEndpoint = `${SUPABASE_URL}/rest/v1/handoff_log`;
     const userStockEndpoint = `${SUPABASE_URL}/rest/v1/user_stock`;
     const userCalendarEndpoint = `${SUPABASE_URL}/rest/v1/user_calendar_slots`;
+    const matchRequestsEndpoint = `${SUPABASE_URL}/rest/v1/match_requests`;
+    const SUPABASE_REALTIME_URL = SUPABASE_URL.replace('https://', 'wss://') + '/realtime/v1/websocket';
     const authSignupEndpoint = `${SUPABASE_URL}/auth/v1/signup`;
     const authLoginEndpoint = `${SUPABASE_URL}/auth/v1/token?grant_type=password`;
     const authRecoverEndpoint = `${SUPABASE_URL}/auth/v1/recover`;
@@ -5817,38 +6037,101 @@
     }
 
     // === Avvio dialogo A2A con la controparte ===
-    function startCrossAccountDialogue(match) {
-      // Riempie i campi della sezione "Dialogue" esistente con i dati del match
-      const buyerEl = document.getElementById('dialogueBuyer');
-      const sellerEl = document.getElementById('dialogueSeller');
-      const topicEl = document.getElementById('dialogueTopic');
-
-      if (buyerEl) {
-        buyerEl.value = (document.getElementById('companyName')?.value || 'Il tuo agente') +
-          ' (cerca: ' + (document.getElementById('quickMissionPrompt')?.value || '') + ')';
-      }
-      if (sellerEl) {
-        sellerEl.value = match.company + ' (offre: ' + match.what +
-          (match.area ? ' · ' + match.area : '') + ')';
-      }
-      if (topicEl) {
-        topicEl.value = 'Match potenziale: ' + match.what +
-          (match.area ? ' in ' + match.area : '') +
-          '. Verifica disponibilità, prezzi, tempi di consegna.';
+    async function startCrossAccountDialogue(match) {
+      if (!isAuthenticated()) {
+        if (typeof showToast === 'function') {
+          showToast('Devi accedere', 'Per inviare richieste devi prima registrarti.');
+        }
+        return;
       }
 
-      // Naviga alla schermata dialogo
-      if (typeof showScreen === 'function') {
-        showScreen('dialogue');
-      } else {
-        // Fallback: scroll alla sezione dialogue
-        const dialSec = document.getElementById('dialogue');
-        if (dialSec) dialSec.scrollIntoView({ behavior: 'smooth' });
+      // Determina to_user_id e to_company dal match (richiede una query)
+      // Strategia: cerco lo slot/stock corrispondente per ottenere user_id
+      let toUserId = null;
+      let toCompanyName = match.company;
+      let slotIdToUse = null;
+      let stockIdToUse = null;
+
+      try {
+        if (match.source === 'slot') {
+          const url = `${userCalendarEndpoint}?select=user_id,company_name&id=eq.${encodeURIComponent(match.id)}&limit=1`;
+          const r = await fetch(url, { headers: supabaseHeaders({ useSession: true }) });
+          if (r.ok) {
+            const rows = await r.json();
+            if (rows[0]) {
+              toUserId = rows[0].user_id;
+              toCompanyName = rows[0].company_name || toCompanyName;
+              slotIdToUse = match.id;
+            }
+          }
+        } else if (match.source === 'stock') {
+          const url = `${userStockEndpoint}?select=user_id,company_name&id=eq.${encodeURIComponent(match.id)}&limit=1`;
+          const r = await fetch(url, { headers: supabaseHeaders({ useSession: true }) });
+          if (r.ok) {
+            const rows = await r.json();
+            if (rows[0]) {
+              toUserId = rows[0].user_id;
+              toCompanyName = rows[0].company_name || toCompanyName;
+              stockIdToUse = match.id;
+            }
+          }
+        }
+      } catch (e) {
+        console.error('Lookup destinatario fallita', e);
       }
 
-      // Toast informativo
-      if (typeof showToast === 'function') {
-        showToast('Dialogo agenti pronto', 'Premi "Avvia dialogo" per far parlare i due agenti AI.');
+      if (!toUserId) {
+        if (typeof showToast === 'function') {
+          showToast('Errore', 'Non sono riuscito a contattare il destinatario.');
+        }
+        return;
+      }
+
+      // Costruisco la richiesta
+      const fromUserId = authSession.user.id;
+      const fromCompanyName = (document.getElementById('companyName')?.value || authSession.user?.email || 'Azienda');
+      const missionText = (document.getElementById('quickMissionPrompt')?.value || '').trim();
+
+      try {
+        const res = await fetch(matchRequestsEndpoint, {
+          method: 'POST',
+          headers: supabaseHeaders({ json: true, prefer: 'return=representation', useSession: true }),
+          body: JSON.stringify({
+            from_user_id: fromUserId,
+            from_company_name: fromCompanyName,
+            to_user_id: toUserId,
+            to_company_name: toCompanyName,
+            slot_id: slotIdToUse,
+            stock_id: stockIdToUse,
+            source_type: match.source,
+            mission_text: missionText,
+            match_what: match.what || '',
+            match_area: match.area || '',
+            match_when: match.when || '',
+            status: 'pending',
+          }),
+        });
+
+        if (!res.ok) {
+          const t = await res.text();
+          console.error('Errore creazione match_request:', t);
+          if (typeof showToast === 'function') {
+            showToast('Errore', 'Non sono riuscito a inviare la richiesta.');
+          }
+          return;
+        }
+
+        if (typeof showToast === 'function') {
+          showToast(
+            'Richiesta inviata!',
+            toCompanyName + ' riceverà una notifica. Aspetta che il suo agente risponda.'
+          );
+        }
+      } catch (e) {
+        console.error('Errore invio richiesta', e);
+        if (typeof showToast === 'function') {
+          showToast('Errore di rete', 'Non sono riuscito a inviare la richiesta. Riprova.');
+        }
       }
     }
 
@@ -7851,6 +8134,423 @@
         if (e.target.id === 'capModal') closeCapacityModal();
       });
 
+    })();
+
+
+    /* =========================================================
+       REALTIME NOTIFICATIONS — Match Requests
+       Sistema completo di notifiche in tempo reale via Supabase Realtime.
+       ========================================================= */
+    (function () {
+      let notifications = [];
+      let realtimeWs = null;
+      let realtimeRefCounter = 1;
+      let realtimeHeartbeat = null;
+      let unreadCount = 0;
+
+      // === Render badge ===
+      function updateBellBadge() {
+        const badge = document.getElementById('alBellBadge');
+        const bell = document.getElementById('alBellBtn');
+        if (!badge || !bell) return;
+        if (unreadCount > 0) {
+          badge.textContent = unreadCount > 99 ? '99+' : String(unreadCount);
+          badge.style.display = 'flex';
+        } else {
+          badge.style.display = 'none';
+        }
+        // Mostra la campanella solo se loggato
+        bell.style.display = isAuthenticated() ? 'flex' : 'none';
+      }
+
+      // === Format tempo relativo ===
+      function timeAgo(iso) {
+        try {
+          const d = new Date(iso);
+          const diff = Math.floor((Date.now() - d.getTime()) / 1000);
+          if (diff < 60) return 'adesso';
+          if (diff < 3600) return Math.floor(diff / 60) + ' min fa';
+          if (diff < 86400) return Math.floor(diff / 3600) + ' ore fa';
+          return Math.floor(diff / 86400) + ' giorni fa';
+        } catch { return ''; }
+      }
+
+      // === Render lista ===
+      function renderNotifList() {
+        const list = document.getElementById('alNotifList');
+        if (!list) return;
+        if (!notifications.length) {
+          list.innerHTML = '<div class="al-notif-empty">Nessuna notifica.</div>';
+          return;
+        }
+        list.innerHTML = notifications.map(n => {
+          const unread = !n.read_at;
+          const status = n.status || 'pending';
+          let actionsHtml = '';
+          if (status === 'pending') {
+            actionsHtml = `
+              <div class="al-notif-actions">
+                <button class="al-notif-btn-accept" data-notif-action="accept" data-notif-id="${escapeHtml(n.id)}">Avvia dialogo agenti</button>
+                <button class="al-notif-btn-reject" data-notif-action="reject" data-notif-id="${escapeHtml(n.id)}">Rifiuta</button>
+              </div>
+            `;
+          } else if (status === 'accepted') {
+            actionsHtml = '<div style="margin-top:6px;color:var(--teal);font-size:11px;font-weight:700">✓ Dialogo avviato</div>';
+          } else if (status === 'rejected') {
+            actionsHtml = '<div style="margin-top:6px;color:var(--muted);font-size:11px">Rifiutata</div>';
+          }
+          return `
+            <div class="al-notif-item ${unread ? 'unread' : ''}" data-notif-id="${escapeHtml(n.id)}">
+              <div class="al-notif-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+                </svg>
+              </div>
+              <div class="al-notif-body">
+                <div class="al-notif-from">${escapeHtml(n.from_company_name || 'Azienda')}</div>
+                <div class="al-notif-msg">
+                  cerca <strong>${escapeHtml(n.match_what || 'qualcosa')}</strong>${n.match_area ? ' in ' + escapeHtml(n.match_area) : ''}
+                  ${n.mission_text ? '<br><em style="color:var(--muted);font-size:11.5px">"' + escapeHtml(n.mission_text.slice(0, 100)) + (n.mission_text.length > 100 ? '..."' : '"') + '</em>' : ''}
+                </div>
+                <div class="al-notif-time">${timeAgo(n.created_at)}</div>
+                ${actionsHtml}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // Attach handlers
+        list.querySelectorAll('[data-notif-action]').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const id = btn.dataset.notifId;
+            const action = btn.dataset.notifAction;
+            if (action === 'accept') {
+              await acceptNotification(id);
+            } else if (action === 'reject') {
+              await rejectNotification(id);
+            }
+          });
+        });
+
+        // Click on item marks as read
+        list.querySelectorAll('.al-notif-item').forEach(item => {
+          item.addEventListener('click', async () => {
+            const id = item.dataset.notifId;
+            await markAsRead(id);
+          });
+        });
+      }
+
+      // === Carica notifiche da DB ===
+      async function loadNotifications() {
+        if (!isAuthenticated()) {
+          notifications = [];
+          unreadCount = 0;
+          updateBellBadge();
+          renderNotifList();
+          return;
+        }
+        try {
+          const userId = authSession.user.id;
+          const url = `${matchRequestsEndpoint}?select=*&to_user_id=eq.${userId}&order=created_at.desc&limit=50`;
+          const r = await fetch(url, { headers: supabaseHeaders({ useSession: true }) });
+          if (!r.ok) return;
+          notifications = await r.json();
+          unreadCount = notifications.filter(n => !n.read_at && n.status === 'pending').length;
+          updateBellBadge();
+          renderNotifList();
+        } catch (e) {
+          console.error('loadNotifications error', e);
+        }
+      }
+
+      // === Mark as read ===
+      async function markAsRead(notifId) {
+        const notif = notifications.find(n => n.id === notifId);
+        if (!notif || notif.read_at) return;
+        try {
+          const r = await fetch(`${matchRequestsEndpoint}?id=eq.${notifId}`, {
+            method: 'PATCH',
+            headers: supabaseHeaders({ json: true, useSession: true }),
+            body: JSON.stringify({ read_at: new Date().toISOString() }),
+          });
+          if (r.ok) {
+            notif.read_at = new Date().toISOString();
+            unreadCount = Math.max(0, unreadCount - 1);
+            updateBellBadge();
+            renderNotifList();
+          }
+        } catch (e) { console.error(e); }
+      }
+
+      // === Accetta richiesta — avvia dialogo agenti ===
+      async function acceptNotification(notifId) {
+        const notif = notifications.find(n => n.id === notifId);
+        if (!notif) return;
+
+        try {
+          await fetch(`${matchRequestsEndpoint}?id=eq.${notifId}`, {
+            method: 'PATCH',
+            headers: supabaseHeaders({ json: true, useSession: true }),
+            body: JSON.stringify({
+              status: 'accepted',
+              responded_at: new Date().toISOString(),
+              read_at: notif.read_at || new Date().toISOString(),
+            }),
+          });
+        } catch (e) { console.error(e); }
+
+        // Precompila la pagina dialogo
+        const buyerEl = document.getElementById('dialogueBuyer');
+        const sellerEl = document.getElementById('dialogueSeller');
+        const topicEl = document.getElementById('dialogueTopic');
+        if (buyerEl) buyerEl.value = (notif.from_company_name || 'Buyer') + ' (cerca: ' + (notif.mission_text || notif.match_what || '') + ')';
+        if (sellerEl) sellerEl.value = (notif.to_company_name || 'Seller') + ' (sei tu — rispondi sulla base delle tue capacità)';
+        if (topicEl) topicEl.value = 'Match: ' + (notif.match_what || '') + (notif.match_area ? ' in ' + notif.match_area : '') + '. Verifica disponibilità, condizioni, tempi.';
+
+        // Chiudi pannello e naviga
+        setNotifPanelOpen(false);
+        if (typeof showScreen === 'function') {
+          showScreen('dialogue');
+        }
+        if (typeof showToast === 'function') {
+          showToast('Dialogo aperto', 'Premi "Genera prossimo turno" per far rispondere il tuo agente.');
+        }
+
+        // Aggiorna stato locale
+        notif.status = 'accepted';
+        notif.responded_at = new Date().toISOString();
+        unreadCount = notifications.filter(n => !n.read_at && n.status === 'pending').length;
+        updateBellBadge();
+        renderNotifList();
+      }
+
+      // === Rifiuta richiesta ===
+      async function rejectNotification(notifId) {
+        const notif = notifications.find(n => n.id === notifId);
+        if (!notif) return;
+        try {
+          await fetch(`${matchRequestsEndpoint}?id=eq.${notifId}`, {
+            method: 'PATCH',
+            headers: supabaseHeaders({ json: true, useSession: true }),
+            body: JSON.stringify({
+              status: 'rejected',
+              responded_at: new Date().toISOString(),
+              read_at: new Date().toISOString(),
+            }),
+          });
+          notif.status = 'rejected';
+          notif.responded_at = new Date().toISOString();
+          notif.read_at = new Date().toISOString();
+          unreadCount = notifications.filter(n => !n.read_at && n.status === 'pending').length;
+          updateBellBadge();
+          renderNotifList();
+        } catch (e) { console.error(e); }
+      }
+
+      // === Toast realtime ===
+      function showRealtimeToast(notif) {
+        const existing = document.getElementById('alRealtimeToast');
+        if (existing) existing.remove();
+        const div = document.createElement('div');
+        div.id = 'alRealtimeToast';
+        div.className = 'al-realtime-toast';
+        div.innerHTML = `
+          <div class="al-realtime-toast-head">
+            🔔 Nuova richiesta
+          </div>
+          <div class="al-realtime-toast-msg">
+            <strong>${escapeHtml(notif.from_company_name || 'Un\'azienda')}</strong>
+            cerca ${escapeHtml(notif.match_what || 'qualcosa')}${notif.match_area ? ' in ' + escapeHtml(notif.match_area) : ''}
+          </div>
+        `;
+        div.addEventListener('click', () => {
+          setNotifPanelOpen(true);
+          div.classList.remove('show');
+          setTimeout(() => div.remove(), 400);
+        });
+        document.body.appendChild(div);
+        // animate in
+        setTimeout(() => div.classList.add('show'), 50);
+        // auto hide after 7s
+        setTimeout(() => {
+          if (div.parentNode) {
+            div.classList.remove('show');
+            setTimeout(() => { if (div.parentNode) div.remove(); }, 400);
+          }
+        }, 7000);
+      }
+
+      // === Realtime subscription via Supabase WebSocket ===
+      function connectRealtime() {
+        if (!isAuthenticated()) return;
+        if (realtimeWs && realtimeWs.readyState === WebSocket.OPEN) return;
+
+        const token = authSession.access_token;
+        const url = SUPABASE_REALTIME_URL + '?apikey=' + encodeURIComponent(SUPABASE_PUBLISHABLE_KEY) + '&vsn=1.0.0';
+
+        try {
+          realtimeWs = new WebSocket(url);
+        } catch (e) {
+          console.warn('Realtime connection failed', e);
+          return;
+        }
+
+        realtimeWs.onopen = () => {
+          // Autentica
+          realtimeWs.send(JSON.stringify({
+            topic: 'realtime:public:match_requests',
+            event: 'phx_join',
+            payload: {
+              config: {
+                postgres_changes: [{
+                  event: 'INSERT',
+                  schema: 'public',
+                  table: 'match_requests',
+                  filter: 'to_user_id=eq.' + authSession.user.id,
+                }]
+              },
+              access_token: token,
+            },
+            ref: String(realtimeRefCounter++),
+          }));
+
+          // Heartbeat ogni 30s
+          if (realtimeHeartbeat) clearInterval(realtimeHeartbeat);
+          realtimeHeartbeat = setInterval(() => {
+            if (realtimeWs && realtimeWs.readyState === WebSocket.OPEN) {
+              realtimeWs.send(JSON.stringify({
+                topic: 'phoenix',
+                event: 'heartbeat',
+                payload: {},
+                ref: String(realtimeRefCounter++),
+              }));
+            }
+          }, 30000);
+        };
+
+        realtimeWs.onmessage = (e) => {
+          try {
+            const data = JSON.parse(e.data);
+            if (data.event === 'postgres_changes' && data.payload?.data?.record) {
+              const newNotif = data.payload.data.record;
+              // Inserisci in testa
+              notifications.unshift(newNotif);
+              unreadCount++;
+              updateBellBadge();
+              renderNotifList();
+              // Anima campanella
+              const bell = document.getElementById('alBellBtn');
+              if (bell) {
+                bell.classList.add('has-new');
+                setTimeout(() => bell.classList.remove('has-new'), 700);
+              }
+              // Toast
+              showRealtimeToast(newNotif);
+            }
+          } catch (err) {
+            console.warn('Realtime parse error', err);
+          }
+        };
+
+        realtimeWs.onclose = () => {
+          if (realtimeHeartbeat) { clearInterval(realtimeHeartbeat); realtimeHeartbeat = null; }
+          // Reconnect dopo 5s se ancora loggato
+          setTimeout(() => {
+            if (isAuthenticated()) connectRealtime();
+          }, 5000);
+        };
+
+        realtimeWs.onerror = (err) => {
+          console.warn('Realtime error', err);
+        };
+      }
+
+      function disconnectRealtime() {
+        if (realtimeWs) {
+          try { realtimeWs.close(); } catch (e) {}
+          realtimeWs = null;
+        }
+        if (realtimeHeartbeat) { clearInterval(realtimeHeartbeat); realtimeHeartbeat = null; }
+      }
+
+      // === Toggle panel ===
+      function setNotifPanelOpen(open) {
+        const panel = document.getElementById('alNotifPanel');
+        if (!panel) return;
+        panel.classList.toggle('open', Boolean(open));
+        if (open) {
+          // Marcare tutte come lette dopo 2s
+          setTimeout(async () => {
+            const unread = notifications.filter(n => !n.read_at);
+            for (const n of unread) {
+              await markAsRead(n.id);
+            }
+          }, 2000);
+        }
+      }
+
+      // === Wire up UI ===
+      const bell = document.getElementById('alBellBtn');
+      const panel = document.getElementById('alNotifPanel');
+      const markAll = document.getElementById('alNotifMarkAll');
+
+      if (bell) {
+        bell.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpen = panel?.classList.contains('open');
+          setNotifPanelOpen(!isOpen);
+        });
+      }
+
+      if (markAll) {
+        markAll.addEventListener('click', async () => {
+          const unread = notifications.filter(n => !n.read_at);
+          for (const n of unread) {
+            await markAsRead(n.id);
+          }
+        });
+      }
+
+      // Click fuori per chiudere
+      document.addEventListener('click', (e) => {
+        if (!panel) return;
+        if (panel.contains(e.target) || bell?.contains(e.target)) return;
+        setNotifPanelOpen(false);
+      });
+
+      // === Init: carica notifiche e collega realtime quando logged in ===
+      async function initNotifications() {
+        await loadNotifications();
+        connectRealtime();
+      }
+
+      // Reagisci al login/logout monitorando authSession
+      let lastAuthState = isAuthenticated();
+      setInterval(() => {
+        const currentAuth = isAuthenticated();
+        if (currentAuth !== lastAuthState) {
+          lastAuthState = currentAuth;
+          if (currentAuth) {
+            initNotifications();
+          } else {
+            disconnectRealtime();
+            notifications = [];
+            unreadCount = 0;
+            updateBellBadge();
+            renderNotifList();
+          }
+        }
+      }, 1000);
+
+      // Init iniziale (caso utente già loggato)
+      if (isAuthenticated()) {
+        initNotifications();
+      }
+
+      // Esponi globalmente per debug
+      window.alReloadNotifications = loadNotifications;
     })();
 
   </script>
