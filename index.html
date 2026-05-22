@@ -8320,30 +8320,61 @@
           e.target.value = '';
           return;
         }
+
+        if (!isAuthenticated()) {
+          alert('Devi accedere per caricare stock.');
+          e.target.value = '';
+          return;
+        }
+
         const text = await file.text();
         // Parser CSV semplice: prima riga header opzionale, formato: nome, quantità, area, note
         const lines = text.split(/\r?\n/).filter(x => x.trim());
-        const items = loadStock();
         let added = 0;
-        lines.forEach((line, idx) => {
+        let failed = 0;
+
+        // Mostra messaggio di caricamento
+        if (typeof showToast === 'function') {
+          showToast('Caricamento in corso', 'Sto importando il file CSV...');
+        }
+
+        for (let idx = 0; idx < lines.length; idx++) {
+          const line = lines[idx];
           // skip header se sembra header
-          if (idx === 0 && /nome|prodotto|articolo/i.test(line)) return;
+          if (idx === 0 && /nome|prodotto|articolo/i.test(line)) continue;
           const parts = line.split(/[,;\t]/).map(x => x.trim().replace(/^"|"$/g, ''));
-          if (!parts[0]) return;
-          items.unshift({
-            id: 'stock-' + Date.now() + '-' + idx,
+          if (!parts[0]) continue;
+
+          const item = {
             name: parts[0],
             quantity: parts[1] || '',
             area: parts[2] || '',
             notes: parts[3] || '',
-            createdAt: new Date().toISOString()
-          });
-          added++;
-        });
-        saveStock(items);
+          };
+
+          try {
+            const result = await insertStockDb(item);
+            if (result) {
+              added++;
+            } else {
+              failed++;
+            }
+          } catch (err) {
+            console.error('CSV insert error riga ' + idx, err);
+            failed++;
+          }
+        }
+
+        // Ricarica dati da Supabase per aggiornare UI
+        await loadStockFromDb();
         renderStock();
         e.target.value = '';
-        alert(`Caricati ${added} prodotti dal file.`);
+
+        if (failed === 0) {
+          alert('Caricati ' + added + ' prodotti dal file.');
+        } else {
+          alert('Caricati ' + added + ' prodotti. ' + failed + ' righe non sono state importate.');
+        }
       });
 
       // Init
