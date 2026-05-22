@@ -9199,63 +9199,19 @@
         if (e.target.id === 'convModal') closeConvModal();
       });
       if (convBtnEmail) convBtnEmail.addEventListener('click', () => {
-        // Prendi i dati direttamente dal DOM del modal (più robusto di __currentConvNotif)
-        const buyerEmail = document.getElementById('convBuyerEmail')?.textContent?.trim() || '';
-        const sellerEmail = document.getElementById('convSellerEmail')?.textContent?.trim() || '';
-        const matchInfo = document.getElementById('convMatchInfo')?.textContent?.trim() || '';
-
-        // Determino chi è la controparte (sono il seller, devo scrivere al buyer)
-        const myEmail = (authSession && authSession.user && authSession.user.email) || '';
-        let toEmail = '';
-        if (buyerEmail && buyerEmail !== myEmail && buyerEmail.includes('@')) {
-          toEmail = buyerEmail;
-        } else if (sellerEmail && sellerEmail !== myEmail && sellerEmail.includes('@')) {
-          toEmail = sellerEmail;
-        }
-
-        if (!toEmail) {
-          // Fallback: prova a recuperare da window.__currentConvNotif
-          const notif = window.__currentConvNotif;
-          if (notif && notif.from_company_name && notif.from_company_name.includes('@')) {
-            toEmail = notif.from_company_name;
-          }
-        }
-
-        if (!toEmail) {
-          // Ultimo fallback: avviso utente
-          if (typeof showToast === 'function') {
-            showToast('Email non disponibile', 'Copia manualmente l\\'email del buyer dalla card sopra.');
-          }
-          return;
-        }
-
-        const subject = encodeURIComponent('AgentLink - ' + (matchInfo.slice(0, 60) || 'Match trovato'));
+        const notif = window.__currentConvNotif;
+        if (!notif) return;
+        const subject = encodeURIComponent('AgentLink - Match: ' + (notif.match_what || ''));
         const body = encodeURIComponent(
-          'Ciao,\\n\\n' +
-          'ti scrivo riguardo al match trovato su AgentLink:\\n\\n' +
-          matchInfo + '\\n\\n' +
-          'Fammi sapere come procedere.\\n\\n' +
-          'Grazie.'
+          'Ciao,\n\nti scrivo riguardo al match trovato su AgentLink:\n' +
+          '- Richiesta: ' + (notif.match_what || '') + '\n' +
+          (notif.match_area ? '- Area: ' + notif.match_area + '\n' : '') +
+          (notif.match_when ? '- Quando: ' + notif.match_when + '\n' : '') +
+          '\nFammi sapere come procedere.\n\nGrazie.'
         );
-
-        // Apre client email predefinito
-        const mailtoUrl = 'mailto:' + encodeURIComponent(toEmail) + '?subject=' + subject + '&body=' + body;
-
-        // Uso window.open invece di location.href - più affidabile
-        try {
-          const w = window.open(mailtoUrl, '_self');
-          if (!w) {
-            // Se popup bloccato, fallback su location.href
-            window.location.href = mailtoUrl;
-          }
-        } catch (e) {
-          window.location.href = mailtoUrl;
-        }
-
-        // Mostra toast informativo
-        if (typeof showToast === 'function') {
-          showToast('Email aperta', 'Se non si apre, copia ' + toEmail + ' e scrivi dal tuo client email.');
-        }
+        // Apre client email con dati precompilati
+        const toEmail = notif.from_company_name && notif.from_company_name.includes('@') ? notif.from_company_name : '';
+        window.location.href = 'mailto:' + toEmail + '?subject=' + subject + '&body=' + body;
       });
     })();
 
