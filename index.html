@@ -5765,11 +5765,31 @@
         </div>
       `;
 
-      // Inserisce sopra l'elemento host (es. quickReportSummary)
+      // Determina dove inserire: cerca un host VISIBILE
       const wrapper = document.createElement('div');
       wrapper.innerHTML = html;
       const boxEl = wrapper.firstElementChild;
-      host.parentNode.insertBefore(boxEl, host);
+
+      // Strategia: inserisci sempre subito dopo il bottone "AVVIA AGENTE" e l'al-hint, 
+      // così è sempre visibile indipendentemente dal report (che potrebbe essere nascosto)
+      const cta = document.getElementById('runQuickMission');
+      const alHint = cta ? cta.parentNode.querySelector('.al-hint') : null;
+      const insertionAnchor = alHint || cta;
+
+      if (insertionAnchor && insertionAnchor.parentNode) {
+        // Inserisce SUBITO DOPO il bottone CTA (o l'hint sotto)
+        insertionAnchor.parentNode.insertBefore(boxEl, insertionAnchor.nextSibling);
+      } else if (host && host.parentNode) {
+        // Fallback al comportamento originale
+        host.parentNode.insertBefore(boxEl, host);
+      } else {
+        // Ultimo fallback: appendi alla home
+        const home = document.querySelector('.al-home') || document.body;
+        home.appendChild(boxEl);
+      }
+
+      // Stile margine per separazione visiva
+      boxEl.style.marginTop = '24px';
 
       // Attacca handler bottoni "Avvia dialogo"
       boxEl.querySelectorAll('[data-cross-match-idx]').forEach(btn => {
@@ -5779,6 +5799,11 @@
           startCrossAccountDialogue(match);
         });
       });
+
+      // Scroll automatico verso la card per essere sicuri che la veda
+      setTimeout(() => {
+        try { boxEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+      }, 100);
 
       // Salva ultima ricerca per pulizia successiva
       window.__lastCrossMatchBox = boxEl;
