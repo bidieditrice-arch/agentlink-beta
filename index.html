@@ -2602,6 +2602,44 @@
       .sk-recurrent-wrap { width: 100%; margin-left: 0; margin-top: 6px; }
     }
 
+    /* === Opt-in missione persistente === */
+    .al-mission-optin {
+      background: linear-gradient(135deg, rgba(243, 168, 79, 0.1), rgba(243, 168, 79, 0.04));
+      border: 1px solid rgba(243, 168, 79, 0.3);
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .al-mission-optin-icon { font-size: 24px; flex-shrink: 0; }
+    .al-mission-optin-body { flex: 1; min-width: 200px; }
+    .al-mission-optin-title {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+    .al-mission-optin-desc {
+      color: var(--muted, #94a3b8);
+      font-size: 12.5px;
+      line-height: 1.4;
+    }
+    .al-mission-optin-btn {
+      background: linear-gradient(135deg, var(--gold), #d68a2e);
+      color: #06101b;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .al-mission-optin-btn:hover { filter: brightness(1.1); }
+    .al-mission-optin-btn:disabled { opacity: 0.6; cursor: wait; }
+
     /* === Mini conversazione modal (post-accept notifica) === */
     .conv-modal-bg {
       position: fixed;
@@ -3005,6 +3043,62 @@
       color: var(--text);
     }
     .al-realtime-toast-msg strong { color: var(--text); }
+
+    .al-cross-cat-label {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin: 14px 0 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(148, 163, 184, 0.1);
+    }
+    .al-cross-cat-label:first-child { padding-top: 0; border-top: none; margin-top: 0; }
+
+    .al-cross-contacts {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+      align-items: center;
+    }
+    .al-cross-tel {
+      color: var(--teal);
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(72, 215, 207, 0.1);
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(72, 215, 207, 0.3);
+    }
+    .al-cross-tel::before { content: "📞"; font-size: 13px; }
+    .al-cross-tel:hover { background: rgba(72, 215, 207, 0.18); }
+    .al-cross-email {
+      color: var(--muted, #94a3b8);
+      font-size: 12px;
+      font-style: italic;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .al-cross-email::before { content: "✉"; }
+    .al-cross-cert {
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+    .al-cross-match-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end;
+    }
 
     /* === Cross-account match box === */
     .al-cross-match-box {
@@ -4591,6 +4685,7 @@
     const userStockEndpoint = `${SUPABASE_URL}/rest/v1/user_stock`;
     const userCalendarEndpoint = `${SUPABASE_URL}/rest/v1/user_calendar_slots`;
     const matchRequestsEndpoint = `${SUPABASE_URL}/rest/v1/match_requests`;
+    const activeMissionsEndpoint = `${SUPABASE_URL}/rest/v1/active_missions`;
     const SUPABASE_REALTIME_URL = SUPABASE_URL.replace('https://', 'wss://') + '/realtime/v1/websocket';
     const authSignupEndpoint = `${SUPABASE_URL}/auth/v1/signup`;
     const authLoginEndpoint = `${SUPABASE_URL}/auth/v1/token?grant_type=password`;
@@ -6131,40 +6226,130 @@
         console.warn('Cross-account slots fetch failed', e);
       }
 
+      // === Cerca anche nei profili aziendali ===
+      result.companies = [];
+      try {
+        const companiesEndpoint = `${SUPABASE_URL}/rest/v1/companies`;
+        // Cerca su offers, needs, sector, area, certifications
+        const companiesFilter = buildOrFilter(['offers', 'needs', 'sector', 'area', 'certifications', 'name'], keywords);
+        const compUrl = `${companiesEndpoint}?select=name,email,phone,sector,area,offers,certifications,availability&${companiesFilter}&limit=10`;
+        const compRes = await fetch(compUrl, { headers: supabaseHeaders({ useSession: true }) });
+        if (compRes.ok) {
+          const companies = await compRes.json();
+          // Filtra fuori la propria azienda (se l'email corrisponde)
+          const myEmail = (authSession && authSession.user && authSession.user.email) || '';
+          result.companies = companies.filter(c => c.email !== myEmail);
+        }
+      } catch (e) {
+        console.warn('Cross-account companies fetch failed', e);
+      }
+
       return result;
     }
 
     // === Render box dei match cross-account sopra il report ===
+    function obfuscateEmail(email) {
+      if (!email || !email.includes('@')) return 'Email su richiesta';
+      // Mostra solo prima lettera + asterischi + dominio
+      const [local, domain] = email.split('@');
+      const lLocal = local.length;
+      if (lLocal <= 2) return local[0] + '*@' + domain;
+      return local[0] + '*'.repeat(Math.min(lLocal - 1, 4)) + '@' + domain;
+    }
+
     function renderCrossAccountMatches(capacities, hostElementId) {
       const host = document.getElementById(hostElementId);
-      if (!host) return;
-      const total = (capacities.stock?.length || 0) + (capacities.slots?.length || 0);
+      const totalSlots = capacities.slots?.length || 0;
+      const totalStock = capacities.stock?.length || 0;
+      const totalCompanies = capacities.companies?.length || 0;
+      const total = totalSlots + totalStock + totalCompanies;
       if (!total) return;
 
       const rows = [];
+      // Disponibilità calendario
       (capacities.slots || []).forEach(s => {
         rows.push({
+          category: 'disponibilita',
           source: 'slot',
           id: s.id,
           company: s.company_name || 'Azienda iscritta',
+          phone: null,
+          email: null,
           what: s.what || 'Disponibilità',
           when: s.when_text || '',
           area: s.area || '',
-          dates: Array.isArray(s.dates) ? s.dates : [],
           recurrence: s.recurrence || 'none',
+          hasCert: false,
         });
       });
+      // Stock fisici
       (capacities.stock || []).forEach(s => {
         rows.push({
+          category: 'stock',
           source: 'stock',
           id: s.id,
           company: s.company_name || 'Azienda iscritta',
+          phone: null,
+          email: null,
           what: s.name || 'Stock',
           when: '',
           area: s.area || '',
           quantity: s.quantity || '',
+          hasCert: false,
         });
       });
+      // Profili aziendali completi
+      (capacities.companies || []).forEach(c => {
+        rows.push({
+          category: 'profilo',
+          source: 'company',
+          id: c.email || c.name,
+          company: c.name || 'Azienda',
+          phone: c.phone || '',
+          email: c.email || '',
+          what: c.offers || c.sector || 'Servizi',
+          when: c.availability || '',
+          area: c.area || '',
+          hasCert: !!(c.certifications && c.certifications.trim()),
+        });
+      });
+
+      // Raggruppa per categoria
+      const groups = { disponibilita: [], stock: [], profilo: [] };
+      rows.forEach(r => groups[r.category].push(r));
+
+      function renderRow(r, idx) {
+        // Contatto: telefono visibile, email oscurata
+        let contactBlock = '';
+        if (r.phone) {
+          contactBlock += `<a class="al-cross-tel" href="tel:${escapeHtml(r.phone.replace(/[^\d+]/g, ''))}">${escapeHtml(r.phone)}</a>`;
+        }
+        if (r.email) {
+          contactBlock += `<span class="al-cross-email" title="Email protetta da spam">${escapeHtml(obfuscateEmail(r.email))}</span>`;
+        } else if (!r.phone) {
+          contactBlock += '<span class="al-cross-email">Contatto su richiesta</span>';
+        }
+
+        return `
+          <div class="al-cross-match-row">
+            <div class="al-cross-match-info">
+              <div class="al-cross-match-company">${escapeHtml(r.company)}</div>
+              <div class="al-cross-match-detail">
+                <strong>${escapeHtml(r.what)}</strong>
+                ${r.quantity ? ' · ' + escapeHtml(r.quantity) : ''}
+                ${r.area ? ' · ' + escapeHtml(r.area) : ''}
+                ${r.when ? ' · ' + escapeHtml(r.when) : ''}
+              </div>
+              ${r.hasCert ? '<div class="al-cross-cert">✓ Dispone di certificazioni</div>' : ''}
+              ${(r.recurrence && r.recurrence !== 'none') ? `<div class="al-cross-match-meta">Ricorrenza: ${escapeHtml(r.recurrence)}</div>` : ''}
+              <div class="al-cross-contacts">${contactBlock}</div>
+            </div>
+            <div class="al-cross-match-actions">
+              <button class="al-cross-match-btn" data-cross-match-idx="${idx}" data-cross-match-action="agent">Approfondisci con agente AI</button>
+            </div>
+          </div>
+        `;
+      }
 
       const html = `
         <div class="al-cross-match-box">
@@ -6172,53 +6357,40 @@
             <span class="al-cross-match-icon">⚡</span>
             <strong>Trovati ${total} match nella rete AgentLink</strong>
           </div>
-          <div class="al-cross-match-list">
-            ${rows.map((r, idx) => `
-              <div class="al-cross-match-row">
-                <div class="al-cross-match-info">
-                  <div class="al-cross-match-company">${escapeHtml(r.company)}</div>
-                  <div class="al-cross-match-detail">
-                    <strong>${escapeHtml(r.what)}</strong>
-                    ${r.quantity ? ' · ' + escapeHtml(r.quantity) : ''}
-                    ${r.area ? ' · ' + escapeHtml(r.area) : ''}
-                    ${r.when ? ' · ' + escapeHtml(r.when) : ''}
-                  </div>
-                  ${r.recurrence && r.recurrence !== 'none' ? `<div class="al-cross-match-meta">Ricorrenza: ${escapeHtml(r.recurrence)}</div>` : ''}
-                </div>
-                <button class="al-cross-match-btn" data-cross-match-idx="${idx}">Avvia dialogo agenti →</button>
-              </div>
-            `).join('')}
-          </div>
+          ${groups.disponibilita.length ? `
+            <div class="al-cross-cat-label">📅 Disponibilità immediata (${groups.disponibilita.length})</div>
+            <div class="al-cross-match-list">${groups.disponibilita.map((r, i) => renderRow(r, rows.indexOf(r))).join('')}</div>
+          ` : ''}
+          ${groups.stock.length ? `
+            <div class="al-cross-cat-label">📦 Stock disponibile (${groups.stock.length})</div>
+            <div class="al-cross-match-list">${groups.stock.map((r, i) => renderRow(r, rows.indexOf(r))).join('')}</div>
+          ` : ''}
+          ${groups.profilo.length ? `
+            <div class="al-cross-cat-label">🏢 Profili compatibili (${groups.profilo.length})</div>
+            <div class="al-cross-match-list">${groups.profilo.map((r, i) => renderRow(r, rows.indexOf(r))).join('')}</div>
+          ` : ''}
         </div>
       `;
 
-      // Determina dove inserire: cerca un host VISIBILE
       const wrapper = document.createElement('div');
       wrapper.innerHTML = html;
       const boxEl = wrapper.firstElementChild;
 
-      // Strategia: inserisci sempre subito dopo il bottone "AVVIA AGENTE" e l'al-hint, 
-      // così è sempre visibile indipendentemente dal report (che potrebbe essere nascosto)
       const cta = document.getElementById('runQuickMission');
       const alHint = cta ? cta.parentNode.querySelector('.al-hint') : null;
       const insertionAnchor = alHint || cta;
 
       if (insertionAnchor && insertionAnchor.parentNode) {
-        // Inserisce SUBITO DOPO il bottone CTA (o l'hint sotto)
         insertionAnchor.parentNode.insertBefore(boxEl, insertionAnchor.nextSibling);
       } else if (host && host.parentNode) {
-        // Fallback al comportamento originale
         host.parentNode.insertBefore(boxEl, host);
       } else {
-        // Ultimo fallback: appendi alla home
         const home = document.querySelector('.al-home') || document.body;
         home.appendChild(boxEl);
       }
 
-      // Stile margine per separazione visiva
       boxEl.style.marginTop = '24px';
 
-      // Attacca handler bottoni "Avvia dialogo"
       boxEl.querySelectorAll('[data-cross-match-idx]').forEach(btn => {
         btn.addEventListener('click', () => {
           const idx = parseInt(btn.dataset.crossMatchIdx);
@@ -6227,12 +6399,10 @@
         });
       });
 
-      // Scroll automatico verso la card per essere sicuri che la veda
       setTimeout(() => {
         try { boxEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
       }, 100);
 
-      // Salva ultima ricerca per pulizia successiva
       window.__lastCrossMatchBox = boxEl;
     }
 
@@ -6340,6 +6510,91 @@
           showToast('Errore di rete', 'Non sono riuscito a inviare la richiesta. Riprova.');
         }
       }
+    }
+
+    // === Missione persistente: opt-in per cerca futura ===
+    function showPersistentMissionOptIn(missionText, parsed) {
+      // Rimuovi eventuale opt-in precedente
+      const existing = document.getElementById('alMissionOptIn');
+      if (existing) existing.remove();
+
+      const cta = document.getElementById('runQuickMission');
+      if (!cta) return;
+      const alHint = cta.parentNode.querySelector('.al-hint');
+      const insertionAnchor = window.__lastCrossMatchBox || alHint || cta;
+      if (!insertionAnchor || !insertionAnchor.parentNode) return;
+
+      const div = document.createElement('div');
+      div.id = 'alMissionOptIn';
+      div.className = 'al-mission-optin';
+      div.innerHTML = `
+        <div class="al-mission-optin-icon">🔔</div>
+        <div class="al-mission-optin-body">
+          <div class="al-mission-optin-title">Vuoi che il tuo agente continui a cercare?</div>
+          <div class="al-mission-optin-desc">Per 7 giorni ti avviserà in tempo reale appena qualcuno carica un match.</div>
+        </div>
+        <button class="al-mission-optin-btn" id="alMissionOptInBtn">Attiva agente per 7 giorni</button>
+      `;
+      insertionAnchor.parentNode.insertBefore(div, insertionAnchor.nextSibling);
+      div.style.marginTop = '20px';
+
+      document.getElementById('alMissionOptInBtn').addEventListener('click', async () => {
+        const btn = document.getElementById('alMissionOptInBtn');
+        if (!btn) return;
+        btn.disabled = true;
+        btn.textContent = 'Attivando...';
+
+        try {
+          // Estrai keywords
+          const lower = (missionText || '').toLowerCase();
+          const what = (parsed?.details?.what || '').toLowerCase().trim();
+          const stopWords = ['il','la','le','i','gli','un','una','di','da','in','su','per','con','che','del','della','dei','delle','cerco','cerca','offre','offri','offro','offriamo','ho','abbiamo','disponibile','disponibili'];
+          const keywords = [];
+          (what + ' ' + lower).split(/\s+/).forEach(w => {
+            const clean = w.replace(/[.,;:!?'"]/g, '');
+            if (clean.length >= 3 && !stopWords.includes(clean) && !keywords.includes(clean)) {
+              keywords.push(clean);
+            }
+          });
+
+          const body = {
+            user_id: authSession.user.id,
+            company_name: (document.getElementById('companyName')?.value || authSession.user?.email || 'Azienda'),
+            mission_text: missionText,
+            parsed_what: parsed?.details?.what || '',
+            parsed_area: parsed?.details?.where || '',
+            parsed_when: parsed?.details?.when || '',
+            keywords: keywords.slice(0, 10),
+            status: 'active',
+          };
+
+          const res = await fetch(activeMissionsEndpoint, {
+            method: 'POST',
+            headers: supabaseHeaders({ json: true, prefer: 'return=representation', useSession: true }),
+            body: JSON.stringify(body),
+          });
+
+          if (res.ok) {
+            div.innerHTML = `
+              <div class="al-mission-optin-icon" style="color: var(--green);">✓</div>
+              <div class="al-mission-optin-body">
+                <div class="al-mission-optin-title">Agente attivo!</div>
+                <div class="al-mission-optin-desc">Riceverai una notifica appena qualcuno carica una capacità compatibile. Validità: 7 giorni.</div>
+              </div>
+            `;
+            if (typeof showToast === 'function') {
+              showToast('Agente attivato', 'Ti notificherò appena trovo un nuovo match.');
+            }
+          } else {
+            btn.disabled = false;
+            btn.textContent = 'Riprova';
+          }
+        } catch (e) {
+          console.error('Errore attivazione missione', e);
+          btn.disabled = false;
+          btn.textContent = 'Riprova';
+        }
+      });
     }
 
     async function runQuickMission() {
@@ -6455,6 +6710,11 @@
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Missione rapida non riuscita.');
         quickRenderActionReport(data, companies, buyer);
+
+        // Mostra opt-in missione persistente (solo in modalità search)
+        if (mode === 'search' && isAuthenticated()) {
+          showPersistentMissionOptIn(mission, parsed);
+        }
 
         // Renderizza box match cross-account sopra il report
         if (mode === 'search' && (crossCapacities.slots?.length || crossCapacities.stock?.length)) {
@@ -7301,6 +7561,77 @@
         }
       }
 
+
+      // === TRIGGER MATCH AUTOMATICO ===
+      // Quando carichi una nuova capacità, controlla le missioni attive degli altri
+      // e crea match_requests automatici per loro
+      async function triggerMatchForActiveMissions(newCapacity) {
+        if (!isAuthenticated()) return;
+        try {
+          // Cerca missioni attive non scadute
+          const myId = authSession.user.id;
+          const nowIso = new Date().toISOString();
+          const url = `${activeMissionsEndpoint}?select=*&status=eq.active&expires_at=gt.${nowIso}&user_id=neq.${myId}`;
+          const r = await fetch(url, { headers: supabaseHeaders({ useSession: true }) });
+          if (!r.ok) return;
+          const missions = await r.json();
+
+          // Per ogni missione, controllo se le keyword matchano newCapacity
+          const capacityText = ((newCapacity.what || newCapacity.name || '') + ' ' +
+                               (newCapacity.area || '') + ' ' +
+                               (newCapacity.notes || '')).toLowerCase();
+
+          const matched = [];
+          for (const m of missions) {
+            const kws = m.keywords || [];
+            if (!kws.length) continue;
+            // Almeno una keyword deve apparire nel testo della capacità
+            const hit = kws.some(kw => capacityText.includes(kw.toLowerCase()));
+            if (hit) matched.push(m);
+          }
+
+          // Per ogni match, crea un match_request
+          const fromCompany = (document.getElementById('companyName')?.value || authSession.user?.email || 'Azienda');
+          for (const m of matched) {
+            try {
+              await fetch(matchRequestsEndpoint, {
+                method: 'POST',
+                headers: supabaseHeaders({ json: true, useSession: true }),
+                body: JSON.stringify({
+                  from_user_id: m.user_id,  // chi cercava
+                  from_company_name: m.company_name,
+                  to_user_id: myId,  // io che ho appena caricato
+                  to_company_name: fromCompany,
+                  source_type: newCapacity.source || 'auto-match',
+                  mission_text: m.mission_text,
+                  match_what: newCapacity.what || newCapacity.name || '',
+                  match_area: newCapacity.area || '',
+                  match_when: newCapacity.when || '',
+                  status: 'pending',
+                }),
+              });
+              // Aggiorna contatore match della missione
+              await fetch(`${activeMissionsEndpoint}?id=eq.${m.id}`, {
+                method: 'PATCH',
+                headers: supabaseHeaders({ json: true, useSession: true }),
+                body: JSON.stringify({ matches_found: (m.matches_found || 0) + 1, last_check_at: nowIso }),
+              });
+            } catch (e) {
+              console.warn('Match trigger fail per missione', m.id, e);
+            }
+          }
+
+          if (matched.length > 0 && typeof showToast === 'function') {
+            showToast(
+              'Hai aiutato ' + matched.length + ' agent' + (matched.length === 1 ? 'e' : 'i'),
+              'La tua capacità è stata segnalata a chi la stava cercando.'
+            );
+          }
+        } catch (e) {
+          console.warn('triggerMatchForActiveMissions error', e);
+        }
+      }
+
       async function loadStockFromDb() {
         if (!isAuthenticated()) { cachedStock = []; return; }
         try {
@@ -7347,7 +7678,18 @@
             return null;
           }
           const inserted = await res.json();
-          return Array.isArray(inserted) ? inserted[0] : inserted;
+          const result = Array.isArray(inserted) ? inserted[0] : inserted;
+          // Trigger match per missioni attive
+          if (result) {
+            triggerMatchForActiveMissions({
+              what: result.what,
+              area: result.area,
+              notes: result.notes,
+              when: result.when_text,
+              source: 'slot',
+            });
+          }
+          return result;
         } catch (e) {
           console.error('insertSlotDb exception', e);
           return null;
@@ -7372,7 +7714,17 @@
           });
           if (!res.ok) return null;
           const inserted = await res.json();
-          return Array.isArray(inserted) ? inserted[0] : inserted;
+          const result = Array.isArray(inserted) ? inserted[0] : inserted;
+          // Trigger match per missioni attive
+          if (result) {
+            triggerMatchForActiveMissions({
+              what: result.name,
+              area: result.area,
+              notes: result.notes,
+              source: 'stock',
+            });
+          }
+          return result;
         } catch (e) {
           console.error('insertStockDb exception', e);
           return null;
@@ -8197,6 +8549,15 @@
           // Aggiorno cache se la pagina Stock è già caricata
           if (typeof window.alReloadStockCalendar === 'function') {
             window.alReloadStockCalendar();
+          }
+          // Trigger match per missioni attive
+          if (typeof triggerMatchForActiveMissions === 'function') {
+            triggerMatchForActiveMissions({
+              what: cap.what,
+              area: cap.area || '',
+              when: cap.when || '',
+              source: 'scatola-nera',
+            });
           }
         } catch (e) {
           console.error('Errore salvataggio slot:', e);
