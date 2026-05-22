@@ -2602,6 +2602,213 @@
       .sk-recurrent-wrap { width: 100%; margin-left: 0; margin-top: 6px; }
     }
 
+    /* === Mini conversazione modal (post-accept notifica) === */
+    .conv-modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1800;
+      padding: 20px;
+    }
+    .conv-modal-bg.open { display: flex; }
+    .conv-modal {
+      background: linear-gradient(180deg, rgba(16, 34, 56, 0.99), rgba(7, 17, 31, 0.99));
+      border: 1px solid rgba(72, 215, 207, 0.4);
+      border-radius: 16px;
+      max-width: 580px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 28px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+    }
+    .conv-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+    }
+    .conv-modal-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 4px;
+    }
+    .conv-modal-subtitle {
+      font-size: 12px;
+      color: var(--muted, #94a3b8);
+    }
+    .conv-modal-close {
+      background: rgba(148, 163, 184, 0.1);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      color: var(--muted, #94a3b8);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+    }
+    .conv-modal-close:hover { color: var(--text); }
+
+    .conv-match-card {
+      background: rgba(72, 215, 207, 0.08);
+      border-left: 3px solid var(--teal);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .conv-match-label {
+      color: var(--teal);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .conv-match-info {
+      color: var(--text);
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+    .conv-match-info strong { color: var(--text); }
+    .conv-match-info em {
+      color: var(--muted, #94a3b8);
+      font-style: italic;
+      display: block;
+      margin-top: 4px;
+      font-size: 12.5px;
+    }
+
+    .conv-section-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin: 16px 0 10px;
+    }
+
+    .conv-message-bubble {
+      background: rgba(7, 17, 31, 0.5);
+      border: 1px solid rgba(72, 215, 207, 0.25);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .conv-message-bubble::before {
+      content: "AI";
+      position: absolute;
+      top: -8px;
+      left: 14px;
+      background: linear-gradient(135deg, var(--teal), var(--green));
+      color: #06101b;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.08em;
+    }
+    .conv-message-author {
+      color: var(--teal);
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .conv-message-text {
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+    }
+    .conv-message-loading {
+      color: var(--muted, #94a3b8);
+      font-style: italic;
+      font-size: 13px;
+    }
+    .conv-message-loading::after {
+      content: '';
+      display: inline-block;
+      width: 18px;
+      animation: conv-dots 1.4s steps(4, end) infinite;
+    }
+    @keyframes conv-dots {
+      0%   { content: ''; }
+      25%  { content: '.'; }
+      50%  { content: '..'; }
+      75%  { content: '...'; }
+      100% { content: ''; }
+    }
+
+    .conv-contacts {
+      background: linear-gradient(135deg, rgba(243, 168, 79, 0.1), rgba(243, 168, 79, 0.04));
+      border: 1px solid rgba(243, 168, 79, 0.3);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-top: 18px;
+    }
+    .conv-contacts-title {
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .conv-contacts-row {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 8px;
+      font-size: 13px;
+      padding: 4px 0;
+    }
+    .conv-contacts-row span:first-child {
+      color: var(--muted, #94a3b8);
+      font-weight: 700;
+    }
+    .conv-contacts-row span:last-child {
+      color: var(--text);
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    .conv-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .conv-actions button {
+      flex: 1;
+      min-width: 140px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .conv-btn-email {
+      background: linear-gradient(135deg, var(--teal), var(--green));
+      color: #06101b;
+    }
+    .conv-btn-email:hover { filter: brightness(1.1); }
+    .conv-btn-close {
+      background: transparent;
+      border-color: rgba(148, 163, 184, 0.3);
+      color: var(--muted, #94a3b8);
+    }
+    .conv-btn-close:hover { color: var(--text); }
+
     /* === Bell notifica + panel === */
     .al-bell-btn {
       position: relative;
@@ -8284,11 +8491,12 @@
         } catch (e) { console.error(e); }
       }
 
-      // === Accetta richiesta — avvia dialogo agenti ===
+      // === Accetta richiesta — apre mini-conversazione con AI intro ===
       async function acceptNotification(notifId) {
         const notif = notifications.find(n => n.id === notifId);
         if (!notif) return;
 
+        // 1) Update status nel DB
         try {
           await fetch(`${matchRequestsEndpoint}?id=eq.${notifId}`, {
             method: 'PATCH',
@@ -8301,29 +8509,95 @@
           });
         } catch (e) { console.error(e); }
 
-        // Precompila la pagina dialogo
-        const buyerEl = document.getElementById('dialogueBuyer');
-        const sellerEl = document.getElementById('dialogueSeller');
-        const topicEl = document.getElementById('dialogueTopic');
-        if (buyerEl) buyerEl.value = (notif.from_company_name || 'Buyer') + ' (cerca: ' + (notif.mission_text || notif.match_what || '') + ')';
-        if (sellerEl) sellerEl.value = (notif.to_company_name || 'Seller') + ' (sei tu — rispondi sulla base delle tue capacità)';
-        if (topicEl) topicEl.value = 'Match: ' + (notif.match_what || '') + (notif.match_area ? ' in ' + notif.match_area : '') + '. Verifica disponibilità, condizioni, tempi.';
-
-        // Chiudi pannello e naviga
+        // 2) Chiudi pannello notifiche, apri modal mini-conversazione
         setNotifPanelOpen(false);
-        if (typeof showScreen === 'function') {
-          showScreen('dialogue');
-        }
-        if (typeof showToast === 'function') {
-          showToast('Dialogo aperto', 'Premi "Genera prossimo turno" per far rispondere il tuo agente.');
-        }
+        openConversationModal(notif);
 
-        // Aggiorna stato locale
+        // 3) Aggiorna stato locale
         notif.status = 'accepted';
         notif.responded_at = new Date().toISOString();
         unreadCount = notifications.filter(n => !n.read_at && n.status === 'pending').length;
         updateBellBadge();
         renderNotifList();
+      }
+
+      // === Apre modal mini-conversazione e genera messaggio AI ===
+      async function openConversationModal(notif) {
+        const modal = document.getElementById('convModal');
+        if (!modal) return;
+
+        // Popola dati statici subito
+        document.getElementById('convModalSubtitle').textContent = 'Il tuo agente sta generando la risposta...';
+        document.getElementById('convMatchInfo').innerHTML =
+          '<strong>' + escapeHtml(notif.from_company_name || 'Buyer') + '</strong> cerca ' +
+          '<strong>' + escapeHtml(notif.match_what || 'qualcosa') + '</strong>' +
+          (notif.match_area ? ' in ' + escapeHtml(notif.match_area) : '') +
+          (notif.match_when ? ' · ' + escapeHtml(notif.match_when) : '') +
+          (notif.mission_text ? '<em>"' + escapeHtml(notif.mission_text) + '"</em>' : '');
+
+        document.getElementById('convMessageAuthor').textContent = (notif.to_company_name || 'Tuo agente');
+        document.getElementById('convMessageText').innerHTML = '<span class="conv-message-loading">Generazione in corso</span>';
+
+        // Cerco email contatti dei due utenti
+        let buyerEmail = '—';
+        let sellerEmail = '—';
+        try {
+          // Email del seller = io (sono il destinatario della notifica)
+          if (authSession && authSession.user && authSession.user.email) {
+            sellerEmail = authSession.user.email;
+          }
+          // Email del buyer = chi ha mandato la richiesta
+          // Va recuperata da Supabase auth - usiamo company_name come fallback se non riusciamo
+          buyerEmail = notif.from_company_name || '—';
+        } catch (e) {}
+
+        document.getElementById('convBuyerEmail').textContent = buyerEmail;
+        document.getElementById('convSellerEmail').textContent = sellerEmail;
+
+        // Mostra modal
+        modal.classList.add('open');
+
+        // Chiama endpoint AI per generare il messaggio
+        try {
+          const r = await fetch('/api/match-intro', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              from_company_name: notif.from_company_name,
+              to_company_name: notif.to_company_name,
+              mission_text: notif.mission_text,
+              match_what: notif.match_what,
+              match_area: notif.match_area,
+              match_when: notif.match_when,
+            }),
+          });
+          if (r.ok) {
+            const data = await r.json();
+            document.getElementById('convMessageText').textContent = data.message || 'Messaggio generato.';
+            document.getElementById('convModalSubtitle').textContent = 'Conversazione attiva. Scambia contatti per continuare.';
+          } else {
+            document.getElementById('convMessageText').textContent =
+              'Buongiorno, sono l\'agente di ' + (notif.to_company_name || '') +
+              '. Ho ricevuto la richiesta di ' + (notif.from_company_name || '') +
+              ' per "' + (notif.match_what || '') + '". Confermo disponibilità e attendo dettagli.';
+          }
+        } catch (e) {
+          console.error('Errore genera intro', e);
+          document.getElementById('convMessageText').textContent =
+            'Buongiorno, sono l\'agente di ' + (notif.to_company_name || '') +
+            '. Ho ricevuto la tua richiesta per "' + (notif.match_what || '') +
+            '". Confermo disponibilità e attendo dettagli operativi.';
+        }
+
+        // Memorizzo dati per il bottone email
+        window.__currentConvNotif = notif;
+      }
+
+      // === Chiusura modal ===
+      function closeConvModal() {
+        const modal = document.getElementById('convModal');
+        if (modal) modal.classList.remove('open');
+        window.__currentConvNotif = null;
       }
 
       // === Rifiuta richiesta ===
@@ -8551,9 +8825,85 @@
 
       // Esponi globalmente per debug
       window.alReloadNotifications = loadNotifications;
+
+      // Wire up bottoni modal conversazione
+      const convClose = document.getElementById('convModalClose');
+      const convBtnClose = document.getElementById('convBtnClose');
+      const convBtnEmail = document.getElementById('convBtnEmail');
+      const convModal = document.getElementById('convModal');
+
+      if (convClose) convClose.addEventListener('click', closeConvModal);
+      if (convBtnClose) convBtnClose.addEventListener('click', closeConvModal);
+      if (convModal) convModal.addEventListener('click', (e) => {
+        if (e.target.id === 'convModal') closeConvModal();
+      });
+      if (convBtnEmail) convBtnEmail.addEventListener('click', () => {
+        const notif = window.__currentConvNotif;
+        if (!notif) return;
+        const subject = encodeURIComponent('AgentLink - Match: ' + (notif.match_what || ''));
+        const body = encodeURIComponent(
+          'Ciao,\n\nti scrivo riguardo al match trovato su AgentLink:\n' +
+          '- Richiesta: ' + (notif.match_what || '') + '\n' +
+          (notif.match_area ? '- Area: ' + notif.match_area + '\n' : '') +
+          (notif.match_when ? '- Quando: ' + notif.match_when + '\n' : '') +
+          '\nFammi sapere come procedere.\n\nGrazie.'
+        );
+        // Apre client email con dati precompilati
+        const toEmail = notif.from_company_name && notif.from_company_name.includes('@') ? notif.from_company_name : '';
+        window.location.href = 'mailto:' + toEmail + '?subject=' + subject + '&body=' + body;
+      });
     })();
 
   </script>
+
+  <!-- Mini-conversazione modal (apertura match accettato) -->
+  <div class="conv-modal-bg" id="convModal" role="dialog">
+    <div class="conv-modal">
+      <div class="conv-modal-header">
+        <div>
+          <h3 class="conv-modal-title" id="convModalTitle">Conversazione avviata</h3>
+          <div class="conv-modal-subtitle" id="convModalSubtitle">Il tuo agente sta rispondendo...</div>
+        </div>
+        <button class="conv-modal-close" id="convModalClose">×</button>
+      </div>
+
+      <div class="conv-match-card">
+        <div class="conv-match-label">Match accettato</div>
+        <div class="conv-match-info" id="convMatchInfo">—</div>
+      </div>
+
+      <div class="conv-section-label">Risposta del tuo agente</div>
+      <div class="conv-message-bubble">
+        <div class="conv-message-author" id="convMessageAuthor">Agente</div>
+        <div class="conv-message-text" id="convMessageText">
+          <span class="conv-message-loading">Generazione in corso</span>
+        </div>
+      </div>
+
+      <div class="conv-contacts">
+        <div class="conv-contacts-title">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          Contatti scambiati
+        </div>
+        <div class="conv-contacts-row">
+          <span>Buyer:</span>
+          <span id="convBuyerEmail">—</span>
+        </div>
+        <div class="conv-contacts-row">
+          <span>Seller:</span>
+          <span id="convSellerEmail">—</span>
+        </div>
+      </div>
+
+      <div class="conv-actions">
+        <button class="conv-btn-email" id="convBtnEmail">Apri client email</button>
+        <button class="conv-btn-close" id="convBtnClose">Chiudi</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Toast notification (Scatola Nera) -->
   <div class="ag-toast" id="agToast">
