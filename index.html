@@ -5846,12 +5846,36 @@
 
       if (parsed.missingRequired.length) {
         const miss = parsed.missingRequired.join(', ');
-        document.getElementById('quickReportSummary').innerHTML = `<strong>Missione incompleta:</strong> manca ${escapeHtml(miss)}.`;
-        document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="6">Per partire scrivi chiaramente cosa vuoi cercare o offrire.</td></tr>';
+        document.getElementById('quickReportSummary').innerHTML = `<strong>Missione incompleta per parser strutturato:</strong> manca ${escapeHtml(miss)}. Procedo lo stesso con ricerca rete AgentLink.`;
+        document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="6">Ricerca testuale sulla rete in corso...</td></tr>';
         setQuickFeed([
-          { type: 'warn', text: `Missione incompleta: manca ${miss}.` },
-          { type: 'muted', text: 'Aggiungi almeno cosa e poi rilancia la missione.' }
+          { type: 'warn', text: `Missione incompleta per parser: manca ${miss}.` },
+          { type: 'muted', text: 'Sto comunque cercando match testuali nella rete AgentLink...' }
         ]);
+
+        // === Continua comunque con cross-account search se in modalità search ===
+        if (mode === 'search') {
+          clearCrossAccountMatches();
+          try {
+            const crossCapacities = await fetchCrossAccountCapacities(mission, parsed);
+            const totalMatches = (crossCapacities.slots?.length || 0) + (crossCapacities.stock?.length || 0);
+            if (totalMatches > 0) {
+              renderCrossAccountMatches(crossCapacities, 'quickReportSummary');
+              document.getElementById('quickReportSummary').innerHTML = `<strong>Match trovati:</strong> nonostante la missione fosse incompleta per il parser strutturato, ho trovato ${totalMatches} potenziali corrispondenze nella rete.`;
+              document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="6">Guarda la card sopra con i match della rete AgentLink.</td></tr>';
+              setQuickFeed([
+                { type: 'done', text: `${totalMatches} match testuali trovati nella rete.` },
+                { type: 'muted', text: 'Per affinare il match strutturato aggiungi cosa, dove, quando.' }
+              ]);
+            } else {
+              document.getElementById('quickReportSummary').innerHTML = `<strong>Missione incompleta:</strong> manca ${escapeHtml(miss)}. Nessun match testuale trovato nella rete. Riprova specificando ${escapeHtml(parsed.missingRequired.join(', '))}.`;
+              document.getElementById('quickReportRows').innerHTML = '<tr><td colspan="6">Nessuna azienda della rete corrisponde al testo della tua ricerca.</td></tr>';
+            }
+          } catch (e) {
+            console.error('Cross-account fallback fallita', e);
+          }
+        }
+
         return;
       }
 
