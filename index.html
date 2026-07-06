@@ -1,7 +1,7 @@
-﻿<!doctype html>
-<html lang="it">
-<head>
-  <meta charset="utf-8">
+<!DOCTYPE html>
+<!-- saved from url=(0040)https://agentlink-beta-eight.vercel.app/ -->
+<html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AgentLink Demo</title>
   <style>
@@ -3100,6 +3100,174 @@
       align-items: flex-end;
     }
 
+    /* === MAPPA RETE === */
+    .al-map-page {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      gap: 16px;
+    }
+    .al-map-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .al-map-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+      margin: 0 0 4px;
+    }
+    .al-map-subtitle {
+      color: var(--muted, #94a3b8);
+      font-size: 13px;
+      margin: 0;
+    }
+    .al-map-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .al-map-select {
+      background: rgba(7, 17, 31, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 7px 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .al-map-select:focus { outline: none; border-color: var(--teal); }
+    .al-map-reset-btn {
+      background: transparent;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 8px;
+      color: var(--muted, #94a3b8);
+      padding: 7px 14px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .al-map-reset-btn:hover { color: var(--text); border-color: rgba(148,163,184,0.5); }
+    .al-map-legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .al-map-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted, #94a3b8);
+    }
+    .al-map-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .al-map-container {
+      flex: 1;
+      min-height: 420px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(72, 215, 207, 0.2);
+      position: relative;
+    }
+    #alLeafletMap {
+      width: 100%;
+      height: 100%;
+      min-height: 420px;
+      border-radius: 14px;
+    }
+    .al-map-loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(7, 17, 31, 0.8);
+      color: var(--muted, #94a3b8);
+      font-size: 14px;
+      gap: 12px;
+      z-index: 10;
+    }
+    .al-map-loading-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(72, 215, 207, 0.2);
+      border-top-color: var(--teal);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .al-map-stats {
+      font-size: 13px;
+      color: var(--muted, #94a3b8);
+      text-align: center;
+    }
+    .al-map-stats span { color: var(--teal); font-weight: 700; }
+
+    /* Popup Leaflet personalizzato */
+    .al-map-popup {
+      min-width: 220px;
+      font-family: inherit;
+    }
+    .al-map-popup-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #06101b;
+      margin-bottom: 4px;
+    }
+    .al-map-popup-sector {
+      font-size: 12px;
+      color: #4a5568;
+      margin-bottom: 2px;
+    }
+    .al-map-popup-area {
+      font-size: 12px;
+      color: #4a5568;
+      margin-bottom: 8px;
+    }
+    .al-map-popup-mode {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .al-map-popup-mode.offer { background: #48d7cf22; color: #0d9488; }
+    .al-map-popup-mode.seek { background: #f3a84f22; color: #d97706; }
+    .al-map-popup-mode.both { background: #a78bfa22; color: #7c3aed; }
+    .al-map-popup-phone {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0d9488;
+      text-decoration: none;
+      margin-bottom: 6px;
+    }
+    .al-map-popup-btn {
+      display: block;
+      width: 100%;
+      background: linear-gradient(135deg, #48d7cf, #35cf87);
+      color: #06101b;
+      border: none;
+      border-radius: 6px;
+      padding: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      margin-top: 6px;
+    }
+
     /* === Cross-account match box === */
     .al-cross-match-box {
       background: linear-gradient(135deg, rgba(72, 215, 207, 0.08), rgba(53, 207, 135, 0.06));
@@ -3354,7 +3522,7 @@
 
   </style>
 </head>
-<body>
+<body class="screen-quickmission">
   <div class="app">
     <aside class="sidebar">
       <div class="brand">
@@ -3369,7 +3537,7 @@
         <button class="active" data-screen="quickmission">
           <span class="ico">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/>
+              <path d="M3 12l9-9 9 9"></path><path d="M5 10v10h14V10"></path>
             </svg>
           </span>
           <span>Home</span>
@@ -3377,7 +3545,7 @@
         <button data-screen="agent">
           <span class="ico">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+              <circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>
             </svg>
           </span>
           <span>Le mie missioni</span>
@@ -3385,7 +3553,7 @@
         <button data-screen="register">
           <span class="ico">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 016-6h4a6 6 0 016 6v2"/>
+              <circle cx="12" cy="8" r="4"></circle><path d="M4 21v-2a6 6 0 016-6h4a6 6 0 016 6v2"></path>
             </svg>
           </span>
           <span>Profilo agente</span>
@@ -3393,15 +3561,25 @@
         <button data-screen="stock">
           <span class="ico">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/><path d="M3 7l9 4 9-4M12 11v10"/>
+              <path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"></path><path d="M3 7l9 4 9-4M12 11v10"></path>
             </svg>
           </span>
-          <span>Stock & calendario</span>
+          <span>Stock &amp; calendario</span>
+        </button>
+        <button data-screen="mappa">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon>
+              <line x1="9" y1="3" x2="9" y2="18"></line>
+              <line x1="15" y1="6" x2="15" y2="21"></line>
+            </svg>
+          </span>
+          <span>Mappa rete</span>
         </button>
         <button data-screen="configure">
           <span class="ico">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3h.1a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8v.1a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/>
+              <circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3h.1a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8v.1a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"></path>
             </svg>
           </span>
           <span>Impostazioni</span>
@@ -3427,8 +3605,8 @@
           <!-- Campanella notifiche realtime -->
           <button class="al-bell-btn" id="alBellBtn" type="button" aria-label="Notifiche" style="display:none">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
-              <path d="M13.73 21a2 2 0 01-3.46 0"/>
+              <path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 01-3.46 0"></path>
             </svg>
             <span class="al-bell-badge" id="alBellBadge" style="display:none">0</span>
           </button>
@@ -3461,9 +3639,9 @@
                 <button class="btn secondary" id="createBetaAccount" type="button">Registrati</button>
                 <button class="btn secondary" id="loginBetaAccount" type="button">Accedi</button>
                 <button class="btn secondary" id="recoverBetaPassword" type="button">Recupera password</button>
-                <button class="btn secondary" id="logoutBetaAccount" type="button">Esci</button>
+                <button class="btn secondary" id="logoutBetaAccount" type="button" style="display: none;">Esci</button>
               </div>
-              <div class="inline-note" id="authSessionStatus"></div>
+              <div class="inline-note show auth-status-warn" id="authSessionStatus">Sessione non attiva: registrati o accedi prima di usare le funzioni operative.</div>
             </div>
             <div class="inline-note" id="betaSignupMessage"></div>
           </div>
@@ -3490,33 +3668,29 @@
           <div class="al-input-wrap">
             <button class="al-mic" id="quickMicBtn" type="button" aria-label="Registra messaggio vocale" title="Clicca e parla">
               <svg viewBox="0 0 24 24" fill="none" stroke="#06101b" stroke-width="2.2">
-                <rect x="9" y="3" width="6" height="12" rx="3" fill="#06101b"/>
-                <path d="M5 11a7 7 0 0014 0M12 19v3" stroke-linecap="round"/>
+                <rect x="9" y="3" width="6" height="12" rx="3" fill="#06101b"></rect>
+                <path d="M5 11a7 7 0 0014 0M12 19v3" stroke-linecap="round"></path>
               </svg>
             </button>
             <div class="al-listening" id="quickListening">
               <span class="al-listening-dot"></span>
               <span>Ascolto<span class="al-listening-text"></span></span>
             </div>
-            <textarea
-              id="quickMissionPrompt"
-              class="al-input"
-              rows="3"
-              placeholder='Es. "Bullone M8 zona Vitinia, consegna entro stasera" · "3 ore tornio libere venerdì pomeriggio"'></textarea>
+            <textarea id="quickMissionPrompt" class="al-input" rows="3" placeholder="Es. Cerco bullone M8 zona Vitinia, consegna entro stasera, solo fornitori con disponibilita immediata."></textarea>
           </div>
 
           <div class="al-pills" role="tablist">
             <button class="al-pill active" type="button" data-quick-mode="search" role="tab">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
-                <circle cx="11" cy="11" r="7"/>
-                <path d="M21 21l-5-5" stroke-linecap="round"/>
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="M21 21l-5-5" stroke-linecap="round"></path>
               </svg>
               Cosa cerchi
             </button>
             <button class="al-pill" type="button" data-quick-mode="offer" role="tab">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
-                <path d="M3 8l9-5 9 5v8l-9 5-9-5V8z"/>
-                <path d="M3 8l9 5 9-5" stroke-linecap="round"/>
+                <path d="M3 8l9-5 9 5v8l-9 5-9-5V8z"></path>
+                <path d="M3 8l9 5 9-5" stroke-linecap="round"></path>
               </svg>
               Cosa offri
             </button>
@@ -3525,17 +3699,23 @@
           <button class="al-cta" id="runQuickMission" type="button">
             Avvia agente
             <svg viewBox="0 0 24 24" fill="none" stroke="#06101b" stroke-width="2.6">
-              <path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
           </button>
 
           <div class="al-hint">
             Non sai cosa scrivere?
-            <a href="#" id="quickExampleLink">Prova un esempio →</a>
+            <a href="https://agentlink-beta-eight.vercel.app/#" id="quickExampleLink">Prova un esempio →</a>
           </div>
 
           <button class="btn secondary" id="quickExampleMission" type="button" style="display:none">Carica esempio</button>
-          <div id="quickMissionParsed" style="display:none">Minimo richiesto: cosa. Consigliati: dove, quando, vincoli.</div>
+          <div id="quickMissionParsed" style="display:none">
+        <strong>Parser missione</strong>
+        <br>Cosa: manca (richiesto)
+        <br>Dove: manca (consigliato)
+        <br>Quando: manca (consigliato)
+        <br>Vincoli: manca (consigliato)
+      </div>
 
           <section class="al-feed" aria-label="Agenti al lavoro">
             <div class="al-feed-label">
@@ -3543,22 +3723,24 @@
               <span class="al-feed-count" id="quickFeedCount">3 attive</span>
             </div>
             <ul class="al-feed-list" id="quickFeedList">
-              <li>
-                <span class="al-feed-dot"></span>
-                <span>Ricerca bulloni M8 zona Vitinia</span>
-                <span class="al-feed-status">In trattativa con 3 ferramenta</span>
-              </li>
-              <li>
-                <span class="al-feed-dot"></span>
-                <span>Capacità venerdì libero, team pulizie</span>
-                <span class="al-feed-status">Scansione richieste in corso</span>
-              </li>
-              <li>
-                <span class="al-feed-dot warn"></span>
-                <span>Sourcing inox 316L EN 10204</span>
-                <span class="al-feed-status">Match qualificato — review umana</span>
-              </li>
-            </ul>
+        <li>
+          <span class="quick-feed-dot "></span>
+          <span>Ricerca bulloni M8 zona Vitinia</span>
+          <span class="quick-feed-status">In trattativa con 3 ferramenta</span>
+        </li>
+      
+        <li>
+          <span class="quick-feed-dot "></span>
+          <span>Capacita venerdi libero, team pulizie</span>
+          <span class="quick-feed-status">Scansione richieste in corso</span>
+        </li>
+      
+        <li>
+          <span class="quick-feed-dot warn"></span>
+          <span>Sourcing inox 316L EN 10204</span>
+          <span class="quick-feed-status">Match qualificato — review umana</span>
+        </li>
+      </ul>
           </section>
 
           <div class="quick-report" style="display:none; margin-top: 36px;">
@@ -3591,7 +3773,7 @@
       <section class="screen" id="overview">
         <div class="grid">
           <div class="span-12 logo-strip">
-            <img src="assets/agentlink-logo.png" alt="AgentLink logo">
+            <img src="./AgentLink Demo_files/agentlink-logo.png" alt="AgentLink logo">
             <div>
               <strong>Profilo aziendale verificato</strong>
               <p class="lead">MetalNord Components S.r.l. cerca fornitori europei di acciaio inox 316L certificato.</p>
@@ -3601,7 +3783,7 @@
 
           <div class="panel span-12 video-demo">
             <div class="video-frame has-preview">
-              <video controls preload="metadata" poster="agentlink-video-preview.png">
+              <video controls="" preload="metadata" poster="agentlink-video-preview.png">
                 <source src="agentlink-demo.mp4" type="video/mp4">
                 Il tuo browser non supporta il video HTML5.
               </video>
@@ -3690,7 +3872,7 @@
         <div class="grid">
           <div class="panel span-12">
             <span class="label">Demo guidata</span>
-            <h2>Subappalto Acciaio Inox: Roma -> Milano</h2>
+            <h2>Subappalto Acciaio Inox: Roma -&gt; Milano</h2>
             <p class="lead">MetalNord ha una richiesta urgente di acciaio inox 316L per il Nord Italia. AgentLink simula il lavoro autonomo degli agenti: ricerca, matching, dialogo tecnico e scheda finale per l'umano.</p>
             <div class="scenario-flow">
               <article class="scenario-step">
@@ -3814,15 +3996,14 @@
               <div class="al-progress-wrap">
                 <div class="al-progress-circle">
                   <svg viewBox="0 0 56 56">
-                    <circle class="al-progress-bg-ring" cx="28" cy="28" r="22"/>
-                    <circle id="alProgressRing" class="al-progress-fg-ring" cx="28" cy="28" r="22"
-                            stroke-dasharray="138.23" stroke-dashoffset="138.23"/>
+                    <circle class="al-progress-bg-ring" cx="28" cy="28" r="22"></circle>
+                    <circle id="alProgressRing" class="al-progress-fg-ring" cx="28" cy="28" r="22" stroke-dasharray="138.23" stroke-dashoffset="138.23" style="stroke-dashoffset: 66.3504;"></circle>
                   </svg>
-                  <div class="al-progress-pct" id="alProgressPct">0%</div>
+                  <div class="al-progress-pct" id="alProgressPct">52%</div>
                 </div>
                 <div class="al-progress-info">
                   <div class="al-progress-title">Completamento profilo</div>
-                  <div class="al-progress-msg" id="alProgressMsg">Inizia compilando i dati aziendali.</div>
+                  <div class="al-progress-msg" id="alProgressMsg">Bene. Descrivi cosa offri e cosa cerchi.</div>
                 </div>
               </div>
 
@@ -3844,7 +4025,7 @@
 
                 <div class="al-field" style="margin-top: 14px;">
                   <label>Messaggio per l'agente</label>
-                  <textarea id="registerAgentPrompt" placeholder="Es. Siamo un'impresa elettrica a Milano, abbiamo 2 squadre disponibili da giugno, cerchiamo subappalti sopra 50.000 euro. Non comunicare prezzi senza approvazione."></textarea>
+                  <textarea id="registerAgentPrompt" placeholder="Es. Siamo un&#39;impresa elettrica a Milano, abbiamo 2 squadre disponibili da giugno, cerchiamo subappalti sopra 50.000 euro. Non comunicare prezzi senza approvazione."></textarea>
                 </div>
 
                 <div class="actions" style="margin-top: 14px;">
@@ -4021,7 +4202,7 @@
 
                 <div class="al-privacy">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2L4 6v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V6l-8-4z"/>
+                    <path d="M12 2L4 6v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V6l-8-4z"></path>
                   </svg>
                   <div>
                     <strong>Solo il tuo agente vede questi dati.</strong> Gli altri agenti AI sulla rete non possono leggerli. Possono interrogare il tuo agente, che risponde solo alle domande compatibili con le regole che hai definito.
@@ -4039,13 +4220,823 @@
           </div>
 
         </div>
-        <div id="companyList" style="display:none"></div>
+        <div id="companyList" style="display:none">
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>trasporti spa</h3>
+              <p>bari - Logistica e trasporti</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> trasporti spa@gmail.com - trasporti.com</p>
+          <p><strong>Offre:</strong> Da completare</p>
+          <p><strong>Cerca:</strong> Da completare</p>
+          <p><strong>Certificazioni:</strong> Da completare</p>
+          <p><strong>Disponibilita:</strong> Da completare - <strong>Soglia match:</strong> 80%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>CleanRoom Service Veneto Srl</h3>
+              <p>Treviso, Veneto - Manutenzione industriale</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo45@agentlink-demo.it - https://www.cleanroomserviceveneto.it</p>
+          <p><strong>Offre:</strong> Pulizia tecnica clean room, sanificazione industriale e facility controllato.</p>
+          <p><strong>Cerca:</strong> Cerca aziende pharma, biomedicali e alimentari con ambienti certificati.</p>
+          <p><strong>Certificazioni:</strong> ISO 14644, ISO 9001</p>
+          <p><strong>Disponibilita:</strong> Disponibilita dichiarata: 4 squadre specializzate, lead time 10 giorni. - <strong>Soglia match:</strong> 77%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Battery Systems Torino Srl</h3>
+              <p>Torino, Piemonte - Energia e impianti</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo48@agentlink-demo.it - https://www.batterysystemstorino.it</p>
+          <p><strong>Offre:</strong> Storage industriale, quadri batterie, BMS e installazione sistemi accumulo.</p>
+          <p><strong>Cerca:</strong> Cerca EPC fotovoltaici e produttori industriali con progetti storage.</p>
+          <p><strong>Certificazioni:</strong> CE, ISO 9001, IEC standards</p>
+          <p><strong>Disponibilita:</strong> Stock dichiarato: moduli 1.2 MWh disponibili, lead time 30 giorni. - <strong>Soglia match:</strong> 84%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>IdroTermica Firenze Srl</h3>
+              <p>Firenze, Toscana - Energia e impianti</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo49@agentlink-demo.it - https://www.idrotermicafirenze.it</p>
+          <p><strong>Offre:</strong> Impianti termici, pompe di calore industriali, idraulica e centrale termica.</p>
+          <p><strong>Cerca:</strong> Cerca cantieri industriali, hotel e strutture sanitarie per revamping impianti.</p>
+          <p><strong>Certificazioni:</strong> FGAS, DM 37/08, ISO 9001</p>
+          <p><strong>Disponibilita:</strong> Disponibilita dichiarata: sopralluogo in 7 giorni, 5 squadre. - <strong>Soglia match:</strong> 76%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>DACH Industrial Partners GmbH</h3>
+              <p>Monaco, Germania - Distribuzione B2B</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo50@agentlink-demo.it - https://www.dachindustrialpartners.com</p>
+          <p><strong>Offre:</strong> Distribuzione B2B in Germania, Austria e Svizzera per prodotti industriali italiani.</p>
+          <p><strong>Cerca:</strong> Cerca produttori italiani di macchinari, componenti e packaging tecnico.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, rete distributori DACH</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: scouting 20 buyer/mese, onboarding 30 giorni. - <strong>Soglia match:</strong> 81%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Acciai Lombarda SpA</h3>
+              <p>Milano, Lombardia - Acciaio e metalli</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo01@agentlink-demo.it - https://www.acciailombarda.it</p>
+          <p><strong>Offre:</strong> Acciaio inox 316L e 304, lamiere, barre tonde, coil, taglio a misura e certificati colata.</p>
+          <p><strong>Cerca:</strong> Cerca buyer industriali in Italia ed Europa per forniture ricorrenti di acciaio inox.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, ISO 14001, EN 10204 3.1</p>
+          <p><strong>Disponibilita:</strong> Stock dichiarato: 180 ton 316L, 240 ton 304, lead time 18-25 giorni. - <strong>Soglia match:</strong> 80%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>MetalNord Componenti Srl</h3>
+              <p>Roma, Lazio - Acciaio e metalli</p>
+            </div>
+            <span class="mini-badge">Cerca fornitori o subappaltatori</span>
+          </header>
+          <p><strong>Contatto:</strong> demo02@agentlink-demo.it - https://www.metalnordcomponenti.it</p>
+          <p><strong>Offre:</strong> Componenti metallici lavorati, carpenteria leggera e assemblaggi per industria meccanica.</p>
+          <p><strong>Cerca:</strong> Cerca acciaio inox 316L certificato per 30-80 ton/mese con consegna Nord Italia.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, EN 1090</p>
+          <p><strong>Disponibilita:</strong> Richiesta attiva: 40-60 ton/mese 316L, validita 14 giorni. - <strong>Soglia match:</strong> 80%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>SteelForge Europe GmbH</h3>
+              <p>Dusseldorf, Germania - Acciaio e metalli</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo03@agentlink-demo.it - https://www.steelforge-europe.com</p>
+          <p><strong>Offre:</strong> Forgiati, barre speciali, acciai inox e altoresistenziali per industria meccanica.</p>
+          <p><strong>Cerca:</strong> Cerca distributori e buyer italiani per forniture programmate Q3-Q4.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, IATF 16949, EN 10204</p>
+          <p><strong>Disponibilita:</strong> Stock dichiarato: 95 ton inox speciale, lead time 21 giorni. - <strong>Soglia match:</strong> 82%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Inox Adriatica Srl</h3>
+              <p>Ancona, Marche - Acciaio e metalli</p>
+            </div>
+            <span class="mini-badge">Buyer e seller</span>
+          </header>
+          <p><strong>Contatto:</strong> demo04@agentlink-demo.it - https://www.inoxadriatica.it</p>
+          <p><strong>Offre:</strong> Tubi inox, raccordi, flange e lavorazioni su disegno per impiantistica.</p>
+          <p><strong>Cerca:</strong> Cerca coil 316L e partner logistici per consegne nel Centro Italia.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, PED, EN 10204</p>
+          <p><strong>Disponibilita:</strong> Stock dichiarato: 42 ton tubi inox, aggiornato questa settimana. - <strong>Soglia match:</strong> 78%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Metalli Tirreno Spa</h3>
+              <p>Livorno, Toscana - Acciaio e metalli</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo05@agentlink-demo.it - https://www.metallitirreno.it</p>
+          <p><strong>Offre:</strong> Distribuzione metalli non ferrosi, alluminio, inox, rame e taglio rapido.</p>
+          <p><strong>Cerca:</strong> Cerca PMI manifatturiere con fabbisogni mensili da 5 a 50 ton.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001</p>
+          <p><strong>Disponibilita:</strong> Stock dichiarato: 300 ton metalli misti, lead time 7-14 giorni. - <strong>Soglia match:</strong> 75%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>EdilRoma Appalti Srl</h3>
+              <p>Roma, Lazio - Subappalti ed edilizia</p>
+            </div>
+            <span class="mini-badge">Cerca fornitori o subappaltatori</span>
+          </header>
+          <p><strong>Contatto:</strong> demo06@agentlink-demo.it - https://www.edilromaappalti.it</p>
+          <p><strong>Offre:</strong> General contractor per cantieri pubblici e privati, coordinamento lavori edili.</p>
+          <p><strong>Cerca:</strong> Cerca subappaltatori a Milano per impianti elettrici, posa strutture e finiture.</p>
+          <p><strong>Certificazioni:</strong> SOA OG1, ISO 9001, DURC regolare</p>
+          <p><strong>Disponibilita:</strong> Appalto Lombardia: avvio previsto entro 30 giorni, budget lavori sopra 250.000 euro. - <strong>Soglia match:</strong> 80%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>TecnoImpianti Milano Srl</h3>
+              <p>Milano, Lombardia - Subappalti ed edilizia</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo07@agentlink-demo.it - https://www.tecnoimpiantimilano.it</p>
+          <p><strong>Offre:</strong> Impianti elettrici civili e industriali, squadre per cantieri, manutenzione e quadri elettrici.</p>
+          <p><strong>Cerca:</strong> Cerca appalti e subappalti in Lombardia con committenti verificati.</p>
+          <p><strong>Certificazioni:</strong> DURC regolare, ISO 9001, DM 37/08</p>
+          <p><strong>Disponibilita:</strong> Disponibilita dichiarata: 3 squadre entro 20 giorni. - <strong>Soglia match:</strong> 80%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Lombarda Ponteggi Srl</h3>
+              <p>Bergamo, Lombardia - Subappalti ed edilizia</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo08@agentlink-demo.it - https://www.lombardaponteggi.it</p>
+          <p><strong>Offre:</strong> Ponteggi, opere provvisionali, sicurezza cantiere e noleggio attrezzature.</p>
+          <p><strong>Cerca:</strong> Cerca imprese edili con cantieri nel Nord Italia sopra 80.000 euro.</p>
+          <p><strong>Certificazioni:</strong> DURC regolare, ISO 45001</p>
+          <p><strong>Disponibilita:</strong> Disponibilita dichiarata: 12.000 mq ponteggi, lead time 10 giorni. - <strong>Soglia match:</strong> 76%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>BuildSud Cantieri Srl</h3>
+              <p>Napoli, Campania - Subappalti ed edilizia</p>
+            </div>
+            <span class="mini-badge">Buyer e seller</span>
+          </header>
+          <p><strong>Contatto:</strong> demo09@agentlink-demo.it - https://www.buildsudcantieri.it</p>
+          <p><strong>Offre:</strong> Ristrutturazioni industriali, opere civili e coordinamento squadre specialistiche.</p>
+          <p><strong>Cerca:</strong> Cerca partner nel Nord Italia per lavori fuori regione e cantieri temporanei.</p>
+          <p><strong>Certificazioni:</strong> SOA OG1, ISO 9001</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 4 cantieri simultanei, trasferte da pianificare. - <strong>Soglia match:</strong> 78%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>NordFiniture Contract Srl</h3>
+              <p>Brescia, Lombardia - Subappalti ed edilizia</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo10@agentlink-demo.it - https://www.nordfiniturecontract.it</p>
+          <p><strong>Offre:</strong> Cartongesso, finiture, pitture industriali, controsoffitti e ripristini rapidi.</p>
+          <p><strong>Cerca:</strong> Cerca general contractor con necessita di squadre rapide in Lombardia.</p>
+          <p><strong>Certificazioni:</strong> DURC regolare, ISO 9001</p>
+          <p><strong>Disponibilita:</strong> Disponibilita dichiarata: 2 squadre entro 15 giorni. - <strong>Soglia match:</strong> 74%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>ElettroPadana Srl</h3>
+              <p>Parma, Emilia-Romagna - Impianti elettrici</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo11@agentlink-demo.it - https://www.elettropadana.it</p>
+          <p><strong>Offre:</strong> Cablaggi industriali, quadri elettrici, automazione bordo macchina e manutenzione.</p>
+          <p><strong>Cerca:</strong> Cerca produttori macchinari e cantieri industriali nel Nord Italia.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, CEI 11-27, DM 37/08</p>
+          <p><strong>Disponibilita:</strong> Disponibilita dichiarata: 6 tecnici, lead time 12 giorni. - <strong>Soglia match:</strong> 80%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Roma Energy Systems Srl</h3>
+              <p>Roma, Lazio - Impianti elettrici</p>
+            </div>
+            <span class="mini-badge">Cerca fornitori o subappaltatori</span>
+          </header>
+          <p><strong>Contatto:</strong> demo12@agentlink-demo.it - https://www.romaenergysystems.it</p>
+          <p><strong>Offre:</strong> Progettazione impianti energia, fotovoltaico e revamping elettrico.</p>
+          <p><strong>Cerca:</strong> Cerca squadre certificate per installazioni in Lombardia e Veneto.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, ESCo, DM 37/08</p>
+          <p><strong>Disponibilita:</strong> Richiesta attiva: 2 squadre esterne per Q3. - <strong>Soglia match:</strong> 82%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Automazione Veneto Spa</h3>
+              <p>Vicenza, Veneto - Impianti elettrici</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo13@agentlink-demo.it - https://www.automazioneveneto.it</p>
+          <p><strong>Offre:</strong> PLC, SCADA, robotica, retrofitting linee e manutenzione predittiva.</p>
+          <p><strong>Cerca:</strong> Cerca PMI manifatturiere con linee da automatizzare entro 6 mesi.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, Siemens Partner</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 5 progetti/mese, lead time analisi 7 giorni. - <strong>Soglia match:</strong> 78%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>PowerLine Sicilia Srl</h3>
+              <p>Catania, Sicilia - Impianti elettrici</p>
+            </div>
+            <span class="mini-badge">Buyer e seller</span>
+          </header>
+          <p><strong>Contatto:</strong> demo14@agentlink-demo.it - https://www.powerlinesicilia.it</p>
+          <p><strong>Offre:</strong> Impianti MT/BT, manutenzione cabine, quadri e installazioni industriali.</p>
+          <p><strong>Cerca:</strong> Cerca fornitori quadri elettrici e cantieri industriali nel Sud Italia.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, CEI, DM 37/08</p>
+          <p><strong>Disponibilita:</strong> Disponibilita dichiarata: 4 squadre, trasferte su richiesta. - <strong>Soglia match:</strong> 76%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>SmartFacility Torino Srl</h3>
+              <p>Torino, Piemonte - Servizi B2B</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo15@agentlink-demo.it - https://www.smartfacilitytorino.it</p>
+          <p><strong>Offre:</strong> Facility management, manutenzione edifici, pulizie industriali e pronto intervento.</p>
+          <p><strong>Cerca:</strong> Cerca aziende multi-sede per contratti annuali di manutenzione e facility.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, ISO 14001</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: copertura Piemonte e Lombardia, SLA 24/48h. - <strong>Soglia match:</strong> 75%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>LogiNord Trasporti Spa</h3>
+              <p>Verona, Veneto - Logistica e trasporti</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo16@agentlink-demo.it - https://www.loginordtrasporti.it</p>
+          <p><strong>Offre:</strong> Trasporto industriale, groupage, FTL/LTL e distribuzione Nord Italia.</p>
+          <p><strong>Cerca:</strong> Cerca produttori con spedizioni ricorrenti verso Germania, Francia e Benelux.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, GDP, ADR base</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 80 mezzi, slot disponibili entro 48 ore. - <strong>Soglia match:</strong> 78%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>FreshLog Bologna Srl</h3>
+              <p>Bologna, Emilia-Romagna - Logistica e trasporti</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo17@agentlink-demo.it - https://www.freshlogbologna.it</p>
+          <p><strong>Offre:</strong> Trasporto refrigerato, logistica alimentare, celle 0-4 gradi e surgelato.</p>
+          <p><strong>Cerca:</strong> Cerca produttori alimentari con consegne GDO nel Centro-Nord.</p>
+          <p><strong>Certificazioni:</strong> HACCP, IFS Logistics, ATP</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 22 mezzi refrigerati, slot settimanali disponibili. - <strong>Soglia match:</strong> 82%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Mediterranea Freight Srl</h3>
+              <p>Bari, Puglia - Logistica e trasporti</p>
+            </div>
+            <span class="mini-badge">Buyer e seller</span>
+          </header>
+          <p><strong>Contatto:</strong> demo18@agentlink-demo.it - https://www.medfreight.it</p>
+          <p><strong>Offre:</strong> Trasporto intermodale, mare-terra, container e distribuzione Sud Italia.</p>
+          <p><strong>Cerca:</strong> Cerca partner logistici Nord Italia e clienti export nel Mediterraneo.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, AEO</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 40 container/settimana, lead time variabile. - <strong>Soglia match:</strong> 74%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Alpina Courier Srl</h3>
+              <p>Bolzano, Trentino-Alto Adige - Logistica e trasporti</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo19@agentlink-demo.it - https://www.alpinacourier.it</p>
+          <p><strong>Offre:</strong> Consegne espresse B2B in aree alpine, ultimo miglio tecnico e ricambi urgenti.</p>
+          <p><strong>Cerca:</strong> Cerca produttori macchinari con necessita ricambi urgenti in Nord-Est.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: consegna 24/48h Nord-Est. - <strong>Soglia match:</strong> 72%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>EuroPallet Service Srl</h3>
+              <p>Piacenza, Emilia-Romagna - Logistica e trasporti</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo20@agentlink-demo.it - https://www.europalletservice.it</p>
+          <p><strong>Offre:</strong> Gestione pallet, pooling, reverse logistics e riparazione bancali.</p>
+          <p><strong>Cerca:</strong> Cerca aziende con flussi pallet sopra 2.000 pezzi/mese.</p>
+          <p><strong>Certificazioni:</strong> EPAL, ISO 9001</p>
+          <p><strong>Disponibilita:</strong> Stock dichiarato: 18.000 pallet EPAL disponibili. - <strong>Soglia match:</strong> 76%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>PackFood Emilia Spa</h3>
+              <p>Modena, Emilia-Romagna - Packaging</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo21@agentlink-demo.it - https://www.packfoodemilia.it</p>
+          <p><strong>Offre:</strong> Packaging alimentare flessibile, vaschette, film barriera e soluzioni MAP.</p>
+          <p><strong>Cerca:</strong> Cerca produttori alimentari con volumi sopra 50.000 pezzi/mese.</p>
+          <p><strong>Certificazioni:</strong> BRC Packaging, ISO 22000, MOCA</p>
+          <p><strong>Disponibilita:</strong> Stock dichiarato: 600.000 pezzi standard, lead time 12-18 giorni. - <strong>Soglia match:</strong> 83%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>BioCarta Toscana Srl</h3>
+              <p>Lucca, Toscana - Packaging</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo22@agentlink-demo.it - https://www.biocartatoscana.it</p>
+          <p><strong>Offre:</strong> Packaging carta riciclata, astucci, scatole e soluzioni sostenibili.</p>
+          <p><strong>Cerca:</strong> Cerca brand alimentari e cosmetici con necessita packaging eco.</p>
+          <p><strong>Certificazioni:</strong> FSC, PEFC, ISO 14001</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 250.000 scatole/mese, lead time 20 giorni. - <strong>Soglia match:</strong> 77%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>PackNord Pharma Srl</h3>
+              <p>Monza, Lombardia - Packaging</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo23@agentlink-demo.it - https://www.packnordpharma.it</p>
+          <p><strong>Offre:</strong> Astucci farmaceutici, bugiardini, serializzazione e packaging regolato.</p>
+          <p><strong>Cerca:</strong> Cerca aziende farmaceutiche con lotti pilota e produzione ricorrente.</p>
+          <p><strong>Certificazioni:</strong> GMP, ISO 9001, FSC</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 3 linee farmaceutiche, lead time 25 giorni. - <strong>Soglia match:</strong> 84%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Adriatica Imballaggi Srl</h3>
+              <p>Pescara, Abruzzo - Packaging</p>
+            </div>
+            <span class="mini-badge">Buyer e seller</span>
+          </header>
+          <p><strong>Contatto:</strong> demo24@agentlink-demo.it - https://www.adriaticaimballaggi.it</p>
+          <p><strong>Offre:</strong> Imballaggi industriali, casse legno, protezioni e packaging export.</p>
+          <p><strong>Cerca:</strong> Cerca fornitori film protettivi e clienti industriali export.</p>
+          <p><strong>Certificazioni:</strong> ISPM-15, ISO 9001</p>
+          <p><strong>Disponibilita:</strong> Stock dichiarato: 4.000 casse standard, produzione su misura 10 giorni. - <strong>Soglia match:</strong> 73%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>PlastTech Bergamo Srl</h3>
+              <p>Bergamo, Lombardia - Packaging</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo25@agentlink-demo.it - https://www.plasttechbergamo.it</p>
+          <p><strong>Offre:</strong> Stampaggio plastica, contenitori tecnici, componenti packaging e prototipi.</p>
+          <p><strong>Cerca:</strong> Cerca aziende alimentari e industriali con stampi dedicati.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, MOCA su richiesta</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 12 presse, lead time campione 15 giorni. - <strong>Soglia match:</strong> 78%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Alimenta Nord Spa</h3>
+              <p>Cremona, Lombardia - Alimentare</p>
+            </div>
+            <span class="mini-badge">Cerca fornitori o subappaltatori</span>
+          </header>
+          <p><strong>Contatto:</strong> demo26@agentlink-demo.it - https://www.alimentanord.it</p>
+          <p><strong>Offre:</strong> Produzione alimentare conto terzi, ingredienti secchi e prodotti da forno.</p>
+          <p><strong>Cerca:</strong> Cerca packaging alimentare certificato MOCA e trasporto refrigerato.</p>
+          <p><strong>Certificazioni:</strong> BRC, IFS, HACCP</p>
+          <p><strong>Disponibilita:</strong> Richiesta attiva: packaging 100.000 pezzi/mese e logistica GDO. - <strong>Soglia match:</strong> 82%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Caseificio Appennino Srl</h3>
+              <p>Reggio Emilia, Emilia-Romagna - Alimentare</p>
+            </div>
+            <span class="mini-badge">Cerca fornitori o subappaltatori</span>
+          </header>
+          <p><strong>Contatto:</strong> demo27@agentlink-demo.it - https://www.caseificioappennino.it</p>
+          <p><strong>Offre:</strong> Produzione lattiero-casearia, stagionatura e confezionamento formaggi.</p>
+          <p><strong>Cerca:</strong> Cerca trasporto refrigerato e packaging alimentare sostenibile.</p>
+          <p><strong>Certificazioni:</strong> HACCP, IFS Food</p>
+          <p><strong>Disponibilita:</strong> Richiesta attiva: consegne settimanali Nord Italia, 0-4 gradi. - <strong>Soglia match:</strong> 80%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Dolciaria Verona Srl</h3>
+              <p>Verona, Veneto - Alimentare</p>
+            </div>
+            <span class="mini-badge">Buyer e seller</span>
+          </header>
+          <p><strong>Contatto:</strong> demo28@agentlink-demo.it - https://www.dolciariaverona.it</p>
+          <p><strong>Offre:</strong> Prodotti dolciari, biscotti, private label e confezionamento stagionale.</p>
+          <p><strong>Cerca:</strong> Cerca packaging premium e distributori B2B in Germania e Austria.</p>
+          <p><strong>Certificazioni:</strong> BRC, IFS, HACCP</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 40.000 confezioni/settimana, stagionalita alta Q4. - <strong>Soglia match:</strong> 78%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Oleificio Sud Export Srl</h3>
+              <p>Bari, Puglia - Alimentare</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo29@agentlink-demo.it - https://www.oleificiosudexport.it</p>
+          <p><strong>Offre:</strong> Olio EVO, private label, bulk e confezionamento per export.</p>
+          <p><strong>Cerca:</strong> Cerca distributori europei e packaging vetro certificato.</p>
+          <p><strong>Certificazioni:</strong> BRC, IFS, BIO</p>
+          <p><strong>Disponibilita:</strong> Stock dichiarato: 180.000 litri disponibili, lead time 14 giorni. - <strong>Soglia match:</strong> 77%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Conserve Tirreno Spa</h3>
+              <p>Salerno, Campania - Alimentare</p>
+            </div>
+            <span class="mini-badge">Cerca fornitori o subappaltatori</span>
+          </header>
+          <p><strong>Contatto:</strong> demo30@agentlink-demo.it - https://www.conservetirreno.it</p>
+          <p><strong>Offre:</strong> Conserve vegetali, sughi, private label e export GDO.</p>
+          <p><strong>Cerca:</strong> Cerca packaging alimentare, logistica e buyer export per lotti ricorrenti.</p>
+          <p><strong>Certificazioni:</strong> BRC, IFS, HACCP</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 1.5M pezzi/mese, richiesta packaging Q3. - <strong>Soglia match:</strong> 79%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>CNC Precision Torino Srl</h3>
+              <p>Torino, Piemonte - Macchinari industriali</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo31@agentlink-demo.it - https://www.cncprecisiontorino.it</p>
+          <p><strong>Offre:</strong> Lavorazioni CNC 3/5 assi, tornitura, fresatura e prototipi metallici.</p>
+          <p><strong>Cerca:</strong> Cerca buyer automotive e fornitori acciai speciali certificati.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, IATF 16949 in audit</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 14 centri CNC, slot disponibili in 3 settimane. - <strong>Soglia match:</strong> 81%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Macchine Veneto Spa</h3>
+              <p>Padova, Veneto - Macchinari industriali</p>
+            </div>
+            <span class="mini-badge">Buyer e seller</span>
+          </header>
+          <p><strong>Contatto:</strong> demo32@agentlink-demo.it - https://www.macchineveneto.it</p>
+          <p><strong>Offre:</strong> Macchine automatiche per packaging, linee custom e revamping.</p>
+          <p><strong>Cerca:</strong> Cerca componenti CNC, automazione PLC e clienti packaging alimentare.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, CE machinery</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 5 linee/mese, lead time progetto 8-12 settimane. - <strong>Soglia match:</strong> 82%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Robotica Brianza Srl</h3>
+              <p>Monza, Lombardia - Macchinari industriali</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo33@agentlink-demo.it - https://www.roboticabrianza.it</p>
+          <p><strong>Offre:</strong> Celle robotizzate, visione artificiale, pallettizzazione e integrazione cobot.</p>
+          <p><strong>Cerca:</strong> Cerca aziende manifatturiere con automazione fine linea.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, Fanuc integrator</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 3 celle/mese, sopralluogo entro 10 giorni. - <strong>Soglia match:</strong> 80%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Officine Marche Srl</h3>
+              <p>Pesaro, Marche - Macchinari industriali</p>
+            </div>
+            <span class="mini-badge">Cerca fornitori o subappaltatori</span>
+          </header>
+          <p><strong>Contatto:</strong> demo34@agentlink-demo.it - https://www.officinemarche.it</p>
+          <p><strong>Offre:</strong> Costruzione telai, carpenteria pesante e parti macchina su disegno.</p>
+          <p><strong>Cerca:</strong> Cerca taglio laser, verniciatura industriale e acciaio certificato.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, EN 1090</p>
+          <p><strong>Disponibilita:</strong> Richiesta attiva: subfornitura telai Q3, volumi medi. - <strong>Soglia match:</strong> 78%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>LaserCut Lombardia Srl</h3>
+              <p>Varese, Lombardia - Macchinari industriali</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo35@agentlink-demo.it - https://www.lasercutlombardia.it</p>
+          <p><strong>Offre:</strong> Taglio laser fibra, piegatura, saldatura e finitura componenti metallici.</p>
+          <p><strong>Cerca:</strong> Cerca commesse ricorrenti da produttori macchinari e carpenterie.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, EN 1090</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 2 impianti laser, slot in 8 giorni. - <strong>Soglia match:</strong> 79%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>CloudB2B Solutions Srl</h3>
+              <p>Milano, Lombardia - Servizi B2B</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo36@agentlink-demo.it - https://www.cloudb2bsolutions.it</p>
+          <p><strong>Offre:</strong> CRM, automazioni commerciali, integrazioni API e dashboard direzionali.</p>
+          <p><strong>Cerca:</strong> Cerca PMI industriali che vogliono digitalizzare vendite e procurement.</p>
+          <p><strong>Certificazioni:</strong> ISO 27001 in corso, Microsoft Partner</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 6 progetti attivi, nuovo slot tra 20 giorni. - <strong>Soglia match:</strong> 76%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>LegalProcurement Roma Srl</h3>
+              <p>Roma, Lazio - Servizi B2B</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo37@agentlink-demo.it - https://www.legalprocurementroma.it</p>
+          <p><strong>Offre:</strong> Consulenza contratti fornitura, compliance appalti, NDA e verifiche documentali.</p>
+          <p><strong>Cerca:</strong> Cerca startup B2B e PMI che gestiscono partnership e subappalti.</p>
+          <p><strong>Certificazioni:</strong> Albo avvocati, privacy compliance</p>
+          <p><strong>Disponibilita:</strong> Disponibilita dichiarata: review documentale entro 72 ore. - <strong>Soglia match:</strong> 74%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>HR Cantieri Italia Srl</h3>
+              <p>Bologna, Emilia-Romagna - Servizi B2B</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo38@agentlink-demo.it - https://www.hrcantieriitalia.it</p>
+          <p><strong>Offre:</strong> Somministrazione personale tecnico, ricerca operai specializzati e capisquadra.</p>
+          <p><strong>Cerca:</strong> Cerca aziende edili e impiantistiche con picchi di lavoro stagionali.</p>
+          <p><strong>Certificazioni:</strong> Agenzia lavoro autorizzata, ISO 9001</p>
+          <p><strong>Disponibilita:</strong> Disponibilita dichiarata: database 850 profili tecnici. - <strong>Soglia match:</strong> 73%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Finanza PMI Hub Srl</h3>
+              <p>Firenze, Toscana - Servizi B2B</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo39@agentlink-demo.it - https://www.finanzapmihub.it</p>
+          <p><strong>Offre:</strong> Finanza agevolata, bandi, credito imposta e supporto business plan.</p>
+          <p><strong>Cerca:</strong> Cerca PMI con progetti digitali, export o investimenti produttivi.</p>
+          <p><strong>Certificazioni:</strong> Consulenti certificati, network Confidi</p>
+          <p><strong>Disponibilita:</strong> Disponibilita dichiarata: check eligibility entro 5 giorni. - <strong>Soglia match:</strong> 72%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>ExportLink Germania Srl</h3>
+              <p>Milano, Lombardia - Servizi B2B</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo40@agentlink-demo.it - https://www.exportlinkgermania.it</p>
+          <p><strong>Offre:</strong> Sviluppo export DACH, ricerca distributori, fiere e temporary export management.</p>
+          <p><strong>Cerca:</strong> Cerca produttori italiani con prodotti B2B esportabili in Germania.</p>
+          <p><strong>Certificazioni:</strong> AICE, consulenti madrelingua</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 12 scouting distributori/mese. - <strong>Soglia match:</strong> 78%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Manutenzione Nord Ovest Srl</h3>
+              <p>Torino, Piemonte - Manutenzione industriale</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo41@agentlink-demo.it - https://www.manutenzionenordovest.it</p>
+          <p><strong>Offre:</strong> Manutenzione impianti industriali, fermo macchina, ricambi e contratti annuali.</p>
+          <p><strong>Cerca:</strong> Cerca stabilimenti manifatturieri in Piemonte e Lombardia.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, ISO 45001</p>
+          <p><strong>Disponibilita:</strong> Disponibilita dichiarata: pronto intervento 24/48h, 18 tecnici. - <strong>Soglia match:</strong> 82%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>ServiceLine Emilia Srl</h3>
+              <p>Modena, Emilia-Romagna - Manutenzione industriale</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo42@agentlink-demo.it - https://www.servicelineemilia.it</p>
+          <p><strong>Offre:</strong> Manutenzione linee automatiche, nastri, confezionatrici e impianti packaging.</p>
+          <p><strong>Cerca:</strong> Cerca produttori alimentari e packaging con manutenzione programmata.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, tecnici certificati</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: 10 tecnici, SLA 48h Emilia e Veneto. - <strong>Soglia match:</strong> 79%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>CoolingTech Pharma Srl</h3>
+              <p>Pavia, Lombardia - Manutenzione industriale</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo43@agentlink-demo.it - https://www.coolingtechpharma.it</p>
+          <p><strong>Offre:</strong> Manutenzione impianti HVAC, celle frigo, clean room e ambienti controllati.</p>
+          <p><strong>Cerca:</strong> Cerca aziende pharma e alimentari con impianti critici.</p>
+          <p><strong>Certificazioni:</strong> FGAS, ISO 9001, GMP awareness</p>
+          <p><strong>Disponibilita:</strong> Disponibilita dichiarata: reperibilita 24h, 6 squadre. - <strong>Soglia match:</strong> 83%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>Sicurezza Impianti Sud Srl</h3>
+              <p>Bari, Puglia - Manutenzione industriale</p>
+            </div>
+            <span class="mini-badge">Buyer e seller</span>
+          </header>
+          <p><strong>Contatto:</strong> demo44@agentlink-demo.it - https://www.sicurezzaimpiantisud.it</p>
+          <p><strong>Offre:</strong> Antincendio, sicurezza impianti, verifiche periodiche e manutenzione estintori.</p>
+          <p><strong>Cerca:</strong> Cerca clienti industriali e fornitori ricambi certificati.</p>
+          <p><strong>Certificazioni:</strong> ISO 9001, UNI 9994, DM 37/08</p>
+          <p><strong>Disponibilita:</strong> Capacita dichiarata: copertura Puglia e Basilicata, SLA 72h. - <strong>Soglia match:</strong> 74%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>SolarBuild Italia Srl</h3>
+              <p>Roma, Lazio - Energia e impianti</p>
+            </div>
+            <span class="mini-badge">Cerca fornitori o subappaltatori</span>
+          </header>
+          <p><strong>Contatto:</strong> demo46@agentlink-demo.it - https://www.solarbuilditalia.it</p>
+          <p><strong>Offre:</strong> EPC fotovoltaico industriale, storage e revamping energetico.</p>
+          <p><strong>Cerca:</strong> Cerca installatori elettrici certificati e strutture metalliche per cantieri Nord Italia.</p>
+          <p><strong>Certificazioni:</strong> SOA OS30, ISO 9001</p>
+          <p><strong>Disponibilita:</strong> Pipeline dichiarata: 12 MW cantieri Q3-Q4, necessita squadre esterne. - <strong>Soglia match:</strong> 82%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>GreenRoof Lombardia Srl</h3>
+              <p>Milano, Lombardia - Energia e impianti</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> demo47@agentlink-demo.it - https://www.greenrooflombardia.it</p>
+          <p><strong>Offre:</strong> Coperture industriali, bonifiche, rinforzi e predisposizione fotovoltaico.</p>
+          <p><strong>Cerca:</strong> Cerca EPC e general contractor per cantieri energetici industriali.</p>
+          <p><strong>Certificazioni:</strong> SOA OG1, ISO 9001, sicurezza cantieri</p>
+          <p><strong>Disponibilita:</strong> Disponibilita dichiarata: 2 squadre entro 25 giorni. - <strong>Soglia match:</strong> 80%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>futura 2000 srl</h3>
+              <p>firenze - Subappalti ed edilizia</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> futura2000@gmail.com - www.futura.com</p>
+          <p><strong>Offre:</strong> Da completare</p>
+          <p><strong>Cerca:</strong> Da completare</p>
+          <p><strong>Certificazioni:</strong> Da completare</p>
+          <p><strong>Disponibilita:</strong> Da completare - <strong>Soglia match:</strong> 80%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>flamante srl</h3>
+              <p>roma - Subappalti ed edilizia</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> impresa.flamantesrl@gmail.com </p>
+          <p><strong>Offre:</strong> Da completare</p>
+          <p><strong>Cerca:</strong> Da completare</p>
+          <p><strong>Certificazioni:</strong> Da completare</p>
+          <p><strong>Disponibilita:</strong> Da completare - <strong>Soglia match:</strong> 80%</p>
+        </article>
+      
+        <article class="company-row">
+          <header>
+            <div>
+              <h3>TecnoImpianti Milano S.r.l.</h3>
+              <p>Milano, Lombardia - Subappalti ed edilizia</p>
+            </div>
+            <span class="mini-badge">Offre servizi/prodotti</span>
+          </header>
+          <p><strong>Contatto:</strong> Da completare </p>
+          <p><strong>Offre:</strong> Impianti elettrici civili e industriali, squadre disponibili entro 30 giorni, manutenzione e lavori in subappalto.</p>
+          <p><strong>Cerca:</strong> Cerca appalti e subappalti in Lombardia con committenti verificati, importo sopra 50.000 euro.</p>
+          <p><strong>Certificazioni:</strong> Da completare</p>
+          <p><strong>Disponibilita:</strong> Da completare - <strong>Soglia match:</strong> 80%</p>
+        </article>
+      </div>
       </section>
 
       <section class="screen" id="stock">
         <div class="sk-page">
 
-          <span class="al-eyebrow">STOCK & CALENDARIO</span>
+          <span class="al-eyebrow">STOCK &amp; CALENDARIO</span>
           <h2 class="al-hero-title" style="font-size: clamp(28px, 4vw, 38px); margin-bottom: 12px;">
             La tua disponibilità, <span class="accent">sempre aggiornata.</span>
           </h2>
@@ -4057,16 +5048,15 @@
           <div class="sk-quickbox">
             <button class="sk-mic" id="skMicBtn" type="button" aria-label="Voce">
               <svg viewBox="0 0 24 24" fill="none" stroke="#06101b" stroke-width="2.2">
-                <rect x="9" y="3" width="6" height="12" rx="3" fill="#06101b"/>
-                <path d="M5 11a7 7 0 0014 0M12 19v3" stroke-linecap="round"/>
+                <rect x="9" y="3" width="6" height="12" rx="3" fill="#06101b"></rect>
+                <path d="M5 11a7 7 0 0014 0M12 19v3" stroke-linecap="round"></path>
               </svg>
             </button>
             <div class="al-listening" id="skListening" style="left: 80px;">
               <span class="al-listening-dot"></span>
               <span>Ascolto<span class="al-listening-text"></span></span>
             </div>
-            <textarea id="skQuickInput" rows="2"
-              placeholder='Es. "Il 24 maggio 3 furgoni disponibili area Roma" · "Ogni venerdì 2 squadre pulizie Roma sud 14-22" · "200 bulloni M8 magazzino Vitinia"'></textarea>
+            <textarea id="skQuickInput" rows="2" placeholder="Es. &quot;Il 24 maggio 3 furgoni disponibili area Roma&quot; · &quot;Ogni venerdì 2 squadre pulizie Roma sud 14-22&quot; · &quot;200 bulloni M8 magazzino Vitinia&quot;"></textarea>
           </div>
 
           <div class="sk-quick-actions">
@@ -4100,8 +5090,8 @@
               <div class="sk-card-head">
                 <div class="sk-card-title">
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--teal);">
-                    <rect x="3" y="4" width="18" height="18" rx="2"/>
-                    <path d="M16 2v4M8 2v4M3 10h18"/>
+                    <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                    <path d="M16 2v4M8 2v4M3 10h18"></path>
                   </svg>
                   Calendario disponibilità
                 </div>
@@ -4110,7 +5100,7 @@
 
               <div class="sk-cal-month">
                 <button class="sk-cal-nav" id="skCalPrev" type="button">‹</button>
-                <strong id="skCalLabel">—</strong>
+                <strong id="skCalLabel">Luglio 2026</strong>
                 <button class="sk-cal-nav" id="skCalNext" type="button">›</button>
               </div>
 
@@ -4123,7 +5113,7 @@
                 <div class="sk-cal-day-head">SAB</div>
                 <div class="sk-cal-day-head">DOM</div>
               </div>
-              <div class="sk-cal-grid" id="skCalGrid"></div>
+              <div class="sk-cal-grid" id="skCalGrid"><div class="sk-cal-day other-month">29</div><div class="sk-cal-day other-month">30</div><div class="sk-cal-day" data-iso="2026-07-01">1</div><div class="sk-cal-day" data-iso="2026-07-02">2</div><div class="sk-cal-day" data-iso="2026-07-03">3</div><div class="sk-cal-day" data-iso="2026-07-04">4</div><div class="sk-cal-day" data-iso="2026-07-05">5</div><div class="sk-cal-day today" data-iso="2026-07-06">6</div><div class="sk-cal-day" data-iso="2026-07-07">7</div><div class="sk-cal-day" data-iso="2026-07-08">8</div><div class="sk-cal-day" data-iso="2026-07-09">9</div><div class="sk-cal-day" data-iso="2026-07-10">10</div><div class="sk-cal-day" data-iso="2026-07-11">11</div><div class="sk-cal-day" data-iso="2026-07-12">12</div><div class="sk-cal-day" data-iso="2026-07-13">13</div><div class="sk-cal-day" data-iso="2026-07-14">14</div><div class="sk-cal-day" data-iso="2026-07-15">15</div><div class="sk-cal-day" data-iso="2026-07-16">16</div><div class="sk-cal-day" data-iso="2026-07-17">17</div><div class="sk-cal-day" data-iso="2026-07-18">18</div><div class="sk-cal-day" data-iso="2026-07-19">19</div><div class="sk-cal-day" data-iso="2026-07-20">20</div><div class="sk-cal-day" data-iso="2026-07-21">21</div><div class="sk-cal-day" data-iso="2026-07-22">22</div><div class="sk-cal-day" data-iso="2026-07-23">23</div><div class="sk-cal-day" data-iso="2026-07-24">24</div><div class="sk-cal-day" data-iso="2026-07-25">25</div><div class="sk-cal-day" data-iso="2026-07-26">26</div><div class="sk-cal-day" data-iso="2026-07-27">27</div><div class="sk-cal-day" data-iso="2026-07-28">28</div><div class="sk-cal-day" data-iso="2026-07-29">29</div><div class="sk-cal-day" data-iso="2026-07-30">30</div><div class="sk-cal-day" data-iso="2026-07-31">31</div><div class="sk-cal-day other-month">1</div><div class="sk-cal-day other-month">2</div></div>
 
               <div class="sk-detail" id="skDetail">
                 <h5 id="skDetailDate">—</h5>
@@ -4139,9 +5129,7 @@
 
               <div class="sk-upcoming">
                 <h4>Prossime disponibilità</h4>
-                <div id="skUpcomingList">
-                  <div class="sk-empty">Nessuna disponibilità inserita.</div>
-                </div>
+                <div id="skUpcomingList"><div class="sk-empty">Nessuna disponibilità inserita.</div></div>
               </div>
             </div>
 
@@ -4150,17 +5138,15 @@
               <div class="sk-card-head">
                 <div class="sk-card-title">
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--teal);">
-                    <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
-                    <path d="M3.27 6.96L12 12l8.73-5.04M12 22V12"/>
+                    <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"></path>
+                    <path d="M3.27 6.96L12 12l8.73-5.04M12 22V12"></path>
                   </svg>
                   Stock prodotti
                 </div>
                 <span class="sk-card-count" id="skStockCount">0 voci</span>
               </div>
 
-              <div id="skStockList">
-                <div class="sk-empty">Nessuno stock caricato. Usa il box sopra per aggiungere.</div>
-              </div>
+              <div id="skStockList"><div class="sk-empty">Nessuno stock caricato. Usa il box sopra per aggiungere.</div></div>
 
               <div class="sk-csv-zone">
                 <strong>Catalogo completo?</strong>
@@ -4183,7 +5169,7 @@
             <h2>Aziende registrate in AgentLink</h2>
             <p class="lead">Vista operativa per controllare le aziende entrate nel database, leggere bisogni/offerte e preparare i primi match manuali o agentici.</p>
             <div class="admin-toolbar">
-              <div class="status-pill"><span class="dot"></span><span id="adminCount">0 aziende</span></div>
+              <div class="status-pill"><span class="dot"></span><span id="adminCount">54 aziende</span></div>
               <div class="actions" style="margin-top: 0;">
                 <button class="btn secondary" id="refreshAdmin">Aggiorna lista</button>
                 <button class="btn secondary" id="seedDemoNetwork">Carica rete demo 50 aziende</button>
@@ -4203,8 +5189,492 @@
                   </tr>
                 </thead>
                 <tbody id="adminCompanyRows">
-                  <tr><td colspan="6">Caricamento aziende...</td></tr>
-                </tbody>
+          <tr>
+            <td><strong>trasporti spa</strong><br>VAT: IT1099887744</td>
+            <td>trasporti spa@gmail.com<br>3409874763663<br>trasporti.com</td>
+            <td>Logistica e trasporti<br>bari</td>
+            <td>Da completare<br><small></small></td>
+            <td>Da completare<br><small>Soglia 80%</small></td>
+            <td>Consenso beta<br></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CleanRoom Service Veneto Srl</strong><br>VAT: ITDEMO000045</td>
+            <td>demo45@agentlink-demo.it<br>+39 02 9000 144<br>https://www.cleanroomserviceveneto.it</td>
+            <td>Manutenzione industriale<br>Treviso, Veneto</td>
+            <td>Pulizia tecnica clean room, sanificazione industriale e facility controllato.<br><small>ISO 14644, ISO 9001</small></td>
+            <td>Cerca aziende pharma, biomedicali e alimentari con ambienti certificati.<br><small>Soglia 77%</small></td>
+            <td>Consenso beta<br>Disponibilita dichiarata: 4 squadre specializzate, lead time 10 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Battery Systems Torino Srl</strong><br>VAT: ITDEMO000048</td>
+            <td>demo48@agentlink-demo.it<br>+39 02 9000 147<br>https://www.batterysystemstorino.it</td>
+            <td>Energia e impianti<br>Torino, Piemonte</td>
+            <td>Storage industriale, quadri batterie, BMS e installazione sistemi accumulo.<br><small>CE, ISO 9001, IEC standards</small></td>
+            <td>Cerca EPC fotovoltaici e produttori industriali con progetti storage.<br><small>Soglia 84%</small></td>
+            <td>Consenso beta<br>Stock dichiarato: moduli 1.2 MWh disponibili, lead time 30 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>IdroTermica Firenze Srl</strong><br>VAT: ITDEMO000049</td>
+            <td>demo49@agentlink-demo.it<br>+39 02 9000 148<br>https://www.idrotermicafirenze.it</td>
+            <td>Energia e impianti<br>Firenze, Toscana</td>
+            <td>Impianti termici, pompe di calore industriali, idraulica e centrale termica.<br><small>FGAS, DM 37/08, ISO 9001</small></td>
+            <td>Cerca cantieri industriali, hotel e strutture sanitarie per revamping impianti.<br><small>Soglia 76%</small></td>
+            <td>Consenso beta<br>Disponibilita dichiarata: sopralluogo in 7 giorni, 5 squadre.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>DACH Industrial Partners GmbH</strong><br>VAT: ITDEMO000050</td>
+            <td>demo50@agentlink-demo.it<br>+39 02 9000 149<br>https://www.dachindustrialpartners.com</td>
+            <td>Distribuzione B2B<br>Monaco, Germania</td>
+            <td>Distribuzione B2B in Germania, Austria e Svizzera per prodotti industriali italiani.<br><small>ISO 9001, rete distributori DACH</small></td>
+            <td>Cerca produttori italiani di macchinari, componenti e packaging tecnico.<br><small>Soglia 81%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: scouting 20 buyer/mese, onboarding 30 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Acciai Lombarda SpA</strong><br>VAT: ITDEMO000001</td>
+            <td>demo01@agentlink-demo.it<br>+39 02 9000 100<br>https://www.acciailombarda.it</td>
+            <td>Acciaio e metalli<br>Milano, Lombardia</td>
+            <td>Acciaio inox 316L e 304, lamiere, barre tonde, coil, taglio a misura e certificati colata.<br><small>ISO 9001, ISO 14001, EN 10204 3.1</small></td>
+            <td>Cerca buyer industriali in Italia ed Europa per forniture ricorrenti di acciaio inox.<br><small>Soglia 80%</small></td>
+            <td>Consenso beta<br>Stock dichiarato: 180 ton 316L, 240 ton 304, lead time 18-25 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>MetalNord Componenti Srl</strong><br>VAT: ITDEMO000002</td>
+            <td>demo02@agentlink-demo.it<br>+39 02 9000 101<br>https://www.metalnordcomponenti.it</td>
+            <td>Acciaio e metalli<br>Roma, Lazio</td>
+            <td>Componenti metallici lavorati, carpenteria leggera e assemblaggi per industria meccanica.<br><small>ISO 9001, EN 1090</small></td>
+            <td>Cerca acciaio inox 316L certificato per 30-80 ton/mese con consegna Nord Italia.<br><small>Soglia 80%</small></td>
+            <td>Consenso beta<br>Richiesta attiva: 40-60 ton/mese 316L, validita 14 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>SteelForge Europe GmbH</strong><br>VAT: ITDEMO000003</td>
+            <td>demo03@agentlink-demo.it<br>+39 02 9000 102<br>https://www.steelforge-europe.com</td>
+            <td>Acciaio e metalli<br>Dusseldorf, Germania</td>
+            <td>Forgiati, barre speciali, acciai inox e altoresistenziali per industria meccanica.<br><small>ISO 9001, IATF 16949, EN 10204</small></td>
+            <td>Cerca distributori e buyer italiani per forniture programmate Q3-Q4.<br><small>Soglia 82%</small></td>
+            <td>Consenso beta<br>Stock dichiarato: 95 ton inox speciale, lead time 21 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Inox Adriatica Srl</strong><br>VAT: ITDEMO000004</td>
+            <td>demo04@agentlink-demo.it<br>+39 02 9000 103<br>https://www.inoxadriatica.it</td>
+            <td>Acciaio e metalli<br>Ancona, Marche</td>
+            <td>Tubi inox, raccordi, flange e lavorazioni su disegno per impiantistica.<br><small>ISO 9001, PED, EN 10204</small></td>
+            <td>Cerca coil 316L e partner logistici per consegne nel Centro Italia.<br><small>Soglia 78%</small></td>
+            <td>Consenso beta<br>Stock dichiarato: 42 ton tubi inox, aggiornato questa settimana.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Metalli Tirreno Spa</strong><br>VAT: ITDEMO000005</td>
+            <td>demo05@agentlink-demo.it<br>+39 02 9000 104<br>https://www.metallitirreno.it</td>
+            <td>Acciaio e metalli<br>Livorno, Toscana</td>
+            <td>Distribuzione metalli non ferrosi, alluminio, inox, rame e taglio rapido.<br><small>ISO 9001</small></td>
+            <td>Cerca PMI manifatturiere con fabbisogni mensili da 5 a 50 ton.<br><small>Soglia 75%</small></td>
+            <td>Consenso beta<br>Stock dichiarato: 300 ton metalli misti, lead time 7-14 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>EdilRoma Appalti Srl</strong><br>VAT: ITDEMO000006</td>
+            <td>demo06@agentlink-demo.it<br>+39 02 9000 105<br>https://www.edilromaappalti.it</td>
+            <td>Subappalti ed edilizia<br>Roma, Lazio</td>
+            <td>General contractor per cantieri pubblici e privati, coordinamento lavori edili.<br><small>SOA OG1, ISO 9001, DURC regolare</small></td>
+            <td>Cerca subappaltatori a Milano per impianti elettrici, posa strutture e finiture.<br><small>Soglia 80%</small></td>
+            <td>Consenso beta<br>Appalto Lombardia: avvio previsto entro 30 giorni, budget lavori sopra 250.000 euro.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>TecnoImpianti Milano Srl</strong><br>VAT: ITDEMO000007</td>
+            <td>demo07@agentlink-demo.it<br>+39 02 9000 106<br>https://www.tecnoimpiantimilano.it</td>
+            <td>Subappalti ed edilizia<br>Milano, Lombardia</td>
+            <td>Impianti elettrici civili e industriali, squadre per cantieri, manutenzione e quadri elettrici.<br><small>DURC regolare, ISO 9001, DM 37/08</small></td>
+            <td>Cerca appalti e subappalti in Lombardia con committenti verificati.<br><small>Soglia 80%</small></td>
+            <td>Consenso beta<br>Disponibilita dichiarata: 3 squadre entro 20 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Lombarda Ponteggi Srl</strong><br>VAT: ITDEMO000008</td>
+            <td>demo08@agentlink-demo.it<br>+39 02 9000 107<br>https://www.lombardaponteggi.it</td>
+            <td>Subappalti ed edilizia<br>Bergamo, Lombardia</td>
+            <td>Ponteggi, opere provvisionali, sicurezza cantiere e noleggio attrezzature.<br><small>DURC regolare, ISO 45001</small></td>
+            <td>Cerca imprese edili con cantieri nel Nord Italia sopra 80.000 euro.<br><small>Soglia 76%</small></td>
+            <td>Consenso beta<br>Disponibilita dichiarata: 12.000 mq ponteggi, lead time 10 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>BuildSud Cantieri Srl</strong><br>VAT: ITDEMO000009</td>
+            <td>demo09@agentlink-demo.it<br>+39 02 9000 108<br>https://www.buildsudcantieri.it</td>
+            <td>Subappalti ed edilizia<br>Napoli, Campania</td>
+            <td>Ristrutturazioni industriali, opere civili e coordinamento squadre specialistiche.<br><small>SOA OG1, ISO 9001</small></td>
+            <td>Cerca partner nel Nord Italia per lavori fuori regione e cantieri temporanei.<br><small>Soglia 78%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 4 cantieri simultanei, trasferte da pianificare.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>NordFiniture Contract Srl</strong><br>VAT: ITDEMO000010</td>
+            <td>demo10@agentlink-demo.it<br>+39 02 9000 109<br>https://www.nordfiniturecontract.it</td>
+            <td>Subappalti ed edilizia<br>Brescia, Lombardia</td>
+            <td>Cartongesso, finiture, pitture industriali, controsoffitti e ripristini rapidi.<br><small>DURC regolare, ISO 9001</small></td>
+            <td>Cerca general contractor con necessita di squadre rapide in Lombardia.<br><small>Soglia 74%</small></td>
+            <td>Consenso beta<br>Disponibilita dichiarata: 2 squadre entro 15 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>ElettroPadana Srl</strong><br>VAT: ITDEMO000011</td>
+            <td>demo11@agentlink-demo.it<br>+39 02 9000 110<br>https://www.elettropadana.it</td>
+            <td>Impianti elettrici<br>Parma, Emilia-Romagna</td>
+            <td>Cablaggi industriali, quadri elettrici, automazione bordo macchina e manutenzione.<br><small>ISO 9001, CEI 11-27, DM 37/08</small></td>
+            <td>Cerca produttori macchinari e cantieri industriali nel Nord Italia.<br><small>Soglia 80%</small></td>
+            <td>Consenso beta<br>Disponibilita dichiarata: 6 tecnici, lead time 12 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Roma Energy Systems Srl</strong><br>VAT: ITDEMO000012</td>
+            <td>demo12@agentlink-demo.it<br>+39 02 9000 111<br>https://www.romaenergysystems.it</td>
+            <td>Impianti elettrici<br>Roma, Lazio</td>
+            <td>Progettazione impianti energia, fotovoltaico e revamping elettrico.<br><small>ISO 9001, ESCo, DM 37/08</small></td>
+            <td>Cerca squadre certificate per installazioni in Lombardia e Veneto.<br><small>Soglia 82%</small></td>
+            <td>Consenso beta<br>Richiesta attiva: 2 squadre esterne per Q3.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Automazione Veneto Spa</strong><br>VAT: ITDEMO000013</td>
+            <td>demo13@agentlink-demo.it<br>+39 02 9000 112<br>https://www.automazioneveneto.it</td>
+            <td>Impianti elettrici<br>Vicenza, Veneto</td>
+            <td>PLC, SCADA, robotica, retrofitting linee e manutenzione predittiva.<br><small>ISO 9001, Siemens Partner</small></td>
+            <td>Cerca PMI manifatturiere con linee da automatizzare entro 6 mesi.<br><small>Soglia 78%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 5 progetti/mese, lead time analisi 7 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>PowerLine Sicilia Srl</strong><br>VAT: ITDEMO000014</td>
+            <td>demo14@agentlink-demo.it<br>+39 02 9000 113<br>https://www.powerlinesicilia.it</td>
+            <td>Impianti elettrici<br>Catania, Sicilia</td>
+            <td>Impianti MT/BT, manutenzione cabine, quadri e installazioni industriali.<br><small>ISO 9001, CEI, DM 37/08</small></td>
+            <td>Cerca fornitori quadri elettrici e cantieri industriali nel Sud Italia.<br><small>Soglia 76%</small></td>
+            <td>Consenso beta<br>Disponibilita dichiarata: 4 squadre, trasferte su richiesta.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>SmartFacility Torino Srl</strong><br>VAT: ITDEMO000015</td>
+            <td>demo15@agentlink-demo.it<br>+39 02 9000 114<br>https://www.smartfacilitytorino.it</td>
+            <td>Servizi B2B<br>Torino, Piemonte</td>
+            <td>Facility management, manutenzione edifici, pulizie industriali e pronto intervento.<br><small>ISO 9001, ISO 14001</small></td>
+            <td>Cerca aziende multi-sede per contratti annuali di manutenzione e facility.<br><small>Soglia 75%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: copertura Piemonte e Lombardia, SLA 24/48h.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>LogiNord Trasporti Spa</strong><br>VAT: ITDEMO000016</td>
+            <td>demo16@agentlink-demo.it<br>+39 02 9000 115<br>https://www.loginordtrasporti.it</td>
+            <td>Logistica e trasporti<br>Verona, Veneto</td>
+            <td>Trasporto industriale, groupage, FTL/LTL e distribuzione Nord Italia.<br><small>ISO 9001, GDP, ADR base</small></td>
+            <td>Cerca produttori con spedizioni ricorrenti verso Germania, Francia e Benelux.<br><small>Soglia 78%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 80 mezzi, slot disponibili entro 48 ore.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>FreshLog Bologna Srl</strong><br>VAT: ITDEMO000017</td>
+            <td>demo17@agentlink-demo.it<br>+39 02 9000 116<br>https://www.freshlogbologna.it</td>
+            <td>Logistica e trasporti<br>Bologna, Emilia-Romagna</td>
+            <td>Trasporto refrigerato, logistica alimentare, celle 0-4 gradi e surgelato.<br><small>HACCP, IFS Logistics, ATP</small></td>
+            <td>Cerca produttori alimentari con consegne GDO nel Centro-Nord.<br><small>Soglia 82%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 22 mezzi refrigerati, slot settimanali disponibili.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Mediterranea Freight Srl</strong><br>VAT: ITDEMO000018</td>
+            <td>demo18@agentlink-demo.it<br>+39 02 9000 117<br>https://www.medfreight.it</td>
+            <td>Logistica e trasporti<br>Bari, Puglia</td>
+            <td>Trasporto intermodale, mare-terra, container e distribuzione Sud Italia.<br><small>ISO 9001, AEO</small></td>
+            <td>Cerca partner logistici Nord Italia e clienti export nel Mediterraneo.<br><small>Soglia 74%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 40 container/settimana, lead time variabile.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Alpina Courier Srl</strong><br>VAT: ITDEMO000019</td>
+            <td>demo19@agentlink-demo.it<br>+39 02 9000 118<br>https://www.alpinacourier.it</td>
+            <td>Logistica e trasporti<br>Bolzano, Trentino-Alto Adige</td>
+            <td>Consegne espresse B2B in aree alpine, ultimo miglio tecnico e ricambi urgenti.<br><small>ISO 9001</small></td>
+            <td>Cerca produttori macchinari con necessita ricambi urgenti in Nord-Est.<br><small>Soglia 72%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: consegna 24/48h Nord-Est.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>EuroPallet Service Srl</strong><br>VAT: ITDEMO000020</td>
+            <td>demo20@agentlink-demo.it<br>+39 02 9000 119<br>https://www.europalletservice.it</td>
+            <td>Logistica e trasporti<br>Piacenza, Emilia-Romagna</td>
+            <td>Gestione pallet, pooling, reverse logistics e riparazione bancali.<br><small>EPAL, ISO 9001</small></td>
+            <td>Cerca aziende con flussi pallet sopra 2.000 pezzi/mese.<br><small>Soglia 76%</small></td>
+            <td>Consenso beta<br>Stock dichiarato: 18.000 pallet EPAL disponibili.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>PackFood Emilia Spa</strong><br>VAT: ITDEMO000021</td>
+            <td>demo21@agentlink-demo.it<br>+39 02 9000 120<br>https://www.packfoodemilia.it</td>
+            <td>Packaging<br>Modena, Emilia-Romagna</td>
+            <td>Packaging alimentare flessibile, vaschette, film barriera e soluzioni MAP.<br><small>BRC Packaging, ISO 22000, MOCA</small></td>
+            <td>Cerca produttori alimentari con volumi sopra 50.000 pezzi/mese.<br><small>Soglia 83%</small></td>
+            <td>Consenso beta<br>Stock dichiarato: 600.000 pezzi standard, lead time 12-18 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>BioCarta Toscana Srl</strong><br>VAT: ITDEMO000022</td>
+            <td>demo22@agentlink-demo.it<br>+39 02 9000 121<br>https://www.biocartatoscana.it</td>
+            <td>Packaging<br>Lucca, Toscana</td>
+            <td>Packaging carta riciclata, astucci, scatole e soluzioni sostenibili.<br><small>FSC, PEFC, ISO 14001</small></td>
+            <td>Cerca brand alimentari e cosmetici con necessita packaging eco.<br><small>Soglia 77%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 250.000 scatole/mese, lead time 20 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>PackNord Pharma Srl</strong><br>VAT: ITDEMO000023</td>
+            <td>demo23@agentlink-demo.it<br>+39 02 9000 122<br>https://www.packnordpharma.it</td>
+            <td>Packaging<br>Monza, Lombardia</td>
+            <td>Astucci farmaceutici, bugiardini, serializzazione e packaging regolato.<br><small>GMP, ISO 9001, FSC</small></td>
+            <td>Cerca aziende farmaceutiche con lotti pilota e produzione ricorrente.<br><small>Soglia 84%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 3 linee farmaceutiche, lead time 25 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Adriatica Imballaggi Srl</strong><br>VAT: ITDEMO000024</td>
+            <td>demo24@agentlink-demo.it<br>+39 02 9000 123<br>https://www.adriaticaimballaggi.it</td>
+            <td>Packaging<br>Pescara, Abruzzo</td>
+            <td>Imballaggi industriali, casse legno, protezioni e packaging export.<br><small>ISPM-15, ISO 9001</small></td>
+            <td>Cerca fornitori film protettivi e clienti industriali export.<br><small>Soglia 73%</small></td>
+            <td>Consenso beta<br>Stock dichiarato: 4.000 casse standard, produzione su misura 10 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>PlastTech Bergamo Srl</strong><br>VAT: ITDEMO000025</td>
+            <td>demo25@agentlink-demo.it<br>+39 02 9000 124<br>https://www.plasttechbergamo.it</td>
+            <td>Packaging<br>Bergamo, Lombardia</td>
+            <td>Stampaggio plastica, contenitori tecnici, componenti packaging e prototipi.<br><small>ISO 9001, MOCA su richiesta</small></td>
+            <td>Cerca aziende alimentari e industriali con stampi dedicati.<br><small>Soglia 78%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 12 presse, lead time campione 15 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Alimenta Nord Spa</strong><br>VAT: ITDEMO000026</td>
+            <td>demo26@agentlink-demo.it<br>+39 02 9000 125<br>https://www.alimentanord.it</td>
+            <td>Alimentare<br>Cremona, Lombardia</td>
+            <td>Produzione alimentare conto terzi, ingredienti secchi e prodotti da forno.<br><small>BRC, IFS, HACCP</small></td>
+            <td>Cerca packaging alimentare certificato MOCA e trasporto refrigerato.<br><small>Soglia 82%</small></td>
+            <td>Consenso beta<br>Richiesta attiva: packaging 100.000 pezzi/mese e logistica GDO.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Caseificio Appennino Srl</strong><br>VAT: ITDEMO000027</td>
+            <td>demo27@agentlink-demo.it<br>+39 02 9000 126<br>https://www.caseificioappennino.it</td>
+            <td>Alimentare<br>Reggio Emilia, Emilia-Romagna</td>
+            <td>Produzione lattiero-casearia, stagionatura e confezionamento formaggi.<br><small>HACCP, IFS Food</small></td>
+            <td>Cerca trasporto refrigerato e packaging alimentare sostenibile.<br><small>Soglia 80%</small></td>
+            <td>Consenso beta<br>Richiesta attiva: consegne settimanali Nord Italia, 0-4 gradi.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Dolciaria Verona Srl</strong><br>VAT: ITDEMO000028</td>
+            <td>demo28@agentlink-demo.it<br>+39 02 9000 127<br>https://www.dolciariaverona.it</td>
+            <td>Alimentare<br>Verona, Veneto</td>
+            <td>Prodotti dolciari, biscotti, private label e confezionamento stagionale.<br><small>BRC, IFS, HACCP</small></td>
+            <td>Cerca packaging premium e distributori B2B in Germania e Austria.<br><small>Soglia 78%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 40.000 confezioni/settimana, stagionalita alta Q4.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Oleificio Sud Export Srl</strong><br>VAT: ITDEMO000029</td>
+            <td>demo29@agentlink-demo.it<br>+39 02 9000 128<br>https://www.oleificiosudexport.it</td>
+            <td>Alimentare<br>Bari, Puglia</td>
+            <td>Olio EVO, private label, bulk e confezionamento per export.<br><small>BRC, IFS, BIO</small></td>
+            <td>Cerca distributori europei e packaging vetro certificato.<br><small>Soglia 77%</small></td>
+            <td>Consenso beta<br>Stock dichiarato: 180.000 litri disponibili, lead time 14 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Conserve Tirreno Spa</strong><br>VAT: ITDEMO000030</td>
+            <td>demo30@agentlink-demo.it<br>+39 02 9000 129<br>https://www.conservetirreno.it</td>
+            <td>Alimentare<br>Salerno, Campania</td>
+            <td>Conserve vegetali, sughi, private label e export GDO.<br><small>BRC, IFS, HACCP</small></td>
+            <td>Cerca packaging alimentare, logistica e buyer export per lotti ricorrenti.<br><small>Soglia 79%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 1.5M pezzi/mese, richiesta packaging Q3.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>CNC Precision Torino Srl</strong><br>VAT: ITDEMO000031</td>
+            <td>demo31@agentlink-demo.it<br>+39 02 9000 130<br>https://www.cncprecisiontorino.it</td>
+            <td>Macchinari industriali<br>Torino, Piemonte</td>
+            <td>Lavorazioni CNC 3/5 assi, tornitura, fresatura e prototipi metallici.<br><small>ISO 9001, IATF 16949 in audit</small></td>
+            <td>Cerca buyer automotive e fornitori acciai speciali certificati.<br><small>Soglia 81%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 14 centri CNC, slot disponibili in 3 settimane.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Macchine Veneto Spa</strong><br>VAT: ITDEMO000032</td>
+            <td>demo32@agentlink-demo.it<br>+39 02 9000 131<br>https://www.macchineveneto.it</td>
+            <td>Macchinari industriali<br>Padova, Veneto</td>
+            <td>Macchine automatiche per packaging, linee custom e revamping.<br><small>ISO 9001, CE machinery</small></td>
+            <td>Cerca componenti CNC, automazione PLC e clienti packaging alimentare.<br><small>Soglia 82%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 5 linee/mese, lead time progetto 8-12 settimane.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Robotica Brianza Srl</strong><br>VAT: ITDEMO000033</td>
+            <td>demo33@agentlink-demo.it<br>+39 02 9000 132<br>https://www.roboticabrianza.it</td>
+            <td>Macchinari industriali<br>Monza, Lombardia</td>
+            <td>Celle robotizzate, visione artificiale, pallettizzazione e integrazione cobot.<br><small>ISO 9001, Fanuc integrator</small></td>
+            <td>Cerca aziende manifatturiere con automazione fine linea.<br><small>Soglia 80%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 3 celle/mese, sopralluogo entro 10 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Officine Marche Srl</strong><br>VAT: ITDEMO000034</td>
+            <td>demo34@agentlink-demo.it<br>+39 02 9000 133<br>https://www.officinemarche.it</td>
+            <td>Macchinari industriali<br>Pesaro, Marche</td>
+            <td>Costruzione telai, carpenteria pesante e parti macchina su disegno.<br><small>ISO 9001, EN 1090</small></td>
+            <td>Cerca taglio laser, verniciatura industriale e acciaio certificato.<br><small>Soglia 78%</small></td>
+            <td>Consenso beta<br>Richiesta attiva: subfornitura telai Q3, volumi medi.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>LaserCut Lombardia Srl</strong><br>VAT: ITDEMO000035</td>
+            <td>demo35@agentlink-demo.it<br>+39 02 9000 134<br>https://www.lasercutlombardia.it</td>
+            <td>Macchinari industriali<br>Varese, Lombardia</td>
+            <td>Taglio laser fibra, piegatura, saldatura e finitura componenti metallici.<br><small>ISO 9001, EN 1090</small></td>
+            <td>Cerca commesse ricorrenti da produttori macchinari e carpenterie.<br><small>Soglia 79%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 2 impianti laser, slot in 8 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>CloudB2B Solutions Srl</strong><br>VAT: ITDEMO000036</td>
+            <td>demo36@agentlink-demo.it<br>+39 02 9000 135<br>https://www.cloudb2bsolutions.it</td>
+            <td>Servizi B2B<br>Milano, Lombardia</td>
+            <td>CRM, automazioni commerciali, integrazioni API e dashboard direzionali.<br><small>ISO 27001 in corso, Microsoft Partner</small></td>
+            <td>Cerca PMI industriali che vogliono digitalizzare vendite e procurement.<br><small>Soglia 76%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 6 progetti attivi, nuovo slot tra 20 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>LegalProcurement Roma Srl</strong><br>VAT: ITDEMO000037</td>
+            <td>demo37@agentlink-demo.it<br>+39 02 9000 136<br>https://www.legalprocurementroma.it</td>
+            <td>Servizi B2B<br>Roma, Lazio</td>
+            <td>Consulenza contratti fornitura, compliance appalti, NDA e verifiche documentali.<br><small>Albo avvocati, privacy compliance</small></td>
+            <td>Cerca startup B2B e PMI che gestiscono partnership e subappalti.<br><small>Soglia 74%</small></td>
+            <td>Consenso beta<br>Disponibilita dichiarata: review documentale entro 72 ore.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>HR Cantieri Italia Srl</strong><br>VAT: ITDEMO000038</td>
+            <td>demo38@agentlink-demo.it<br>+39 02 9000 137<br>https://www.hrcantieriitalia.it</td>
+            <td>Servizi B2B<br>Bologna, Emilia-Romagna</td>
+            <td>Somministrazione personale tecnico, ricerca operai specializzati e capisquadra.<br><small>Agenzia lavoro autorizzata, ISO 9001</small></td>
+            <td>Cerca aziende edili e impiantistiche con picchi di lavoro stagionali.<br><small>Soglia 73%</small></td>
+            <td>Consenso beta<br>Disponibilita dichiarata: database 850 profili tecnici.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Finanza PMI Hub Srl</strong><br>VAT: ITDEMO000039</td>
+            <td>demo39@agentlink-demo.it<br>+39 02 9000 138<br>https://www.finanzapmihub.it</td>
+            <td>Servizi B2B<br>Firenze, Toscana</td>
+            <td>Finanza agevolata, bandi, credito imposta e supporto business plan.<br><small>Consulenti certificati, network Confidi</small></td>
+            <td>Cerca PMI con progetti digitali, export o investimenti produttivi.<br><small>Soglia 72%</small></td>
+            <td>Consenso beta<br>Disponibilita dichiarata: check eligibility entro 5 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>ExportLink Germania Srl</strong><br>VAT: ITDEMO000040</td>
+            <td>demo40@agentlink-demo.it<br>+39 02 9000 139<br>https://www.exportlinkgermania.it</td>
+            <td>Servizi B2B<br>Milano, Lombardia</td>
+            <td>Sviluppo export DACH, ricerca distributori, fiere e temporary export management.<br><small>AICE, consulenti madrelingua</small></td>
+            <td>Cerca produttori italiani con prodotti B2B esportabili in Germania.<br><small>Soglia 78%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 12 scouting distributori/mese.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Manutenzione Nord Ovest Srl</strong><br>VAT: ITDEMO000041</td>
+            <td>demo41@agentlink-demo.it<br>+39 02 9000 140<br>https://www.manutenzionenordovest.it</td>
+            <td>Manutenzione industriale<br>Torino, Piemonte</td>
+            <td>Manutenzione impianti industriali, fermo macchina, ricambi e contratti annuali.<br><small>ISO 9001, ISO 45001</small></td>
+            <td>Cerca stabilimenti manifatturieri in Piemonte e Lombardia.<br><small>Soglia 82%</small></td>
+            <td>Consenso beta<br>Disponibilita dichiarata: pronto intervento 24/48h, 18 tecnici.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>ServiceLine Emilia Srl</strong><br>VAT: ITDEMO000042</td>
+            <td>demo42@agentlink-demo.it<br>+39 02 9000 141<br>https://www.servicelineemilia.it</td>
+            <td>Manutenzione industriale<br>Modena, Emilia-Romagna</td>
+            <td>Manutenzione linee automatiche, nastri, confezionatrici e impianti packaging.<br><small>ISO 9001, tecnici certificati</small></td>
+            <td>Cerca produttori alimentari e packaging con manutenzione programmata.<br><small>Soglia 79%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: 10 tecnici, SLA 48h Emilia e Veneto.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>CoolingTech Pharma Srl</strong><br>VAT: ITDEMO000043</td>
+            <td>demo43@agentlink-demo.it<br>+39 02 9000 142<br>https://www.coolingtechpharma.it</td>
+            <td>Manutenzione industriale<br>Pavia, Lombardia</td>
+            <td>Manutenzione impianti HVAC, celle frigo, clean room e ambienti controllati.<br><small>FGAS, ISO 9001, GMP awareness</small></td>
+            <td>Cerca aziende pharma e alimentari con impianti critici.<br><small>Soglia 83%</small></td>
+            <td>Consenso beta<br>Disponibilita dichiarata: reperibilita 24h, 6 squadre.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>Sicurezza Impianti Sud Srl</strong><br>VAT: ITDEMO000044</td>
+            <td>demo44@agentlink-demo.it<br>+39 02 9000 143<br>https://www.sicurezzaimpiantisud.it</td>
+            <td>Manutenzione industriale<br>Bari, Puglia</td>
+            <td>Antincendio, sicurezza impianti, verifiche periodiche e manutenzione estintori.<br><small>ISO 9001, UNI 9994, DM 37/08</small></td>
+            <td>Cerca clienti industriali e fornitori ricambi certificati.<br><small>Soglia 74%</small></td>
+            <td>Consenso beta<br>Capacita dichiarata: copertura Puglia e Basilicata, SLA 72h.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>SolarBuild Italia Srl</strong><br>VAT: ITDEMO000046</td>
+            <td>demo46@agentlink-demo.it<br>+39 02 9000 145<br>https://www.solarbuilditalia.it</td>
+            <td>Energia e impianti<br>Roma, Lazio</td>
+            <td>EPC fotovoltaico industriale, storage e revamping energetico.<br><small>SOA OS30, ISO 9001</small></td>
+            <td>Cerca installatori elettrici certificati e strutture metalliche per cantieri Nord Italia.<br><small>Soglia 82%</small></td>
+            <td>Consenso beta<br>Pipeline dichiarata: 12 MW cantieri Q3-Q4, necessita squadre esterne.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>GreenRoof Lombardia Srl</strong><br>VAT: ITDEMO000047</td>
+            <td>demo47@agentlink-demo.it<br>+39 02 9000 146<br>https://www.greenrooflombardia.it</td>
+            <td>Energia e impianti<br>Milano, Lombardia</td>
+            <td>Coperture industriali, bonifiche, rinforzi e predisposizione fotovoltaico.<br><small>SOA OG1, ISO 9001, sicurezza cantieri</small></td>
+            <td>Cerca EPC e general contractor per cantieri energetici industriali.<br><small>Soglia 80%</small></td>
+            <td>Consenso beta<br>Disponibilita dichiarata: 2 squadre entro 25 giorni.</td>
+          </tr>
+        
+          <tr>
+            <td><strong>futura 2000 srl</strong><br>VAT: it4567777733</td>
+            <td>futura2000@gmail.com<br>34977934444<br>www.futura.com</td>
+            <td>Subappalti ed edilizia<br>firenze</td>
+            <td>Da completare<br><small></small></td>
+            <td>Da completare<br><small>Soglia 80%</small></td>
+            <td>Consenso beta<br></td>
+          </tr>
+        
+          <tr>
+            <td><strong>flamante srl</strong><br>VAT: 13535241007</td>
+            <td>impresa.flamantesrl@gmail.com<br>3408887694<br></td>
+            <td>Subappalti ed edilizia<br>roma</td>
+            <td>Da completare<br><small></small></td>
+            <td>Da completare<br><small>Soglia 80%</small></td>
+            <td>Consenso beta<br></td>
+          </tr>
+        
+          <tr>
+            <td><strong>TecnoImpianti Milano S.r.l.</strong><br>VAT: n/d</td>
+            <td>n/d<br><br></td>
+            <td>Subappalti ed edilizia<br>Milano, Lombardia</td>
+            <td>Impianti elettrici civili e industriali, squadre disponibili entro 30 giorni, manutenzione e lavori in subappalto.<br><small></small></td>
+            <td>Cerca appalti e subappalti in Lombardia con committenti verificati, importo sopra 50.000 euro.<br><small>Soglia 80%</small></td>
+            <td>Solo demo<br></td>
+          </tr>
+        </tbody>
               </table>
             </div>
           </div>
@@ -4231,13 +5701,17 @@
                   <textarea id="missionPrompt">Trova subappaltatori elettrici in Lombardia per un appalto fuori regione, con disponibilita entro 30 giorni, documentazione chiara e importo lavori sopra 50.000 euro.</textarea>
                 </div>
                 <div class="quick-report-summary" id="missionParsed">
-                  Compila missione con 4 elementi: cosa, dove, quando, vincoli.
-                </div>
+        <strong>Parser missione</strong>
+        <br>Cosa: ok
+        <br>Dove: Lombardia per un appalto fuori regione, con disponibilita entro 30 giorni, documentazione chiara e importo lavori sopra 50.000 euro.
+        <br>Quando: entro 30 giorni
+        <br>Vincoli: ok
+      </div>
                 <div class="field">
                   <label>Dove deve cercare</label>
                   <div class="source-grid">
                     <label class="source-option">
-                      <input type="radio" name="missionSource" value="internal" checked>
+                      <input type="radio" name="missionSource" value="internal" checked="">
                       <strong>Solo AgentLink</strong>
                       <small>Aziende gia registrate nel database.</small>
                     </label>
@@ -4305,11 +5779,11 @@
             <div class="match-builder">
               <div class="field">
                 <label>Azienda buyer / richiesta</label>
-                <select id="buyerSelect"></select>
+                <select id="buyerSelect"><option value="56">trasporti spa - bari</option><option value="50">CleanRoom Service Veneto Srl - Treviso, Veneto</option><option value="53">Battery Systems Torino Srl - Torino, Piemonte</option><option value="54">IdroTermica Firenze Srl - Firenze, Toscana</option><option value="55">DACH Industrial Partners GmbH - Monaco, Germania</option><option value="6">Acciai Lombarda SpA - Milano, Lombardia</option><option value="7">MetalNord Componenti Srl - Roma, Lazio</option><option value="8">SteelForge Europe GmbH - Dusseldorf, Germania</option><option value="9">Inox Adriatica Srl - Ancona, Marche</option><option value="10">Metalli Tirreno Spa - Livorno, Toscana</option><option value="11">EdilRoma Appalti Srl - Roma, Lazio</option><option value="12">TecnoImpianti Milano Srl - Milano, Lombardia</option><option value="13">Lombarda Ponteggi Srl - Bergamo, Lombardia</option><option value="14">BuildSud Cantieri Srl - Napoli, Campania</option><option value="15">NordFiniture Contract Srl - Brescia, Lombardia</option><option value="16">ElettroPadana Srl - Parma, Emilia-Romagna</option><option value="17">Roma Energy Systems Srl - Roma, Lazio</option><option value="18">Automazione Veneto Spa - Vicenza, Veneto</option><option value="19">PowerLine Sicilia Srl - Catania, Sicilia</option><option value="20">SmartFacility Torino Srl - Torino, Piemonte</option><option value="21">LogiNord Trasporti Spa - Verona, Veneto</option><option value="22">FreshLog Bologna Srl - Bologna, Emilia-Romagna</option><option value="23">Mediterranea Freight Srl - Bari, Puglia</option><option value="24">Alpina Courier Srl - Bolzano, Trentino-Alto Adige</option><option value="25">EuroPallet Service Srl - Piacenza, Emilia-Romagna</option><option value="26">PackFood Emilia Spa - Modena, Emilia-Romagna</option><option value="27">BioCarta Toscana Srl - Lucca, Toscana</option><option value="28">PackNord Pharma Srl - Monza, Lombardia</option><option value="29">Adriatica Imballaggi Srl - Pescara, Abruzzo</option><option value="30">PlastTech Bergamo Srl - Bergamo, Lombardia</option><option value="31">Alimenta Nord Spa - Cremona, Lombardia</option><option value="32">Caseificio Appennino Srl - Reggio Emilia, Emilia-Romagna</option><option value="33">Dolciaria Verona Srl - Verona, Veneto</option><option value="34">Oleificio Sud Export Srl - Bari, Puglia</option><option value="35">Conserve Tirreno Spa - Salerno, Campania</option><option value="36">CNC Precision Torino Srl - Torino, Piemonte</option><option value="37">Macchine Veneto Spa - Padova, Veneto</option><option value="38">Robotica Brianza Srl - Monza, Lombardia</option><option value="39">Officine Marche Srl - Pesaro, Marche</option><option value="40">LaserCut Lombardia Srl - Varese, Lombardia</option><option value="41">CloudB2B Solutions Srl - Milano, Lombardia</option><option value="42">LegalProcurement Roma Srl - Roma, Lazio</option><option value="43">HR Cantieri Italia Srl - Bologna, Emilia-Romagna</option><option value="44">Finanza PMI Hub Srl - Firenze, Toscana</option><option value="45">ExportLink Germania Srl - Milano, Lombardia</option><option value="46">Manutenzione Nord Ovest Srl - Torino, Piemonte</option><option value="47">ServiceLine Emilia Srl - Modena, Emilia-Romagna</option><option value="48">CoolingTech Pharma Srl - Pavia, Lombardia</option><option value="49">Sicurezza Impianti Sud Srl - Bari, Puglia</option><option value="51">SolarBuild Italia Srl - Roma, Lazio</option><option value="52">GreenRoof Lombardia Srl - Milano, Lombardia</option><option value="5">futura 2000 srl - firenze</option><option value="4">flamante srl - roma</option><option value="3">TecnoImpianti Milano S.r.l. - Milano, Lombardia</option></select>
               </div>
               <div class="field">
                 <label>Azienda seller / offerta</label>
-                <select id="sellerSelect"></select>
+                <select id="sellerSelect"><option value="56">trasporti spa - bari</option><option value="50">CleanRoom Service Veneto Srl - Treviso, Veneto</option><option value="53">Battery Systems Torino Srl - Torino, Piemonte</option><option value="54">IdroTermica Firenze Srl - Firenze, Toscana</option><option value="55">DACH Industrial Partners GmbH - Monaco, Germania</option><option value="6">Acciai Lombarda SpA - Milano, Lombardia</option><option value="7">MetalNord Componenti Srl - Roma, Lazio</option><option value="8">SteelForge Europe GmbH - Dusseldorf, Germania</option><option value="9">Inox Adriatica Srl - Ancona, Marche</option><option value="10">Metalli Tirreno Spa - Livorno, Toscana</option><option value="11">EdilRoma Appalti Srl - Roma, Lazio</option><option value="12">TecnoImpianti Milano Srl - Milano, Lombardia</option><option value="13">Lombarda Ponteggi Srl - Bergamo, Lombardia</option><option value="14">BuildSud Cantieri Srl - Napoli, Campania</option><option value="15">NordFiniture Contract Srl - Brescia, Lombardia</option><option value="16">ElettroPadana Srl - Parma, Emilia-Romagna</option><option value="17">Roma Energy Systems Srl - Roma, Lazio</option><option value="18">Automazione Veneto Spa - Vicenza, Veneto</option><option value="19">PowerLine Sicilia Srl - Catania, Sicilia</option><option value="20">SmartFacility Torino Srl - Torino, Piemonte</option><option value="21">LogiNord Trasporti Spa - Verona, Veneto</option><option value="22">FreshLog Bologna Srl - Bologna, Emilia-Romagna</option><option value="23">Mediterranea Freight Srl - Bari, Puglia</option><option value="24">Alpina Courier Srl - Bolzano, Trentino-Alto Adige</option><option value="25">EuroPallet Service Srl - Piacenza, Emilia-Romagna</option><option value="26">PackFood Emilia Spa - Modena, Emilia-Romagna</option><option value="27">BioCarta Toscana Srl - Lucca, Toscana</option><option value="28">PackNord Pharma Srl - Monza, Lombardia</option><option value="29">Adriatica Imballaggi Srl - Pescara, Abruzzo</option><option value="30">PlastTech Bergamo Srl - Bergamo, Lombardia</option><option value="31">Alimenta Nord Spa - Cremona, Lombardia</option><option value="32">Caseificio Appennino Srl - Reggio Emilia, Emilia-Romagna</option><option value="33">Dolciaria Verona Srl - Verona, Veneto</option><option value="34">Oleificio Sud Export Srl - Bari, Puglia</option><option value="35">Conserve Tirreno Spa - Salerno, Campania</option><option value="36">CNC Precision Torino Srl - Torino, Piemonte</option><option value="37">Macchine Veneto Spa - Padova, Veneto</option><option value="38">Robotica Brianza Srl - Monza, Lombardia</option><option value="39">Officine Marche Srl - Pesaro, Marche</option><option value="40">LaserCut Lombardia Srl - Varese, Lombardia</option><option value="41">CloudB2B Solutions Srl - Milano, Lombardia</option><option value="42">LegalProcurement Roma Srl - Roma, Lazio</option><option value="43">HR Cantieri Italia Srl - Bologna, Emilia-Romagna</option><option value="44">Finanza PMI Hub Srl - Firenze, Toscana</option><option value="45">ExportLink Germania Srl - Milano, Lombardia</option><option value="46">Manutenzione Nord Ovest Srl - Torino, Piemonte</option><option value="47">ServiceLine Emilia Srl - Modena, Emilia-Romagna</option><option value="48">CoolingTech Pharma Srl - Pavia, Lombardia</option><option value="49">Sicurezza Impianti Sud Srl - Bari, Puglia</option><option value="51">SolarBuild Italia Srl - Roma, Lazio</option><option value="52">GreenRoof Lombardia Srl - Milano, Lombardia</option><option value="5">futura 2000 srl - firenze</option><option value="4">flamante srl - roma</option><option value="3">TecnoImpianti Milano S.r.l. - Milano, Lombardia</option></select>
               </div>
             </div>
             <div class="actions">
@@ -4556,8 +6030,8 @@
         <div class="cap-modal">
           <div class="cap-modal-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 12l2 2 4-4"/>
-              <circle cx="12" cy="12" r="10"/>
+              <path d="M9 12l2 2 4-4"></path>
+              <circle cx="12" cy="12" r="10"></circle>
             </svg>
           </div>
           <h3 id="capModalTitle">Capacità rilevata</h3>
@@ -4618,6 +6092,52 @@
           </div>
         </div>
       </div>
+
+      <!-- ===================== MAPPA RETE ===================== -->
+      <section class="screen" id="mappa">
+        <div class="al-map-page">
+          <div class="al-map-header">
+            <div>
+              <h2 class="al-map-title">Mappa della rete</h2>
+              <p class="al-map-subtitle">Aziende e professionisti nella rete AgentLink</p>
+            </div>
+            <div class="al-map-controls">
+              <select id="alMapFilterMode" class="al-map-select">
+                <option value="all">Tutti</option>
+                <option value="offer">Chi offre</option>
+                <option value="seek">Chi cerca</option>
+              </select>
+              <select id="alMapFilterSector" class="al-map-select">
+                <option value="all">Tutti i settori</option>
+              </select>
+              <button class="al-map-reset-btn" id="alMapResetBtn">Reset filtri</button>
+            </div>
+          </div>
+
+          <div class="al-map-legend">
+            <span class="al-map-legend-item">
+              <span class="al-map-dot" style="background:#48d7cf"></span> Offre servizi
+            </span>
+            <span class="al-map-legend-item">
+              <span class="al-map-dot" style="background:#f3a84f"></span> Cerca fornitori
+            </span>
+            <span class="al-map-legend-item">
+              <span class="al-map-dot" style="background:#a78bfa"></span> Buyer & Seller
+            </span>
+          </div>
+
+          <div id="alMapContainer" class="al-map-container">
+            <div class="al-map-loading" id="alMapLoading">
+              <div class="al-map-loading-spinner"></div>
+              <p>Caricamento mappa...</p>
+            </div>
+          </div>
+
+          <div class="al-map-stats" id="alMapStats">
+            <span id="alMapCount">0 aziende</span> nella rete AgentLink
+          </div>
+        </div>
+      </section>
 
     </main>
 
@@ -9246,6 +10766,311 @@
       });
     })();
 
+    /* =========================================================
+       MAPPA RETE AGENTLINK — Leaflet.js
+       ========================================================= */
+    (function () {
+
+      // Database geocoding per zone italiane
+      const GEO_DB = {
+        // Lombardia
+        'milano': [45.4654, 9.1859], 'milano, lombardia': [45.4654, 9.1859],
+        'bergamo': [45.6983, 9.6773], 'bergamo, lombardia': [45.6983, 9.6773],
+        'brescia': [45.5416, 10.2118], 'brescia, lombardia': [45.5416, 10.2118],
+        'monza': [45.5845, 9.2744], 'como': [45.8103, 9.0863],
+        'varese': [45.8206, 8.8257], 'lecco': [45.8566, 9.3958],
+        // Lazio
+        'roma': [41.9028, 12.4964], 'roma, lazio': [41.9028, 12.4964],
+        'pomezia': [41.6693, 12.5011], 'vitinia': [41.8103, 12.4467],
+        'ostia': [41.7326, 12.2344], 'guidonia': [41.9935, 12.7246],
+        'tivoli': [41.9635, 12.7987], 'frosinone': [41.6401, 13.3426],
+        'latina': [41.4676, 12.9035], 'viterbo': [42.4169, 12.1049],
+        'civitavecchia': [42.0932, 11.7996],
+        // Campania
+        'napoli': [40.8518, 14.2681], 'napoli, campania': [40.8518, 14.2681],
+        'salerno': [40.6824, 14.7681], 'caserta': [41.0736, 14.3328],
+        'avellino': [40.9145, 14.7906], 'benevento': [41.1297, 14.7822],
+        // Sicilia
+        'palermo': [38.1157, 13.3615], 'catania': [37.5079, 15.0830],
+        'catania, sicilia': [37.5079, 15.0830],
+        'messina': [38.1938, 15.5540], 'agrigento': [37.3111, 13.5765],
+        // Toscana
+        'firenze': [43.7696, 11.2558], 'firenze, toscana': [43.7696, 11.2558],
+        'livorno': [43.5479, 10.3146], 'livorno, toscana': [43.5479, 10.3146],
+        'pisa': [43.7228, 10.4017], 'siena': [43.3186, 11.3307],
+        'arezzo': [43.4633, 11.8781],
+        // Veneto
+        'venezia': [45.4408, 12.3155], 'verona': [45.4384, 10.9916],
+        'padova': [45.4065, 11.8768], 'vicenza': [45.5455, 11.5354],
+        'vicenza, veneto': [45.5455, 11.5354],
+        'treviso': [45.6669, 12.2421],
+        // Emilia-Romagna
+        'bologna': [44.4949, 11.3426], 'parma': [44.8015, 10.3279],
+        'parma, emilia-romagna': [44.8015, 10.3279],
+        'modena': [44.6471, 10.9252], 'reggio emilia': [44.7000, 10.6296],
+        'ferrara': [44.8353, 11.6197], 'rimini': [44.0678, 12.5695],
+        // Piemonte
+        'torino': [45.0703, 7.6869], 'cuneo': [44.3839, 7.5428],
+        'asti': [44.9003, 8.2064], 'alessandria': [44.9133, 8.6150],
+        // Puglia
+        'bari': [41.1171, 16.8719], 'taranto': [40.4661, 17.2470],
+        'lecce': [40.3564, 18.1745], 'brindisi': [40.6326, 17.9418],
+        'foggia': [41.4621, 15.5444],
+        // Calabria
+        'reggio calabria': [38.1113, 15.6435], 'catanzaro': [38.9097, 16.5879],
+        'cosenza': [39.3000, 16.2500],
+        // Marche
+        'ancona': [43.6158, 13.5189], 'ancona, marche': [43.6158, 13.5189],
+        'pesaro': [43.9100, 12.9131],
+        // Abruzzo
+        "l'aquila": [42.3498, 13.3995], 'pescara': [42.4617, 14.2160],
+        // Estero
+        'dusseldorf': [51.2217, 6.7762], 'düsseldorf': [51.2217, 6.7762],
+        'dusseldorf, germania': [51.2217, 6.7762],
+        'berlino': [52.5200, 13.4050], 'parigi': [48.8566, 2.3522],
+        'londra': [51.5074, -0.1278],
+        // Default Italia
+        'italia': [41.9028, 12.4964], 'italy': [41.9028, 12.4964],
+      };
+
+      function geocodeArea(area) {
+        if (!area) return null;
+        const lower = area.toLowerCase().trim();
+        // Cerca corrispondenza diretta
+        if (GEO_DB[lower]) return GEO_DB[lower];
+        // Cerca corrispondenza parziale
+        for (const [key, coords] of Object.entries(GEO_DB)) {
+          if (lower.includes(key) || key.includes(lower)) return coords;
+        }
+        // Fallback Roma + offset casuale per non sovrapporre
+        return [41.9028 + (Math.random() - 0.5) * 0.5, 12.4964 + (Math.random() - 0.5) * 0.5];
+      }
+
+      function getModeClass(mode) {
+        if (!mode) return 'offer';
+        const m = mode.toLowerCase();
+        if (m.includes('cerca') || m.includes('buyer')) return 'seek';
+        if (m.includes('entrambi') || m.includes('buyer e seller') || m.includes('seller e buyer')) return 'both';
+        return 'offer';
+      }
+
+      function getModeColor(mode) {
+        const cls = getModeClass(mode);
+        if (cls === 'seek') return '#f3a84f';
+        if (cls === 'both') return '#a78bfa';
+        return '#48d7cf';
+      }
+
+      function getModeLabel(mode) {
+        const cls = getModeClass(mode);
+        if (cls === 'seek') return 'Cerca fornitori';
+        if (cls === 'both') return 'Buyer & Seller';
+        return 'Offre servizi';
+      }
+
+      let leafletMap = null;
+      let allMarkers = [];
+      let allCompanies = [];
+      let leafletLoaded = false;
+
+      function createMarkerIcon(color) {
+        return L.divIcon({
+          className: '',
+          html: `<div style="
+            width: 18px;
+            height: 18px;
+            background: ${color};
+            border-radius: 50%;
+            border: 3px solid rgba(255,255,255,0.9);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+          "></div>`,
+          iconSize: [18, 18],
+          iconAnchor: [9, 9],
+          popupAnchor: [0, -12],
+        });
+      }
+
+      function buildPopup(c) {
+        const modeClass = getModeClass(c.mode);
+        const modeLabel = getModeLabel(c.mode);
+        const phoneHtml = c.phone
+          ? `<a class="al-map-popup-phone" href="tel:${c.phone.replace(/[^\d+]/g, '')}">📞 ${c.phone}</a>`
+          : '';
+        const offerHtml = c.offers
+          ? `<div style="font-size:12px;color:#4a5568;margin-bottom:6px">${c.offers.slice(0, 80)}${c.offers.length > 80 ? '...' : ''}</div>`
+          : '';
+        return `
+          <div class="al-map-popup">
+            <div class="al-map-popup-name">${c.name || 'Azienda'}</div>
+            <div class="al-map-popup-sector">${c.sector || ''}</div>
+            <div class="al-map-popup-area">📍 ${c.area || 'Zona non specificata'}</div>
+            <span class="al-map-popup-mode ${modeClass}">${modeLabel}</span>
+            ${offerHtml}
+            ${phoneHtml}
+            ${c.certifications ? '<div style="font-size:11px;color:#0d9488;font-weight:700;margin-bottom:6px">✓ Dispone di certificazioni</div>' : ''}
+          </div>
+        `;
+      }
+
+      function renderMarkers(companies) {
+        if (!leafletMap) return;
+        // Rimuovi marker esistenti
+        allMarkers.forEach(m => leafletMap.removeLayer(m));
+        allMarkers = [];
+
+        companies.forEach(c => {
+          const coords = geocodeArea(c.area);
+          if (!coords) return;
+
+          // Offset leggero per non sovrapporre marker nella stessa zona
+          const jitter = [(Math.random() - 0.5) * 0.015, (Math.random() - 0.5) * 0.015];
+          const pos = [coords[0] + jitter[0], coords[1] + jitter[1]];
+
+          const color = getModeColor(c.mode);
+          const icon = createMarkerIcon(color);
+          const marker = L.marker(pos, { icon }).addTo(leafletMap);
+          marker.bindPopup(buildPopup(c), { maxWidth: 280, className: 'al-custom-popup' });
+          marker.companyData = c;
+          allMarkers.push(marker);
+        });
+
+        document.getElementById('alMapCount').textContent = companies.length + ' aziend' + (companies.length === 1 ? 'a' : 'e');
+      }
+
+      function applyFilters() {
+        const mode = document.getElementById('alMapFilterMode')?.value || 'all';
+        const sector = document.getElementById('alMapFilterSector')?.value || 'all';
+
+        let filtered = allCompanies;
+        if (mode !== 'all') {
+          filtered = filtered.filter(c => {
+            const cls = getModeClass(c.mode);
+            if (mode === 'offer') return cls === 'offer' || cls === 'both';
+            if (mode === 'seek') return cls === 'seek' || cls === 'both';
+            return true;
+          });
+        }
+        if (sector !== 'all') {
+          filtered = filtered.filter(c => (c.sector || '').toLowerCase().includes(sector.toLowerCase()));
+        }
+        renderMarkers(filtered);
+      }
+
+      function populateSectorFilter(companies) {
+        const select = document.getElementById('alMapFilterSector');
+        if (!select) return;
+        const sectors = [...new Set(companies.map(c => c.sector).filter(Boolean))].sort();
+        sectors.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s;
+          opt.textContent = s;
+          select.appendChild(opt);
+        });
+      }
+
+      async function loadAndRenderMap() {
+        const loading = document.getElementById('alMapLoading');
+        if (loading) loading.style.display = 'flex';
+
+        try {
+          // Carica aziende da Supabase
+          const url = `${SUPABASE_URL}/rest/v1/companies?select=name,sector,area,mode,phone,offers,certifications&limit=200`;
+          const headers = {
+            'apikey': SUPABASE_PUBLISHABLE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_PUBLISHABLE_KEY,
+          };
+          const r = await fetch(url, { headers });
+          if (!r.ok) throw new Error('Fetch companies failed: ' + r.status);
+          allCompanies = await r.json();
+
+          // Popola filtro settori
+          populateSectorFilter(allCompanies);
+
+          // Init mappa Leaflet
+          if (!leafletMap) {
+            const container = document.getElementById('alMapContainer');
+            // Crea div per leaflet dentro il container
+            const mapDiv = document.createElement('div');
+            mapDiv.id = 'alLeafletMap';
+            mapDiv.style.cssText = 'width:100%;height:100%;min-height:420px;';
+            container.appendChild(mapDiv);
+
+            leafletMap = L.map('alLeafletMap', {
+              center: [41.9028, 12.4964],
+              zoom: 6,
+              zoomControl: true,
+            });
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              attribution: '© OpenStreetMap contributors',
+              maxZoom: 18,
+            }).addTo(leafletMap);
+          }
+
+          renderMarkers(allCompanies);
+
+          if (loading) loading.style.display = 'none';
+
+          // Se ci sono marker, centra la mappa sull'Italia
+          if (allMarkers.length > 0) {
+            leafletMap.setView([41.9028, 12.4964], 6);
+          }
+
+        } catch (err) {
+          console.error('Mappa error:', err);
+          if (loading) {
+            loading.innerHTML = '<p style="color:#f87171">Errore caricamento mappa. Ricarica la pagina.</p>';
+          }
+        }
+      }
+
+      // Carica Leaflet CSS e JS dinamicamente
+      function loadLeaflet(callback) {
+        if (leafletLoaded || window.L) {
+          callback();
+          return;
+        }
+        const css = document.createElement('link');
+        css.rel = 'stylesheet';
+        css.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
+        document.head.appendChild(css);
+
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+        script.onload = () => { leafletLoaded = true; callback(); };
+        script.onerror = () => console.error('Leaflet load failed');
+        document.head.appendChild(script);
+      }
+
+      // Attiva la mappa quando si naviga alla sezione
+      const origShowScreen = window.__origShowScreen || showScreen;
+      if (!window.__origShowScreen) {
+        window.__origShowScreen = showScreen;
+        window.showScreen = function(id) {
+          origShowScreen(id);
+          if (id === 'mappa') {
+            loadLeaflet(() => {
+              // Piccolo delay per far rendere il DOM
+              setTimeout(() => {
+                loadAndRenderMap();
+                if (leafletMap) leafletMap.invalidateSize();
+              }, 200);
+            });
+          }
+        };
+      }
+
+      // Wire up filtri
+      document.getElementById('alMapFilterMode')?.addEventListener('change', applyFilters);
+      document.getElementById('alMapFilterSector')?.addEventListener('change', applyFilters);
+      document.getElementById('alMapResetBtn')?.addEventListener('click', () => {
+        document.getElementById('alMapFilterMode').value = 'all';
+        document.getElementById('alMapFilterSector').value = 'all';
+        applyFilters();
+      });
+
+    })();
+
   </script>
 
   <!-- Mini-conversazione modal (apertura match accettato) -->
@@ -9275,8 +11100,8 @@
       <div class="conv-contacts">
         <div class="conv-contacts-title">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-            <polyline points="22,6 12,13 2,6"/>
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
           </svg>
           Contatti scambiati
         </div>
@@ -9301,7 +11126,7 @@
   <div class="ag-toast" id="agToast">
     <div class="ag-toast-icon">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="20 6 9 17 4 12"/>
+        <polyline points="20 6 9 17 4 12"></polyline>
       </svg>
     </div>
     <div class="ag-toast-body">
@@ -9309,5 +11134,6 @@
       <div class="ag-toast-msg" id="agToastMsg">Capacità aggiunta al profilo.</div>
     </div>
   </div>
-</body>
-</html>
+
+
+</body></html>
